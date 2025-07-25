@@ -35,4 +35,19 @@ class AccessoriesController extends Controller
             'type' => 'glasses'
         ]);
     }
+
+    public function index()
+    {
+        // Gộp cả 3 loại phụ kiện vào cùng view nếu bạn muốn
+        $straps = WatchStrap::all();
+        $boxes = WatchBox::all();
+        $glasses = WatchGlass::all();
+
+        return view('client.products.accessories_index', [
+            'straps' => $straps,
+            'boxes' => $boxes,
+            'glasses' => $glasses,
+        ]);
+    }
+
 }

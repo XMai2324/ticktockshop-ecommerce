@@ -87,6 +87,7 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 
+Route::get('/accessories', [AccessoriesController::class, 'index'])->name('accessories.index');
 
 Route::get('/login', function () {
     return view('client.login'); // nếu có file login.blade.php

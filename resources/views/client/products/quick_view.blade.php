@@ -3,7 +3,19 @@
 
     {{-- ✅ Bên trái --}}
     <div class="modal-quickview-left">
-        <img src="{{ asset('storage/Watch/Watch_nu/' . $product->image) }}" alt="{{ $product->name }}">
+        @php
+    $folder = 'Watch/Watch_nu'; // mặc định
+    $slug = \Illuminate\Support\Str::slug($product->category->name ?? '');
+
+    if ($slug === 'nam') {
+        $folder = 'Watch/Watch_nam';
+    } elseif ($slug === 'cap-doi') {
+        $folder = 'Watch/Watch_cap';
+    }
+@endphp
+     <img src="{{ asset('storage/' . $folder . '/' . $product->image) }}" alt="{{ $product->name }}">
+
+
     </div>
 
     {{-- ✅ Bên phải --}}

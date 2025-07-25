@@ -20,42 +20,48 @@
         <div class="header_menu">
             <li> <a href="#">THƯƠNG HIỆU</a>
                 <ul class="sub_TH">
-                    <li><a href="#">Casio</a></li>
-                    <li><a href="#">Rolex</a></li>
-                    <li><a href="#">Citizen</a></li>
-                    <li><a href="#">Rado</a></li>
-                    <li><a href="#">Seiko</a></li>
+                    <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
+                    <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
+                    <li><a href="{{ route('products.filter', ['brand' => 'citizen']) }}">Citizen</a></li>
+                    <li><a href="{{ route('products.filter', ['brand' => 'rado']) }}">Rado</a></li>
+                    <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>       
                 </ul>
             </li>
             <li><a href="#">NỮ</a>
                 <ul class="sub_Nu">
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'casio']) }}">Casio nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rolex']) }}">Rolex nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rado']) }}">Rado nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'citizen']) }}">Citizen nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'seiko']) }}">Seiko nữ</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rolex']) }}">Rolex cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'citizen']) }}">Citizen cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rado']) }}">Rado cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko cặp</a></li>
                 </ul>
             </li>
             <li> <a href="#">NAM</a> 
                 <ul class="sub_Nam">
-                    <li><a href="#">Casio nam</a></li>
-                    <li><a href="#">Rolex nam</a></li>
-                    <li><a href="#">Citizen nam</a></li>
-                    <li><a href="#">Rado nam</a></li>
-                    <li><a href="#">Seiko nam</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'citizen']) }}">Citizen nam</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rado']) }}">Rado nam</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'seiko']) }}">Seiko nam</a></li>
                 </ul>
             </li>
             <li> <a href="#">CẶP ĐÔI</a>
                 <ul class="sub_Doi">
-                    <li><a href="#">Casio cặp</a></li>
-                    <li><a href="#">Rolex cặp</a></li>
-                    <li><a href="#">Citizen cặp</a></li>
-                    <li><a href="#">Rado cặp</a></li>
-                    <li><a href="#">Seiko cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rolex']) }}">Rolex cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'citizen']) }}">Citizen cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rado']) }}">Rado cặp</a></li>
+                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko cặp</a></li>
                 </ul>
             </li>
-            <li> <a href="#">PHỤ KIỆN</a> </li>
-            <li> <a href="#">THÔNG TIN</a> </li>
+            <li><a href="{{ route('accessories.index') }}">PHỤ KIỆN</a>
+                <ul class="sub_pk">
+                    <li><a href="{{ route('accessories.straps') }}">Dây đeo</a></li>
+                    <li><a href="{{ route('accessories.boxes') }}">Hộp đựng</a></li>
+                    <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
+                </ul>
+            </li>
+            <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
         </div>
 
         <div class="header_other">
@@ -102,8 +108,8 @@
         <div class="footer-container">
             <p>Tải ứng dụng TickTock_Shop</p>
             <div class="app-google">
-                <a href="#"><img src="{{ asset('storage/appstore.png') }}" alt="App Store"></a>
-                <a href="#"><img src="{{ asset('storage/googleplay.png') }}" alt="Google Play"></a>
+                <a href="#"><img src="{{ asset('storage/appstore.jpg') }}" alt="App Store"></a>
+                <a href="#"><img src="{{ asset('storage/googleplay.jpg') }}" alt="Google Play"></a>
             </div>
             <p>Nhận bản tin TickTock_Shop</p>
             <div class="input-email">
@@ -111,7 +117,7 @@
                 <i class="fas fa-arrow-left"></i>
             </div>
             <div class="footer-items">
-                <li><a href="#"><img src="{{ asset('client/image/dathongbao.png') }}" alt=""></a></li>
+                <li><a href="#"><img src="{{ asset('storage/dathongbao.jpg') }}" alt=""></a></li>
                 <li><a href="#">Liên hệ</a></li>
                 <li><a href="#">Tuyển dụng</a></li>
                 <li><a href="#">Giới thiệu</a></li>

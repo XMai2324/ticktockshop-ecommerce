@@ -163,8 +163,9 @@
     margin-right: 20px;
 }
 
+/*đổi màu khi di chuột đến nút thanh toán ....*/
 .cart-content-right-button button:first-child:hover {
-    background-color: #f1f1f1;
+    background-color: #da4747;
 }
 
 .cart-content-right-button button:last-child {

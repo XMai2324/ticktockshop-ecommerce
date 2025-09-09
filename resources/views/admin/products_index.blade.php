@@ -34,6 +34,7 @@
             + Thêm sản phẩm mới
         </button>
 
+        <!-- ------------------------THÊM SP------------------------ -->
         <div id="create-form-modal" class="modal-overlay">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
@@ -75,6 +76,7 @@
             </div>
         </div>
 
+        <!-- --------------------------------SỬA SP--------------------------- -->
         <div id="edit-form-modal" class="modal-overlay">
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
@@ -143,8 +145,7 @@
                         <p class="product-price">{{ number_format($product->price, 0, ',', '.') }}₫</p>
                         <p class="product-desc">{{ \Illuminate\Support\Str::limit($product->description, 60) }}</p>
                         <div class="action-buttons">
-                            <a href="javascript:void(0);" 
-                            class="btn-edit" 
+                            <a href="javascript:void(0);" class="btn-edit" 
                             data-id="{{ $product->id }}"
                             data-name="{{ $product->name }}"
                             data-price="{{ $product->price }}"
@@ -153,11 +154,13 @@
                             data-category="{{ $product->category_id }}"
                             data-image="{{ $product->image }}"
                             data-folder="{{ $folder }}"> Sửa </a>
-                            <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="display:inline;">
+
+
+                        <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc muốn xoá đồng hồ này?')">Xoá</button>
-                            </form>
+                        </form>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,8 @@
 
+    // LỌC SẮP XẾP & KHOẢNG GIÁ
 document.addEventListener('DOMContentLoaded', function () {
-    // ===============================
-    // 1. LỌC SẮP XẾP & KHOẢNG GIÁ
-    // ===============================
+
+    // Lọc theo SẮP XẾP
     const sortSelect = document.querySelector('select[name="sort"]');
     if (sortSelect) {
         sortSelect.addEventListener('change', function () {
@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Lọc theo KHOẢNG GIÁ
     const priceSelect = document.querySelector('select[name="price_range"]');
     if (priceSelect) {
         priceSelect.addEventListener('change', function () {

@@ -17,7 +17,6 @@ class ProductsSeeder extends Seeder
         DB::table('products')->truncate();
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-
         // ---------Casio nữ-----------------
         $category = Category::where('name', 'Nữ')->first();
         $brand  = Brand::where('name', 'Casio')->first();
@@ -116,8 +115,55 @@ class ProductsSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         } 
+        // -----------Citizen nữ----------
+        $category = Category::where('name', 'Nữ')->first();
+        $brand  = Brand::where('name', 'Citizen')->first();
 
-// -----------Rado nữ----------
+        if (!$category || !$brand) {
+        $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Citizen"!');
+        return;
+        }   
+        $products = [
+            ['Citizen Eco-Drive Silhouette', 'Citizen1.png', 4900000, 'Đồng hồ Eco-Drive Silhouette với dây kim loại mạ vàng hồng, mặt số khảm trai sang trọng, hoạt động bằng ánh sáng.'],
+            ['Citizen Eco-Drive Bianca', 'Citizen2.jpg', 5300000, 'Thiết kế nữ tính với dây da trắng, mặt số xanh navy ánh trai, công nghệ ánh sáng không cần thay pin.'],
+            ['Citizen L Ambiluna', 'Citizen3.jpg', 8600000, 'Đồng hồ Citizen L với triết lý tối giản, vỏ titanium siêu nhẹ và mặt số đá bán quý.'],
+            ['Citizen Eco-Drive EM0686-01A', 'Citizen4.jpg', 4500000, 'Thiết kế tinh tế, dây da nâu, vỏ vàng hồng và mặt số bạc trắng dịu dàng.'],
+            ['Citizen L EM0576-80A', 'Citizen5.jpg', 5950000, 'Đồng hồ dây thép không gỉ, mặt số ánh xà cừ với điểm nhấn kim vàng hồng hiện đại.'],
+            ['Citizen Silhouette Crystal', 'Citizen6.webp', 6250000, 'Dây kim loại đính pha lê Swarovski, mặt số khảm trai, phù hợp dự tiệc và công sở.'],
+            ['Citizen L Sunrise', 'Citizen7.webp', 8700000, 'Thiết kế đột phá với mặt số 3D, đính đá tự nhiên, dây da màu nude thời thượng.'],
+            ['Citizen Eco-Drive EM0500-73L', 'Citizen8.jpg', 3990000, 'Mặt số xanh đậm chải tia, dây thép không gỉ tông bạc, hoạt động bằng ánh sáng.'],
+            ['Citizen L Carina', 'Citizen9.webp', 7400000, 'Mẫu đồng hồ lấy cảm hứng từ chòm sao Carina, mặt số khảm trai cùng chi tiết lấp lánh.'],
+            ['Citizen EM0930-80D', 'Citizen10.jpg', 5800000, 'Dây kim loại mảnh, mặt số xà cừ với họa tiết hoa tinh tế, phù hợp cổ tay nhỏ.'],
+            ['Citizen Eco-Drive EM0683-58P', 'Citizen11.webp', 5100000, 'Thiết kế vàng champagne, mặt số đơn giản dễ nhìn, phong cách cổ điển nhẹ nhàng.'],
+            ['Citizen L Gaia', 'Citizen12.webp', 9900000, 'Đồng hồ thân thiện môi trường, vỏ thép không gỉ tái chế, mặt số xà cừ xanh biển độc đáo.'],
+            ['Citizen EQ9064-52D', 'Citizen13.jpg', 4150000, 'Vẻ đẹp tối giản, mặt số trắng bạc, dây kim loại vàng kết hợp bạc trẻ trung.'],
+            ['Citizen EM0680-53D', 'Citizen14.jpg', 4880000, 'Mặt số khảm trai trắng, dây thép sáng bóng, phù hợp phong cách công sở hiện đại.'],
+            ['Citizen Eco-Drive xC', 'Citizen15.jpg', 10600000, 'Kết hợp giữa công nghệ hiện đại và thiết kế thanh lịch Nhật Bản, mặt kính sapphire chống xước.'],
+            ['Citizen EM0993-82X', 'Citizen16.jpg', 5600000, 'Dây kim loại vàng , mặt số la mã đơn giản, thiết kế thanh lịch hàng ngày.'],
+            ['Citizen Eco-Drive EM0843-51D', 'Citizen17.webp', 6400000, 'Đính đá pha lê quanh viền, mặt số khảm trai trắng với hiệu ứng chuyển sắc tinh tế.'],
+            ['Citizen L Ceci', 'Citizen18.jpg', 9200000, 'Thiết kế tinh xảo với dây da đen và mặt số được trang trí bằng các đường cong nghệ thuật.'],
+            ['Citizen Eco-Drive EM0572-58P', 'Citizen19.webp', 5200000, 'Phong cách cổ điển, dây thép mạ vàng, mặt số đơn sắc nhẹ nhàng, thanh lịch.'],
+            ['Citizen EM0896-89Y', 'Citizen20.jpg', 5900000, 'Dây kim loại rose gold, mặt số khảm trai hồng pastel, điểm nhấn kim xanh cá tính.'],
+            ['Citizen Eco-Drive EM0492-02A', 'Citizen21.jpg', 4700000, 'Dây da nâu cổ điển, mặt số trắng tinh tế, phù hợp phong cách vintage nữ tính.'],
+            ['Citizen EW1676-52D', 'Citizen22.webp', 6150000, 'Dây kim loại tông vàng phối bạc, mặt số khảm trai với cọc số ánh vàng sang trọng.'],
+            ['Citizen EM0990-53L', 'Citizen23.png', 5650000, 'Thiết kế dây thép hiếm có, mặt số tông xanh – bạc tạo sự nổi bật.'],
+            ['Citizen L Crystal Garden', 'Citizen24.jpg', 8900000, 'Đồng hồ đính pha lê Swarovski, họa tiết hoa mờ trên mặt số tạo hiệu ứng huyền ảo.'],
+        ];      
+        foreach ($products as [$name, $image, $price, $description]) {
+            DB::table('products')->insert([
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'image' => $image,
+                'category_id' => $category->id,
+                'brand_id' => $brand->id,
+                'warranty_months' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        } 
+
+        // -----------Rado nữ----------
         $category = Category::where('name', 'Nữ')->first();
         $brand = Brand::where('name', 'Rado')->first();
 
@@ -127,30 +173,30 @@ class ProductsSeeder extends Seeder
         }
 
         $products = [
-            ['Rado Chic Quartz White', 'Rado1.jpg', 15800000, 'Thiết kế đơn giản với mặt số trắng trang nhã, phù hợp với phong cách tối giản.'],
-            ['Rado Petite Black Leather', 'Rado2.jpg', 42100000, 'Mặt đen cổ điển kết hợp dây da mềm mại, dễ phối đồ hàng ngày.'],
-            ['Rado Rose Mini Dial', 'Rado3.jpg', 26800000, 'Thiết kế mặt nhỏ với viền hồng thanh lịch cho cổ tay mảnh mai.'],
-            ['Rado Basic Silver Mesh', 'Rado4.jpg', 33700000, 'Dây kim loại dạng lưới bạc thời trang, nhẹ tay và thoáng khí.'],
-            ['Rado Pearl Dial Slim', 'Rado5.jpg', 11700000, 'Mặt số xà cừ lấp lánh nhẹ nhàng, nữ tính cho phong cách thanh lịch.'],
-            ['Rado Classic Brown Strap', 'Rado6.jpg', 46300000, 'Tone nâu sang trọng, dây da thật với mặt tròn cổ điển.'],
-            ['Rado Simple Ceramic Look', 'Rado7.jpg', 18500000, 'Dây trắng giả ceramic tinh tế và thời trang.'],
-            ['Rado Quartz Champagne Gold', 'Rado8.jpg', 24900000, 'Mặt số ánh vàng champagne phối kim chỉ ánh kim nổi bật.'],
-            ['Rado Fashion Navy Dial', 'Rado9.jpg', 31200000, 'Mặt số xanh navy trẻ trung, phối cùng dây trắng hiện đại.'],
-            ['Rado Violet Elegant', 'Rado10.jpg', 40100000, 'Sắc tím pastel nhẹ nhàng cho nàng yêu màu sắc độc đáo.'],
-            ['Rado Coral Pink Strap', 'Rado11.jpg', 12700000, 'Dây da màu hồng san hô cá tính kết hợp mặt số đơn giản.'],
-            ['Rado Floral Engraved Dial', 'Rado12.jpg', 35800000, 'Mặt số hoa văn khắc tinh xảo, thích hợp cho quý cô yêu nghệ thuật.'],
-            ['Rado Green Olive Dial', 'Rado13.jpg', 19400000, 'Mặt số xanh olive lạ mắt, kết hợp kim vàng cá tính.'],
-            ['Rado Silver White Crystal', 'Rado14.jpg', 10100000, 'Đính đá tinh tế tại các cọc số, thiết kế sáng và tinh khôi.'],
-            ['Rado Blue Starry Night', 'Rado15.jpg', 27400000, 'Mặt xanh ánh kim như bầu trời đêm, dây đeo ánh bạc.'],
-            ['Rado Minimal Gold-Tone', 'Rado16.jpg', 49900000, 'Toàn bộ đồng hồ mạ vàng, nổi bật và sang trọng.'],
-            ['Rado Ceramic Inspired Nude', 'Rado17.jpg', 13500000, 'Tone nude trang nhã, thiết kế bo tròn nhẹ nhàng.'],
-            ['Rado Dual Tone Silver-Gold', 'Rado18.jpg', 38800000, 'Phối màu bạc – vàng cổ điển, phong cách thanh lịch.'],
-            ['Rado Ruby Accent Dial', 'Rado19.jpg', 22800000, 'Điểm xuyết đá đỏ ruby tại các vị trí giờ, tăng vẻ quý phái.'],
-            ['Rado Touch Screen Slim', 'Rado20.jpg', 30900000, 'Thiết kế mặt cảm ứng không nút bấm, hiện đại, gọn nhẹ.'],
-            ['Rado Lady Date White', 'Rado21.jpg', 19200000, 'Thiết kế có lịch ngày, dây trắng thời thượng.'],
-            ['Rado Moonphase Chic', 'Rado22.jpg', 43300000, 'Mặt số hiển thị lịch trăng, biểu tượng sự dịu dàng và mộng mơ.'],
-            ['Rado Lush Pink Ceramic', 'Rado23.jpg', 25300000, 'Phiên bản giả ceramic màu hồng ngọt ngào, tinh tế.'],
-            ['Rado Diamond Silver Mesh', 'Rado24.jpg', 14700000, 'Mặt đính đá cùng dây lưới kim loại bạc cao cấp, thích hợp dạ tiệc.'],
+            ['Rado Chic Quartz', 'Rado1.jpg', 15800000, 'Thiết kế sang trọng với viền đính kim cương và dây ceramic trắng.'],
+            ['Rado Centrix Automatic Diamonds Open Heart', 'Rado2.jpg', 42100000, 'Thiết kế lộ cơ tinh tế, đính kim cương, dây thép phủ PVD vàng hồng.'],
+            ['Rado Anatom Automatic Diamonds', 'Rado3.jpg', 26800000, 'Mặt kính vát cạnh liền dây ceramic, lộ cơ, đính kim cương.'],
+            ['Rado DiaStar Original Automatic', 'Rado4.jpg', 33700000, 'Dây lưới bạc nhẹ tay, thiết kế thoáng khí, hiện đại.'],
+            ['Rado DiaStar Original 60-Year Edition', 'Rado5.jpg', 11700000, 'Thiết kế kỷ niệm 60 năm, mặt số xám, 2 dây đeo cao cấp.'],
+            ['Rado Centrix Automatic', 'Rado6.jpg', 46300000, 'Thiết kế lộ cơ lớn, đính kim cương, dây thép và ceramic sang trọng.'],
+            ['Rado True Round Automatic Open Heart', 'Rado7.jpg', 18500000, 'Vỏ ceramic trắng bóng, mặt lộ cơ, phối viền vàng hồng.'],
+            ['Rado True Square Automatic Open Heart', 'Rado8.jpg', 24900000, 'Vỏ vuông ceramic nguyên khối, thiết kế lộ cơ nghệ thuật.'],
+            ['Rado Anatom Automatic', 'Rado9.jpg', 31200000, 'Kính sapphire vát, dây cao su đỏ, mặt số chuyển sắc độc đáo.'],
+            ['Rado Captain Cook Over-Pole Limited Edition', 'Rado10.jpg', 40100000, 'Phiên bản giới hạn, máy lên cót tay, dây thép mạ vàng.'],
+            ['Rado Florence Diamonds', 'Rado11.jpg', 12700000, 'Thiết kế thanh lịch, mặt đen đính kim cương, bộ máy quartz chính xác.'],
+            ['Rado DiaStar X Tej Chauhan Special Edition', 'Rado12.jpg', 35800000, 'Thiết kế neon phá cách, dây cao su, máy tự động R764.'],
+            ['Rado DiaStar Original Open Heart', 'Rado13.jpg', 19400000, 'Thiết kế lộ cơ, mặt guilloche, máy tự động dự trữ 80 giờ.'],
+            ['Rado DiaStar Original Automatic', 'Rado14.jpg', 10100000, 'Viền Ceramos™ vàng, mặt đính zirconia xanh, dây thép mạ vàng.'],
+            ['Rado DiaStar Original', 'Rado15.jpg', 27400000, 'Mặt xanh ngọc chải xước, kim phủ dạ quang, dây thép không gỉ.'],
+            ['Rado Minimal Gold-Tone', 'Rado16.jpg', 49900000, 'Mặt số vàng chải xước, dây thép phối vàng, sang trọng.'],
+            ['Rado LaCoupole Diamonds', 'Rado17.jpg', 13500000, 'Vỏ ceramic đen bóng, mặt khắc sóng, đính kim cương.'],
+            ['Rado Centrix Diamonds', 'Rado18.jpg', 38800000, 'Mặt sơn mài đen đính kim cương, dây thép và ceramic.'],
+            ['Rado True Square Skeleton', 'Rado19.jpg', 22800000, 'Thiết kế skeleton lộ cơ, dây cao su, vỏ ceramic đen nhám.'],
+            ['Rado True Square Thinline', 'Rado20.jpg', 30900000, 'Thiết kế xanh bóng thanh lịch, máy quartz chính xác.'],
+            ['Rado True Square Formafantasma', 'Rado21.jpg', 19200000, 'Thiết kế tối giản đặc biệt, phong cách vượt thời gian.'],
+            ['Rado True Square Undigital', 'Rado22.jpg', 43300000, 'Lấy cảm hứng từ đồng hồ số, thiết kế hiện đại táo bạo.'],
+            ['Rado Anatom Automatic', 'Rado23.jpg', 25300000, 'Dây ceramic phối thép mạ vàng, mặt đen sọc, máy R766.'],
+            ['Rado Captain Cook x Marina Heartbeat', 'Rado24.jpg', 14700000, 'Phiên bản đặc biệt, mặt đính đá cầu vồng, dây đổi được.']
         ];
 
         foreach ($products as [$name, $image, $price, $description]) {
@@ -165,15 +211,57 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
+        // -----------Seiko nữ----------
+        $category = Category::where('name', 'Nữ')->first();
+        $brand = Brand::where('name', 'Seiko')->first();
 
+        if (!$category || !$brand) {
+        $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Seiko"!');
+        return;
+        }       
 
+        $products = [
+            ['Seiko Classic White Dial', 'Seiko1.webp', 1250000, 'Mặt số trắng đơn giản, dây thép không gỉ, phù hợp đi làm hoặc đi học.'],
+            ['Seiko Lady Two-Tone', 'Seiko2.webp', 2750000, 'Thiết kế phối màu vàng - bạc, mặt số nhỏ gọn, lịch sự và nữ tính.'],
+            ['Seiko Quartz Leather Strap', 'Seiko3.jpg', 980000, 'Dây da đen mềm mại, mặt số đen cổ điển, phù hợp phong cách thanh lịch.'],
+            ['Seiko Dress Silver Dial', 'Seiko4.jpg', 3190000, 'Vỏ thép bạc sáng, mặt trắng đính cọc số mảnh – trang nhã, dễ phối đồ.'],
+            ['Seiko Solar Elegant', 'Seiko5.jpg', 6980000, 'Máy năng lượng mặt trời, mặt số hoa văn tinh tế, dây kim loại mỏng nhẹ.'],
+            ['Seiko Petite Pink', 'Seiko6.jpg', 2450000, 'Mặt số hồng pastel, dây thép nhỏ gọn – dễ thương và trẻ trung.'],
+            ['Seiko Basic Quartz Black', 'Seiko7.jpg', 1090000, 'Thiết kế tối giản với dây da đen, mặt trắng, phù hợp mọi dịp.'],
+            ['Seiko Fashion Slim', 'Seiko8.jpg', 3720000, 'Dây thép ánh bạc, vỏ siêu mỏng nhẹ, thời trang và hiện đại.'],
+            ['Seiko White Ceramic Accent', 'Seiko9.webp', 5490000, 'Dây phối ceramic trắng sáng, mặt số đính đá nhỏ, cao cấp.'],
+            ['Seiko Vintage Champagne', 'Seiko10.jpg', 2950000, 'Mặt số ánh vàng champagne, dây kim loại kiểu mắt nhỏ cổ điển.'],
+            ['Seiko Trendy Mesh Strap', 'Seiko11.jpg', 1890000, 'Dây lưới kim loại thời trang, mặt số xám đậm cá tính.'],
+            ['Seiko Gold Plated Quartz', 'Seiko12.jpg', 4550000, 'Dây và vỏ mạ vàng, mặt trắng đơn giản – sang trọng, phù hợp đi tiệc.'],
+            ['Seiko Casual Everyday', 'Seiko13.jpg', 1580000, 'Thiết kế đơn giản, dễ sử dụng hằng ngày, dây da nâu, mặt trắng.'],
+            ['Seiko Rose Gold Tone', 'Seiko14.jpg', 3980000, 'Dây thép vàng hồng phối mặt trắng – nữ tính, hiện đại.'],
+            ['Seiko Mini Dial Square', 'Seiko15.jpg', 990000, 'Mặt vuông nhỏ xinh, dây kim loại, phong cách Hàn Quốc nhẹ nhàng.'],
+            ['Seiko Elegant Sunray Blue', 'Seiko16.jpg', 3280000, 'Mặt xanh ánh kim vân tia, dây kim loại bạc – cuốn hút và độc đáo.'],
+            ['Seiko Silver Slim Date', 'Seiko17.webp', 2680000, 'Vỏ mỏng nhẹ, hiển thị ngày rõ ràng, tiện dụng và thanh lịch.'],
+            ['Seiko Red Wine Leather', 'Seiko18.webp', 2190000, 'Dây da màu đỏ rượu, mặt trắng cổ điển, cho nàng phong cách chín chắn.'],
+            ['Seiko Titanium Light', 'Seiko19.webp', 6990000, 'Chất liệu titanium siêu nhẹ, dây kim loại cao cấp, chống dị ứng.'],
+            ['Seiko Blue Dial Crystal', 'Seiko20.jpg', 3590000, 'Mặt xanh dương đậm, cọc số đính đá, dây thép mắt nhỏ thanh lịch.'],
+            ['Seiko Gold Mesh Limited', 'Seiko21.jpg', 6090000, 'Dây lưới vàng thời trang, mặt số khảm đá nhỏ, thiết kế giới hạn.'],
+            ['Seiko Casual Pink Leather', 'Seiko22.webp', 1320000, 'Dây da hồng dễ thương, phù hợp với học sinh – sinh viên.'],
+            ['Seiko Modern Line Black', 'Seiko23.jpg', 2790000, 'Mặt đen nhám, dây thép mờ xám – hiện đại, hợp xu hướng.'],
+            ['Seiko SSA880 Sportura', 'Seiko24.webp', 6790000, 'Dây thép tích hợp ceramic trắng, mặt đơn giản với cửa sổ lộ cơ nhỏ, kiểu dáng thanh lịch và hiện đại.'],
+        ];
 
-
-
-
-
-//---------------------------Casio cặp--------------------------
+            foreach ($products as [$name, $image, $price, $description]) {
+                DB::table('products')->insert([
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'image' => $image,
+                'category_id' => $category->id,
+                'brand_id' => $brand->id,
+                'warranty_months' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        //---------------------------Casio cặp--------------------------
         $category = Category::where('name', 'Cặp đôi')->first();
         $brand = Brand::where('name', 'Casio')->first();
 
@@ -334,92 +422,43 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
 
+        }
 
-        
-// --------------------------------Citizen nữ----------
-        $category = Category::where('name', 'Nữ')->first();
-        $brand  = Brand::where('name', 'Citizen')->first();
-
-        if (!$category || !$brand) {
-        $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Citizen"!');
-        return;
-        }   
-        $products = [
-            ['Citizen Eco-Drive Silhouette', 'Citizen1.png', 4900000, 'Đồng hồ Eco-Drive Silhouette với dây kim loại mạ vàng hồng, mặt số khảm trai sang trọng, hoạt động bằng ánh sáng.'],
-            ['Citizen Eco-Drive Bianca', 'Citizen2.jpg', 5300000, 'Thiết kế nữ tính với dây da trắng, mặt số xanh navy ánh trai, công nghệ ánh sáng không cần thay pin.'],
-            ['Citizen L Ambiluna', 'Citizen3.jpg', 8600000, 'Đồng hồ Citizen L với triết lý tối giản, vỏ titanium siêu nhẹ và mặt số đá bán quý.'],
-            ['Citizen Eco-Drive EM0686-01A', 'Citizen4.jpg', 4500000, 'Thiết kế tinh tế, dây da nâu, vỏ vàng hồng và mặt số bạc trắng dịu dàng.'],
-            ['Citizen L EM0576-80A', 'Citizen5.jpg', 5950000, 'Đồng hồ dây thép không gỉ, mặt số ánh xà cừ với điểm nhấn kim vàng hồng hiện đại.'],
-            ['Citizen Silhouette Crystal', 'Citizen6.webp', 6250000, 'Dây kim loại đính pha lê Swarovski, mặt số khảm trai, phù hợp dự tiệc và công sở.'],
-            ['Citizen L Sunrise', 'Citizen7.webp', 8700000, 'Thiết kế đột phá với mặt số 3D, đính đá tự nhiên, dây da màu nude thời thượng.'],
-            ['Citizen Eco-Drive EM0500-73L', 'Citizen8.jpg', 3990000, 'Mặt số xanh đậm chải tia, dây thép không gỉ tông bạc, hoạt động bằng ánh sáng.'],
-            ['Citizen L Carina', 'Citizen9.webp', 7400000, 'Mẫu đồng hồ lấy cảm hứng từ chòm sao Carina, mặt số khảm trai cùng chi tiết lấp lánh.'],
-            ['Citizen EM0930-80D', 'Citizen10.jpg', 5800000, 'Dây kim loại mảnh, mặt số xà cừ với họa tiết hoa tinh tế, phù hợp cổ tay nhỏ.'],
-            ['Citizen Eco-Drive EM0683-58P', 'Citizen11.webp', 5100000, 'Thiết kế vàng champagne, mặt số đơn giản dễ nhìn, phong cách cổ điển nhẹ nhàng.'],
-            ['Citizen L Gaia', 'Citizen12.webp', 9900000, 'Đồng hồ thân thiện môi trường, vỏ thép không gỉ tái chế, mặt số xà cừ xanh biển độc đáo.'],
-            ['Citizen EQ9064-52D', 'Citizen13.jpg', 4150000, 'Vẻ đẹp tối giản, mặt số trắng bạc, dây kim loại vàng kết hợp bạc trẻ trung.'],
-            ['Citizen EM0680-53D', 'Citizen14.jpg', 4880000, 'Mặt số khảm trai trắng, dây thép sáng bóng, phù hợp phong cách công sở hiện đại.'],
-            ['Citizen Eco-Drive xC', 'Citizen15.jpg', 10600000, 'Kết hợp giữa công nghệ hiện đại và thiết kế thanh lịch Nhật Bản, mặt kính sapphire chống xước.'],
-            ['Citizen EM0993-82X', 'Citizen16.jpg', 5600000, 'Dây kim loại vàng , mặt số la mã đơn giản, thiết kế thanh lịch hàng ngày.'],
-            ['Citizen Eco-Drive EM0843-51D', 'Citizen17.webp', 6400000, 'Đính đá pha lê quanh viền, mặt số khảm trai trắng với hiệu ứng chuyển sắc tinh tế.'],
-            ['Citizen L Ceci', 'Citizen18.jpg', 9200000, 'Thiết kế tinh xảo với dây da đen và mặt số được trang trí bằng các đường cong nghệ thuật.'],
-            ['Citizen Eco-Drive EM0572-58P', 'Citizen19.webp', 5200000, 'Phong cách cổ điển, dây thép mạ vàng, mặt số đơn sắc nhẹ nhàng, thanh lịch.'],
-            ['Citizen EM0896-89Y', 'Citizen20.jpg', 5900000, 'Dây kim loại rose gold, mặt số khảm trai hồng pastel, điểm nhấn kim xanh cá tính.'],
-            ['Citizen Eco-Drive EM0492-02A', 'Citizen21.jpg', 4700000, 'Dây da nâu cổ điển, mặt số trắng tinh tế, phù hợp phong cách vintage nữ tính.'],
-            ['Citizen EW1676-52D', 'Citizen22.webp', 6150000, 'Dây kim loại tông vàng phối bạc, mặt số khảm trai với cọc số ánh vàng sang trọng.'],
-            ['Citizen EM0990-53L', 'Citizen23.png', 5650000, 'Thiết kế dây thép hiếm có, mặt số tông xanh – bạc tạo sự nổi bật.'],
-            ['Citizen L Crystal Garden', 'Citizen24.jpg', 8900000, 'Đồng hồ đính pha lê Swarovski, họa tiết hoa mờ trên mặt số tạo hiệu ứng huyền ảo.'],
-        ];      
-        foreach ($products as [$name, $image, $price, $description]) {
-            DB::table('products')->insert([
-                'name' => $name,
-                'description' => $description,
-                'price' => $price,
-                'image' => $image,
-                'category_id' => $category->id,
-                'brand_id' => $brand->id,
-                'warranty_months' => 12,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        } 
-
-        // -----------Rado nữ----------
-        $category = Category::where('name', 'Nữ')->first();
-        $brand = Brand::where('name', 'Rado')->first();
+        // ---------Casio nam-----------------
+        $category = Category::where('name', 'Nam')->first();
+        $brand  = Brand::where('name', 'Casio')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Rado"!');
+            $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Casio"!');
             return;
         }
 
         $products = [
-            ['Rado Chic Quartz', 'Rado1.jpg', 15800000, 'Thiết kế sang trọng với viền đính kim cương và dây ceramic trắng.'],
-            ['Rado Centrix Automatic Diamonds Open Heart', 'Rado2.jpg', 42100000, 'Thiết kế lộ cơ tinh tế, đính kim cương, dây thép phủ PVD vàng hồng.'],
-            ['Rado Anatom Automatic Diamonds', 'Rado3.jpg', 26800000, 'Mặt kính vát cạnh liền dây ceramic, lộ cơ, đính kim cương.'],
-            ['Rado DiaStar Original Automatic', 'Rado4.jpg', 33700000, 'Dây lưới bạc nhẹ tay, thiết kế thoáng khí, hiện đại.'],
-            ['Rado DiaStar Original 60-Year Edition', 'Rado5.jpg', 11700000, 'Thiết kế kỷ niệm 60 năm, mặt số xám, 2 dây đeo cao cấp.'],
-            ['Rado Centrix Automatic', 'Rado6.jpg', 46300000, 'Thiết kế lộ cơ lớn, đính kim cương, dây thép và ceramic sang trọng.'],
-            ['Rado True Round Automatic Open Heart', 'Rado7.jpg', 18500000, 'Vỏ ceramic trắng bóng, mặt lộ cơ, phối viền vàng hồng.'],
-            ['Rado True Square Automatic Open Heart', 'Rado8.jpg', 24900000, 'Vỏ vuông ceramic nguyên khối, thiết kế lộ cơ nghệ thuật.'],
-            ['Rado Anatom Automatic', 'Rado9.jpg', 31200000, 'Kính sapphire vát, dây cao su đỏ, mặt số chuyển sắc độc đáo.'],
-            ['Rado Captain Cook Over-Pole Limited Edition', 'Rado10.jpg', 40100000, 'Phiên bản giới hạn, máy lên cót tay, dây thép mạ vàng.'],
-            ['Rado Florence Diamonds', 'Rado11.jpg', 12700000, 'Thiết kế thanh lịch, mặt đen đính kim cương, bộ máy quartz chính xác.'],
-            ['Rado DiaStar X Tej Chauhan Special Edition', 'Rado12.jpg', 35800000, 'Thiết kế neon phá cách, dây cao su, máy tự động R764.'],
-            ['Rado DiaStar Original Open Heart', 'Rado13.jpg', 19400000, 'Thiết kế lộ cơ, mặt guilloche, máy tự động dự trữ 80 giờ.'],
-            ['Rado DiaStar Original Automatic', 'Rado14.jpg', 10100000, 'Viền Ceramos™ vàng, mặt đính zirconia xanh, dây thép mạ vàng.'],
-            ['Rado DiaStar Original', 'Rado15.jpg', 27400000, 'Mặt xanh ngọc chải xước, kim phủ dạ quang, dây thép không gỉ.'],
-            ['Rado Minimal Gold-Tone', 'Rado16.jpg', 49900000, 'Mặt số vàng chải xước, dây thép phối vàng, sang trọng.'],
-            ['Rado LaCoupole Diamonds', 'Rado17.jpg', 13500000, 'Vỏ ceramic đen bóng, mặt khắc sóng, đính kim cương.'],
-            ['Rado Centrix Diamonds', 'Rado18.jpg', 38800000, 'Mặt sơn mài đen đính kim cương, dây thép và ceramic.'],
-            ['Rado True Square Skeleton', 'Rado19.jpg', 22800000, 'Thiết kế skeleton lộ cơ, dây cao su, vỏ ceramic đen nhám.'],
-            ['Rado True Square Thinline', 'Rado20.jpg', 30900000, 'Thiết kế xanh bóng thanh lịch, máy quartz chính xác.'],
-            ['Rado True Square Formafantasma', 'Rado21.jpg', 19200000, 'Thiết kế tối giản đặc biệt, phong cách vượt thời gian.'],
-            ['Rado True Square Undigital', 'Rado22.jpg', 43300000, 'Lấy cảm hứng từ đồng hồ số, thiết kế hiện đại táo bạo.'],
-            ['Rado Anatom Automatic', 'Rado23.jpg', 25300000, 'Dây ceramic phối thép mạ vàng, mặt đen sọc, máy R766.'],
-            ['Rado Captain Cook x Marina Heartbeat', 'Rado24.jpg', 14700000, 'Phiên bản đặc biệt, mặt đính đá cầu vồng, dây đổi được.']
+            ['Casio World Time AE-1200WHD-1A', 'casio-nam-1.jpg', 750000, 'Digital world time, pin 10 năm, WR 100m, nhiều múi giờ + báo thức – tiện dụng & bền bỉ.'],
+            ['Casio AE-1300WH Analog-Digital', 'casio-nam-2.jpg', 900000, 'Kết hợp kim & số điện tử, WR 100m, led, báo thức – thể thao & linh hoạt.'],
+            ['Casio AMW-870DA-2A2V Analog-Digital Blue', 'casio-nam-3.jpg', 2000000, 'Mặt xanh, vỏ thép + dây da, WR 100m, kim số & điện tử – lịch lãm & đa năng.'],
+            ['Casio MTD-130D-1A2V Analog Stainless Steel', 'casio-nam-4.jpg', 1800000, 'Quartz thép không gỉ, WR 100m, thiết kế đơn giản & sang trọng hàng ngày.'],
+            ['Casio Tough Solar AQ-S810W-5AV', 'casio-nam-5.jpg', 690000, 'Tough Solar, kim + số điện tử, WR 100m, 5 báo thức – bền bỉ & đa chức năng.'],
+            ['Casio Vintage Calculator CA-53WF-8B', 'casio-nam-6.jpg', 375000, 'Máy tính 8 số, stopwatch, giờ kép – thiết kế retro tiện dụng.'],
+            ['Casio W-737H-8AV Digital 10-Year Battery', 'casio-nam-7.jpg', 850000, 'Điện tử full màn hình, pin 10 năm, WR 100m, thiết kế mạnh mẽ & thực dụng.'],
+            ['Casio MRW-200H-1BV Analog Diver', 'casio-nam-8.jpg', 1140000, 'Analog diver style, WR 100m, mặt trắng dễ đọc, kim đỏ nổi bật – đơn giản & thực dụng.'],
+            ['Casio MTP-V002D-7B3', 'casio-nam-9.jpg', 390000, 'Thiết kế đơn giản, mặt trắng dây nhựa đen, lịch ngày – dễ đeo, giá rẻ.'],
+            ['Casio A168WEGB-1BVT', 'casio-nam-10.jpg', 780000, 'Thiết kế retro, mặt số điện tử, viền vàng, dây đen – phong cách cổ điển cá tính.'],
+            ['Casio MRW-200HD-2BV', 'casio-nam-11.jpg', 950000, 'Diver style, mặt xanh ngọc, dây thép không gỉ, WR 100m – năng động và bền bỉ.'],
+            ['Casio MDV-107D-2A2V', 'casio-nam-12.jpg', 1190000, 'Dòng lặn 200m, mặt trắng viền xanh, dây thép – mạnh mẽ và dễ phối đồ.'],
+            ['Casio MTD-E501D-5EVDF', 'casio-nam-13.jpg', 1650000, 'Chronograph 42 mm, vỏ & dây thép mạ bạc, mặt beige – lịch lãm & tiện dụng hàng ngày.'],
+            ['Casio A700WE-2A Vintage Slim Digital', 'casio-nam-14.jpg', 700000, 'Digital mặt xanh nhạt, thiết kế mỏng, pin nhiều năm – retro & nhẹ nhàng.'],
+            ['Casio LTP-V007D-1B Elegance Analog', 'casio-nam-15.jpg', 800000, 'Mặt chữ nhật đen, kim La Mã, vỏ & dây thép mạ bạc – cổ điển & thanh lịch.'],
+            ['Casio MTP-V006G-3B1 Day-Date', 'casio-nam-16.jpg', 950000, 'Analog mặt xanh lá, lịch ngày & thứ, vỏ & dây thép mạ vàng – nổi bật & thanh thoát.'],
+            ['Casio MTP-V002D-1B3 Day-Date Analog', 'casio-nam-17.jpg', 900000, 'Analog mặt đen, lịch ngày-thứ, vỏ & dây thép – tối giản & dễ phối.'],
+            ['Casio MDV-106D-9A Diver 200m', 'casio-nam-18.jpg', 1450000, 'Diver 200m, mặt vàng bold, bezel xoay, dây thép – mạnh mẽ & nổi bật.'],
+            ['Casio MTP-1302L-7BV', 'casio-nam-19.jpg', 580000, 'Analog mặt trắng, kim số to, dây da nâu – thanh lịch & phổ thông.'],
+            ['Casio MTP-V003D-1B3 Day-Date', 'casio-nam-20.jpg', 900000, 'Analog mặt đen, lịch ngày-thứ, vỏ & dây thép – đơn giản & tinh tế.'],
+            ['Casio Edifice EFR-S572PB-1AV', 'casio-nam-21.jpg', 2100000, 'Chronograph 45 mm, vỏ thép + bezel resin, WR 100m – thể thao & chắc chắn.'],
+            ['Casio Illuminator F-108WH-8A', 'casio-nam-22.jpg', 780000, 'Digital chắc chắn, WR 50m, pin nhiều năm, đèn nền – retro & bền.'],
+            ['Casio Edifice EFR-S108D-2AV', 'casio-nam-23.jpg', 1700000, 'Chronograph mặt xanh nhạt, vỏ & dây thép, WR 100m – thanh lịch & năng động.'],
+            ['Casio A168WEGG-1BEF', 'casio-nam-24.jpg', 650000, 'Digital iconic, viền & dây vàng đen, pin lâu – retro cá tính hàng ngày.'],
         ];
 
         foreach ($products as [$name, $image, $price, $description]) {
@@ -435,44 +474,196 @@ class ProductsSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
-        // -----------Seiko nữ----------
-        $category = Category::where('name', 'Nữ')->first();
-        $brand = Brand::where('name', 'Seiko')->first();
+
+ // ---------Citizen nam-----------------
+        $category = Category::where('name', 'Nam')->first();
+        $brand  = Brand::where('name', 'Citizen')->first();
 
         if (!$category || !$brand) {
-        $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Seiko"!');
-        return;
-        }       
+            $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Citizen"!');
+            return;
+        }
 
         $products = [
-            ['Seiko Classic White Dial', 'Seiko1.webp', 1250000, 'Mặt số trắng đơn giản, dây thép không gỉ, phù hợp đi làm hoặc đi học.'],
-            ['Seiko Lady Two-Tone', 'Seiko2.webp', 2750000, 'Thiết kế phối màu vàng - bạc, mặt số nhỏ gọn, lịch sự và nữ tính.'],
-            ['Seiko Quartz Leather Strap', 'Seiko3.jpg', 980000, 'Dây da đen mềm mại, mặt số đen cổ điển, phù hợp phong cách thanh lịch.'],
-            ['Seiko Dress Silver Dial', 'Seiko4.jpg', 3190000, 'Vỏ thép bạc sáng, mặt trắng đính cọc số mảnh – trang nhã, dễ phối đồ.'],
-            ['Seiko Solar Elegant', 'Seiko5.jpg', 6980000, 'Máy năng lượng mặt trời, mặt số hoa văn tinh tế, dây kim loại mỏng nhẹ.'],
-            ['Seiko Petite Pink', 'Seiko6.jpg', 2450000, 'Mặt số hồng pastel, dây thép nhỏ gọn – dễ thương và trẻ trung.'],
-            ['Seiko Basic Quartz Black', 'Seiko7.jpg', 1090000, 'Thiết kế tối giản với dây da đen, mặt trắng, phù hợp mọi dịp.'],
-            ['Seiko Fashion Slim', 'Seiko8.jpg', 3720000, 'Dây thép ánh bạc, vỏ siêu mỏng nhẹ, thời trang và hiện đại.'],
-            ['Seiko White Ceramic Accent', 'Seiko9.webp', 5490000, 'Dây phối ceramic trắng sáng, mặt số đính đá nhỏ, cao cấp.'],
-            ['Seiko Vintage Champagne', 'Seiko10.jpg', 2950000, 'Mặt số ánh vàng champagne, dây kim loại kiểu mắt nhỏ cổ điển.'],
-            ['Seiko Trendy Mesh Strap', 'Seiko11.jpg', 1890000, 'Dây lưới kim loại thời trang, mặt số xám đậm cá tính.'],
-            ['Seiko Gold Plated Quartz', 'Seiko12.jpg', 4550000, 'Dây và vỏ mạ vàng, mặt trắng đơn giản – sang trọng, phù hợp đi tiệc.'],
-            ['Seiko Casual Everyday', 'Seiko13.jpg', 1580000, 'Thiết kế đơn giản, dễ sử dụng hằng ngày, dây da nâu, mặt trắng.'],
-            ['Seiko Rose Gold Tone', 'Seiko14.jpg', 3980000, 'Dây thép vàng hồng phối mặt trắng – nữ tính, hiện đại.'],
-            ['Seiko Mini Dial Square', 'Seiko15.jpg', 990000, 'Mặt vuông nhỏ xinh, dây kim loại, phong cách Hàn Quốc nhẹ nhàng.'],
-            ['Seiko Elegant Sunray Blue', 'Seiko16.jpg', 3280000, 'Mặt xanh ánh kim vân tia, dây kim loại bạc – cuốn hút và độc đáo.'],
-            ['Seiko Silver Slim Date', 'Seiko17.webp', 2680000, 'Vỏ mỏng nhẹ, hiển thị ngày rõ ràng, tiện dụng và thanh lịch.'],
-            ['Seiko Red Wine Leather', 'Seiko18.webp', 2190000, 'Dây da màu đỏ rượu, mặt trắng cổ điển, cho nàng phong cách chín chắn.'],
-            ['Seiko Titanium Light', 'Seiko19.webp', 6990000, 'Chất liệu titanium siêu nhẹ, dây kim loại cao cấp, chống dị ứng.'],
-            ['Seiko Blue Dial Crystal', 'Seiko20.jpg', 3590000, 'Mặt xanh dương đậm, cọc số đính đá, dây thép mắt nhỏ thanh lịch.'],
-            ['Seiko Gold Mesh Limited', 'Seiko21.jpg', 6090000, 'Dây lưới vàng thời trang, mặt số khảm đá nhỏ, thiết kế giới hạn.'],
-            ['Seiko Casual Pink Leather', 'Seiko22.webp', 1320000, 'Dây da hồng dễ thương, phù hợp với học sinh – sinh viên.'],
-            ['Seiko Modern Line Black', 'Seiko23.jpg', 2790000, 'Mặt đen nhám, dây thép mờ xám – hiện đại, hợp xu hướng.'],
-            ['Seiko SSA880 Sportura', 'Seiko24.webp', 6790000, 'Dây thép tích hợp ceramic trắng, mặt đơn giản với cửa sổ lộ cơ nhỏ, kiểu dáng thanh lịch và hiện đại.'],
+            ['Citizen Eco‑Drive Chronograph Blue Dial AT8020-54L', 'citizen-nam-1.webp', 23500000, 'Chronograph 43 mm, Eco‑Drive, chronometer, sapphire, thép bạc mặt xanh – kỹ thuật & chuyên nghiệp.'],
+            ['Citizen Promaster Automatic Diver Brown Dial NB6021-17X', 'citizen-nam-2.webp', 10300000, 'Automatic Diver 44 mm, WR 200 m, mặt nâu, thép + bezel nâu – mạnh mẽ & phiêu lưu.'],
+            ['Citizen Promaster Diver Eco‑Drive BN0151-17L', 'citizen-nam-3.webp', 5300000, 'Eco‑Drive Diver 200 m, mặt xanh, thép – giá mềm, bền bỉ và phục vụ lặn.'],
+            ['Citizen AT0550-11X Sporty Chronograph Eco‑Drive Brown', 'citizen-nam-4.webp', 4500000, 'Chronograph 42 mm, Eco‑Drive, mặt nâu, dây da – thể thao & hiện đại.'],
+            ['Citizen Eco‑Drive Day-Date Silver Dial', 'citizen-nam-5.webp', 2950000, 'Eco‑Drive, lịch ngày-thứ, mặt bạc tia nắng, vỏ & dây thép – thanh lịch & bền.'],
+            ['Citizen Quartz Day-Date Gold PVD', 'citizen-nam-6.webp', 2400000, 'Quartz, lịch ngày-thứ, mạ vàng PVD, mặt vàng kim La Mã – cổ điển & sang trọng.'],
+            ['Citizen Quartz Day-Date Blue Dial', 'citizen-nam-7.webp', 2950000, 'Quartz, lịch ngày-thứ, mặt xanh navy, vỏ & dây thép – phổ thông & dễ dùng.'],
+            ['Citizen Quartz Black Dial Gold Case', 'citizen-nam-8.webp', 2700000, 'Quartz, mặt đen, kim vàng, vỏ mạ vàng, dây da đen – nổi bật & thanh nhã.'],
+            ['Citizen GMT Two-Tone Gold Black', 'citizen-nam-9.webp', 7200000, 'GMT 40 mm, vỏ & dây hai tông vàng‑thép, bezel xoay, dial carbon – chuyên nghiệp & mạnh mẽ.'],
+            ['Citizen Automatic Blue Dial Stainless', 'citizen-nam-10.webp', 4150000, 'Automatic, lịch ngày, mặt xanh tia nắng, thép – tinh tế & chất mechanism.'],
+            ['Citizen Automatic Titanium Silver', 'citizen-nam-11.webp', 5400000, 'Automatic, titanium nhẹ, mặt bạc, lịch ngày – bền bỉ & cao cấp.'],
+            ['Citizen Eco‑Drive Chronograph Blue Dial', 'citizen-nam-12.webp', 5250000, 'Eco‑Drive chronograph, mặt xanh, kim số, dây thép – thể thao & đa dùng.'],
+            ['Citizen Eco‑Drive Diver Green Dial', 'citizen-nam-13.webp', 7200000, 'Eco‑Drive Diver 200m, mặt xanh lá, thép + bezel xoay – năng động & bền bỉ.'],
+            ['Citizen Eco‑Drive Diver Black Dial Two‑Tone', 'citizen-nam-14.webp', 7200000, 'Diver 200m, mặt đen + bezel vàng, dây thép hai tông – thể thao & lịch lãm.'],
+            ['Citizen Automatic Beach Blue Dial', 'citizen-nam-15.webp', 6500000, 'Automatic 40mm, mặt xanh biển tia nắng, vỏ & dây thép – tinh tế & cơ khí.'],
+            ['Citizen Promaster Series RT Pilot', 'citizen-nam-16.webp', 17500000, 'Eco‑Drive GMT, nhiều múi giờ, dây titanium – phi công & công nghệ cao.'],
+            ['Citizen Eco‑Drive Chronograph Blue Leather', 'citizen-nam-17.webp', 6200000, 'Chronograph Eco‑Drive, mặt xanh, dây da đen – thể thao & lịch lãm.'],
+            ['Citizen Quartz Green Dial Two‑Tone', 'citizen-nam-18.webp', 3800000, 'Quartz, mặt xanh ngọc, vỏ thép + bezel vàng – nổi bật & thanh nhã.'],
+            ['Citizen Automatic TC Automatic Silver', 'citizen-nam-19.webp', 5400000, 'Automatic titanium nhẹ, mặt bạc, lịch ngày – công nghệ & bền bỉ.'],
+            ['Citizen Eco‑Drive Chronograph Blue Pattern', 'citizen-nam-20.webp', 5600000, 'Eco‑Drive chronograph, mặt xanh họa tiết, dây thép – thể thao & thanh lịch.'],
+            ['Citizen Automatic Sand Dial', 'citizen-nam-21.webp', 4500000, 'Automatic, mặt cát tia nắng, thép – cổ điển & cơ khí.'],
+            ['Citizen Eco‑Drive Executive Gold Steel', 'citizen-nam-22.webp', 8000000, 'Eco‑Drive, mặt xanh trơn, dây thép bicolor vàng – sang trọng & tinh tế.'],
+            ['Citizen Automatic Diver Turquoise Dial', 'citizen-nam-23.webp', 6500000, 'Automatic Diver 200m, mặt xanh ngọc, dây cao su – thể thao & nổi bật.'],
+            ['Citizen Eco‑Drive Minimal Blue Gold', 'citizen-nam-24.webp', 6300000, 'Eco‑Drive, mặt xanh cổ điển, dây thép bicolor – thanh lịch & tối giản.'],
         ];
 
-            foreach ($products as [$name, $image, $price, $description]) {
-                DB::table('products')->insert([
+        foreach ($products as [$name, $image, $price, $description]) {
+            DB::table('products')->insert([
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'image' => $image,
+                'category_id' => $category->id,
+                'brand_id' => $brand->id,
+                'warranty_months' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+// ---------Rado nam-----------------
+        $category = Category::where('name', 'Nam')->first();
+        $brand  = Brand::where('name', 'Rado')->first();
+
+        if (!$category || !$brand) {
+            $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Rado"!');
+            return;
+        }
+
+        $products = [
+            
+            ['Rado Chronograph Blue Leather', 'rado-nam-1.webp', 25900000, 'Mặt xanh navy nổi bật, dây da lịch lãm, thiết kế thể thao sang trọng.'],
+            ['Rado Classic Black Leather', 'rado-nam-2.webp', 23800000, 'Thiết kế cổ điển, mặt đen tối giản, dây da nâu sang trọng.'],
+            ['Rado Green Stainless Steel', 'rado-nam-3.webp', 27500000, 'Mặt xanh lạ mắt, dây kim loại sáng bóng – thanh lịch và hiện đại.'],
+            ['Rado Diastar Original Black', 'rado-nam-4.webp', 28900000, 'Mặt oval đặc trưng, dây thép không gỉ – phong cách cổ điển, bền bỉ.'],
+            ['Rado White Classic Leather', 'rado-nam-5.webp', 23900000, 'Mặt trắng tinh tế, dây da đen – thiết kế thanh lịch, phù hợp công sở.'],
+            ['Rado Two-Tone Black Gold', 'rado-nam-6.webp', 26500000, 'Mặt đen sang trọng, dây demi vàng bạc – quý phái và nổi bật.'],
+            ['Rado Ceramica Black', 'rado-nam-7.webp', 27800000, 'Thiết kế gọn nhẹ, mặt đen huyền bí – dây ceramic bóng bẩy.'],
+            ['Rado Transparent Skeleton', 'rado-nam-8.webp', 30500000, 'Thiết kế trong suốt, lộ máy ấn tượng – hiện đại và cá tính.'],
+            ['Rado Ceramica Square Black', 'rado-nam-9.webp', 25900000, 'Dáng vuông mạnh mẽ, mặt đen tinh tế – dây ceramic đen bóng.'],
+            ['Rado Chronograph Two-Tone', 'rado-nam-10.webp', 28900000, 'Mặt đồng hồ phụ nổi bật, dây demi thời trang – đậm chất nam tính.'],
+            ['Rado Beige Leather Automatic', 'rado-nam-11.webp', 24800000, 'Mặt màu kem sang trọng, dây da nâu cổ điển – máy automatic bền bỉ.'],
+            ['Rado Textured White Dial', 'rado-nam-12.webp', 23900000, 'Mặt vân nổi 3D, dây da đen – thiết kế lịch thiệp và cao cấp.'],
+            ['Rado Tradition Classic Silver', 'rado-nam-13.webp', 23800000, 'Mặt trắng vân caro, kim xanh nổi bật – dây da lịch lãm, cổ điển.'],
+            ['Rado Integral Black Ceramic', 'rado-nam-14.webp', 27500000, 'Thiết kế vuông đẳng cấp, dây ceramic đen bạc – sang trọng và tinh tế.'],
+            ['Rado Diastar Gold Skeleton', 'rado-nam-15.webp', 28900000, 'Lộ máy toàn phần, vỏ vàng ấn tượng – thiết kế độc đáo và cá tính.'],
+            ['Rado Florence Classic Black', 'rado-nam-16.webp', 24500000, 'Mặt đen sang trọng, dây demi bóng sáng – tối giản mà thu hút.'],
+            ['Rado Blue Semi-Skeleton', 'rado-nam-17.webp', 28900000, 'Thiết kế lộ cơ 1 phần, mặt xanh navy – dây ceramic bóng bẩy.'],
+            ['Rado Ceramica Square Skeleton', 'rado-nam-18.webp', 31500000, 'Dáng vuông mạnh mẽ, máy cơ lộ xương – hiện đại và cá tính.'],
+            ['Rado True Open Heart Black', 'rado-nam-19.webp', 29800000, 'Mặt lộ cơ góc cạnh, dây ceramic đen bóng – phong cách thể thao sang trọng.'],
+            ['Rado True White Ceramic', 'rado-nam-20.webp', 26500000, 'Màu trắng tinh khiết, thiết kế siêu mỏng – thanh lịch và hiện đại.'],
+            ['Rado Captain Cook Blue', 'rado-nam-21.webp', 32500000, 'Dòng lặn cổ điển, mặt xanh biển – dây thép lưới chắc chắn.'],
+            ['Rado Sintra Chronograph Silver', 'rado-nam-22.webp', 29500000, 'Vỏ vuốt cong lạ mắt, mặt trắng 3 kim – phong cách thời thượng.'],
+            ['Rado Ceramica Skeleton Square', 'rado-nam-23.webp', 31900000, 'Máy cơ lộ rõ, khung vuông hiện đại – dây ceramic đen tuyền.'],
+            ['Rado Diamond Black Leather', 'rado-nam-24.webp', 23900000, 'Mặt vân chéo đen, vỏ hồng sang trọng – dây da nâu cổ điển.'],
+
+        ];
+
+        foreach ($products as [$name, $image, $price, $description]) {
+            DB::table('products')->insert([
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'image' => $image,
+                'category_id' => $category->id,
+                'brand_id' => $brand->id,
+                'warranty_months' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+// ---------Rolex nam-----------------
+        $category = Category::where('name', 'Nam')->first();
+        $brand  = Brand::where('name', 'Rolex')->first();
+
+        if (!$category || !$brand) {
+            $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Rolex"!');
+            return;
+        }
+
+        $products = [
+            ['Rolex Audemars Piguet Millenary', 'rolex-nam-1.jpg', 4652900000, 'Thiết kế độc đáo với mặt hồng và dây đính kim cương, dành cho con người yêu thích sự sang trọng và khác biệt.'],
+            ['Rolex Audemars Piguet Royal Oak Selfwinding', 'rolex-nam-2.jpg', 1129000000, 'Thiết kế Royal Oak biểu tượng với mặt đen “Grande Tapisserie”, vỏ và dây thép, viền kim cương lấp lánh, tích hợp bộ máy automatic, sang trọng và tinh tế.'],
+            ['Rolex Audemars Piguet Royal Oak Double Balance Wheel Openworked', 'rolex-nam-3.jpg', 9098000000, 'Thiết kế skeleton lộ cơ Calibre 3132 với hai bánh cân bằng, vỏ và dây bằng vàng 18K, bezel đính đá nhiều màu “rainbow” baguette'],
+            ['Rolex Audemars Piguet Royal Oak Concept “Black Panther” Flying', 'rolex-nam-4.png', 395000000, 'Vỏ titan 42 mm và vành bezel ceramic đen, tourbillon lộ cơ, hình tượng 3D Black Panther bằng vàng trắng sơn tay, dây cao su tím – mẫu giới hạn, phối hợp nghệ thuật và kỹ thuật đỉnh cao.'],
+            ['Rolex Audemars Piguet Royal Oak Concept Flying Tourbillon Rainbow', 'rolex-nam-5.jpg', 8290000000, 'Tourbillon bay, mặt lộ cơ đính kim cương nhiều màu, thiết kế nghệ thuật và đẳng cấp xa xỉ.'],
+            ['Rolex Audemars Piguet Code 11.59 Blue Aventurine Dial', 'rolex-nam-6.jpg', 1320000000, 'Mặt xanh đá aventurine nổi bật, thiết kế tối giản sang trọng, dây da cá sấu đồng màu.'],
+            ['Rolex Audemars Piguet Code Chronograph Blue Dial', 'rolex-nam-7.jpg', 2050000000, 'Thiết kế thể thao cao cấp, chronograph vàng hồng 41mm, mặt xanh navy cá tính.'],
+            ['Rolex Audemars Piguet Code 11.6 White Dial Pink Gold', 'rolex-nam-8.jpg', 1220000000, 'Phong cách cổ điển thanh lịch, mặt trắng, vỏ vàng hồng, dây da nâu sang trọng.'],
+            ['Rolex Audemars Piguet Code 11.59 Chronograph Silver Dial', 'rolex-nam-9.jpg', 800000000, 'Chronograph 41mm, mặt bạc, vỏ thép, dây da xám – lịch lãm & tinh tế.'],
+            ['Rolex Audemars Piguet Code Skeleton Tourbillon', 'rolex-nam-10.jpg', 6550000000, 'Open‑worked tourbillon flyback chronograph 41mm, vỏ vàng trắng đỉnh cao kỹ thuật.'],
+            ['Rolex Audemars Piguet Diamond Bracelet Watch', 'rolex-nam-11.jpg', 1300000000, 'Lắc tay/bracelet full kim cương, vỏ kim loại quý – xa xỉ & nổi bật.'],
+            ['Rolex MB&F Legacy Machine Inspired', 'rolex-nam-12.jpg', 4270000000, 'MB&F Legacy Machine, tourbillon treo, vỏ vàng + mặt kỹ thuật – nghệ thuật cao.'],
+            ['Rolex Audemars Piguet Code 11.59 Tourbillon Openworked Chronograph', 'rolex-nam-13.jpg', 4400000000, 'Open‑worked tourbillon + flyback chronograph 41mm vàng hồng – tinh hoa kỹ thuật.' ],
+            ['Rolex Audemars Piguet Code 11.59 Perpetual Calendar Blue Aventurine', 'rolex-nam-14.jpg', 3800000000, 'Perpetual calendar 41mm vàng hồng, mặt aventurine xanh – lịch vĩnh cửu & sang trọng.'],
+            ['Rolex Audemars Piguet Royal Oak Offshore Music Edition 37mm', 'rolex-nam-15.png', 3200000000, 'Offshore 37mm gốm đen, mặt VU‑meter đá xanh & ruby – phong cách âm nhạc pop.' ],
+            ['Rolex Audemars Piguet Code 11.59 Skeleton Chronograph Rose Gold', 'rolex-nam-16.jpg', 4900000000, 'Skeleton chronograph 41mm vàng hồng, mặt lộ cơ kỹ thuật – cá tính & phô diễn cơ khí.' ],
+            ['Rolex Audemars Piguet Royal Oak Selfwinding Flying Tourbillon Blue Dial RG', 'rolex-nam-17.jpg', 7955000000, 'Tourbillon bay 41mm, vỏ & dây vàng hồng, mặt xanh Grande Tapisserie – sang trọng & tinh tế.'],
+            ['Rolex Audemars Piguet Royal Oak Concept Spider Man Tourbillon', 'rolex-nam-18.jpg', 7130000000, 'Tourbillon 42mm titan‑gốm, dial skeleton có tượng 3D Spider‑Man – kỹ thuật & pop culture.'],
+            ['Rolex Audemars Piguet Royal Oak Openworked Blue Baguette BEZEL', 'rolex-nam-19.jpg', 7900000000, 'Skeleton 41mm vàng trắng/stainless với vành baguette xanh, lộ cơ phô diễn kỹ thuật.'],
+            ['Rolex Audemars Piguet Royal Oak Concept Flying Tourbillon Rainbow', 'rolex-nam-20.jpg', 8290000000, 'Skeleton tourbillon 38.5mm vàng hồng, bezel & cọc đa sắc – cực kỳ nghệ thuật & xa xỉ.'],
+            ['Rolex Audemars Piguet Royal Oak Offshore Lady Chronograph', 'rolex-nam-21.jpg', 1336000000, 'Chronograph 37 mm, vỏ vàng hồng, bezel kim cương ~1carat, dây cao su trắng – dành cho nữ, sang trọng & thể thao.'],
+            ['Rolex Audemars Piguet Royal Oak Concept Openworked Chronograph', 'rolex-nam-22.jpg', 4025000000, 'Chronograph flyback 44 mm titan/stainless open‑worked, dây cao su đen – kỹ thuật & hiện đại.'],
+            ['Rolex Cartier Ballon Bleu Pink Gold Brown Strap', 'rolex-nam-23.jpg', 550000000, 'Ballon Bleu 36 mm, vỏ vàng hồng, mặt trắng La queu d’or, dây da nâu – cổ điển & lịch lãm.'],
+            ['Rolex Franck Muller Heart Diamond Rose Gold', 'rolex-nam-24.jpg', 380000000, 'Vỏ vàng hồng, đính kim cương bezel + cọc số trái tim, mặt số ngọc trai, dây da đỏ – nữ tính & quý phái.'],
+        ];
+
+        foreach ($products as [$name, $image, $price, $description]) {
+            DB::table('products')->insert([
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'image' => $image,
+                'category_id' => $category->id,
+                'brand_id' => $brand->id,
+                'warranty_months' => 12,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+// ---------Seiko nam-----------------
+        $category = Category::where('name', 'Nam')->first();
+        $brand  = Brand::where('name', 'Seiko')->first();
+
+        if (!$category || !$brand) {
+            $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Seiko"!');
+            return;
+        }
+
+        $products = [
+            ['Seiko 5 Sports Automatic Black', 'seiko-nam-1.webp', 4150000, 'Thiết kế thể thao mạnh mẽ, dây thép không gỉ và bộ máy cơ tự động.'],
+            ['Seiko Prospex Speedtimer Chronograph', 'seiko-nam-2.webp', 8990000, 'Đồng hồ bấm giờ thể thao, mặt xanh xám cá tính – chuẩn phong cách mạnh mẽ.'],
+            ['Seiko Presage Champagne Dial', 'seiko-nam-3.webp', 7390000, 'Mặt vàng champagne cổ điển, dây demi lịch lãm – dành cho quý ông tinh tế.'],
+            ['Seiko Presage Skeleton Black', 'seiko-nam-4.webp', 8690000, 'Thiết kế lộ cơ độc đáo, dây da cao cấp – sang trọng và kỹ thuật.'],
+            ['Seiko Presage Open Heart Gold', 'seiko-nam-5.webp', 8390000, 'Mặt vàng nhạt tinh tế, lộ máy góc 9h – vẻ đẹp cơ khí kết hợp truyền thống.'],
+            ['Seiko Prospex Panda Chronograph', 'seiko-nam-6.webp', 8990000, 'Mặt trắng viền đen “Panda” độc đáo, chronograph thể thao chuyên nghiệp.'],
+            ['Seiko 5 Two-Tone Silver Gold', 'seiko-nam-7.webp', 5650000, 'Tông vàng-trắng thanh lịch, hiển thị lịch thứ ngày tiện dụng.'],
+            ['Seiko Neo Classic Black Dial', 'seiko-nam-8.webp', 5290000, 'Mặt đen đơn giản hiện đại, vỏ thép không gỉ – dễ phối đồ hằng ngày.'],
+            ['Seiko 5 GMT Automatic', 'seiko-nam-9.webp', 6190000, 'Mặt số dễ đọc, kim GMT nổi bật – thích hợp cho người hay di chuyển.'],
+            ['Seiko Presage Textured Grey', 'seiko-nam-10.webp', 8490000, 'Mặt xám vân lụa độc đáo, dây thép chắc chắn – sang trọng và tinh xảo.'],
+            ['Seiko Presage Blue Open Heart', 'seiko-nam-11.webp', 8990000, 'Mặt xanh sapphire, lộ cơ và đồng hồ phụ – đẳng cấp và hiện đại.'],
+            ['Seiko 5 Sports Green Leather', 'seiko-nam-12.webp', 4890000, 'Mặt xanh lá cá tính, dây da tối giản – thể thao, phong trần và độc đáo.'],
+            ['Seiko Presage Brown Leather', 'seiko-nam-13.webp', 7690000, 'Mặt nâu vân guilloché tinh xảo, dây da nâu – sang trọng và cổ điển.'],
+            ['Seiko 5 Military Field Beige', 'seiko-nam-14.webp', 3790000, 'Thiết kế quân đội mạnh mẽ, dây vải kaki bền bỉ – phù hợp dã ngoại.'],
+            ['Seiko Presage Cocktail Green', 'seiko-nam-15.webp', 7990000, 'Mặt xanh lục ánh tia, dây da nâu – thanh lịch và nổi bật.'],
+            ['Seiko Chronograph Sporty Nato', 'seiko-nam-16.webp', 6950000, 'Mặt xanh đậm phối cam, dây vải NATO – đậm chất thể thao năng động.'],
+            ['Seiko Presage Ice Blue Mesh', 'seiko-nam-17.webp', 8750000, 'Mặt xanh băng độc đáo, dây lưới kim loại – hiện đại và cá tính.'],
+            ['Seiko 5 Sports Orange Dial', 'seiko-nam-18.webp', 5650000, 'Mặt cam nổi bật, dây vải thể thao – thiết kế cá tính và trẻ trung.'],
+            ['Seiko Prospex Tuna Black Rubber', 'seiko-nam-19.webp', 11250000, 'Dáng Tuna huyền thoại, dây cao su đen – chuyên dụng cho lặn.'],
+            ['Seiko Presage Blue Open Heart', 'seiko-nam-20.webp', 9190000, 'Mặt xanh trời thanh lịch, lộ cơ tinh xảo – phù hợp công sở và tiệc.'],
+            ['Seiko 5 Sports Explorer Style', 'seiko-nam-21.webp', 4250000, 'Mặt đen đơn giản, kim dạ quang – dây thép chắc chắn, dễ sử dụng.'],
+            ['Seiko Presage Roman Open Heart', 'seiko-nam-22.webp', 8990000, 'Thiết kế cổ điển La Mã, lộ cơ nghệ thuật – đậm chất thanh lịch.'],
+            ['Seiko Prospex Urban Safari', 'seiko-nam-23.webp', 10290000, 'Mặt đen mạnh mẽ, dây da lộn – phong cách phiêu lưu và bền bỉ.'],
+            ['Seiko Presage Style 60s Black', 'seiko-nam-24.webp', 8850000, 'Mặt đen hoài cổ, viền nâu vàng vintage – kết hợp giữa cổ điển và hiện đại.'],
+        ];
+
+        foreach ($products as [$name, $image, $price, $description]) {
+            DB::table('products')->insert([
                 'name' => $name,
                 'description' => $description,
                 'price' => $price,
@@ -739,5 +930,6 @@ class ProductsSeeder extends Seeder
             ]);
         }
 
+        }   
     }
-}
+

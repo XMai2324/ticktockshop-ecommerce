@@ -21,7 +21,7 @@ header {
     top: 0;
     left: 0;
     z-index: 999;
-    background-color: white;
+    background-color: #afbbc5;
 }
 header.sticky{
     background-color: white;
@@ -246,7 +246,7 @@ header.sticky{
   border-radius: 4px;
 }
 
-/* Fỏm đăng ký */
+/* Form đăng ký */
 .register-form {
   background-color: white;
   padding: 20px;

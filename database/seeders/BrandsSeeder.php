@@ -17,6 +17,7 @@ class BrandsSeeder extends Seeder
         $brands = ['Casio','Rolex', 'Citizen', 'Rado' ,'Seiko'];
 
         foreach ($brands as $name) {
+
             Brand::create(['name' => $name]);
         }
     }

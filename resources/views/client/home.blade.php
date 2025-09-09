@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'TickTock Shop')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
@@ -11,7 +12,6 @@
     <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/cart.css') }}">
-
 
     @if (session('error'))
         <meta name="login-error" content="1">
@@ -47,13 +47,13 @@
             </li>
             <li> <a href="">NAM</a> 
                 <ul class="sub_Nam">
+
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'citizen']) }}">Citizen nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rado']) }}">Rado nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'seiko']) }}">Seiko nam</a></li>
                 </ul>
-            </li>
             <li> <a href="">CẶP ĐÔI</a>
                 <ul class="sub_Doi">
                     <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio đôi</a></li>
@@ -75,17 +75,18 @@
         </div>
 
         <div class="header_other">
-            <li> <input placeholder="Tìm kiếm" type="text"> <i class="fas fa-search"></i>
-                <div class="search-history">
-                    <h3 class="search-heading">Lịch sử tìm kiếm</h3>
-                    <ul class="search-history-list">
-                        <li class="item"> <a href="">Casio</a> </li>
-                        <li class="item"> <a href="">Rolex</a> </li>
+            <li class="search-wrapper">
+                <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">
+                    <input id="searchInput" name="keyword" placeholder="Tìm kiếm" type="text" autocomplete="off">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
 
-                    </ul>
+                <div class="search-history" id="searchHistory">
+                    <h3 class="search-heading">Lịch sử tìm kiếm</h3>
+                    <ul class="search-history-list"></ul>
                 </div>
             </li>
-            
+           
             <li class="header-user">
                     <i class="fa fa-user"></i>
 
@@ -106,8 +107,16 @@
                         @include('client.auth.register')
                 </div>
             </li>
-            <li>  <a class="fa fa-shopping-bag" href="{{ route('cart.index') }}"></a></li>
-            
+            <li>  <a href="{{ route('cart.index') }}" class="cart-icon">
+                <i class="fa fa-shopping-bag"></i>
+                @if(session('cart') && array_sum(array_column(session('cart'), 'quantity')) > 0)
+                    <span class="cart-count">
+                        {{ array_sum(array_column(session('cart'), 'quantity')) }}
+                    </span>
+                @endif
+                </a>
+            </li>
+
             @auth
                 <li class="logout-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -146,8 +155,6 @@
         @yield('content')
     </main>
 
-
-
     <section class="footer">
         <div class="footer-container">
             <p>Tải ứng dụng TickTock</p>
@@ -180,8 +187,9 @@
                 @Ivymoda All rights reserved
             </div>
         </div>
-     </section>
-</body>
+
+     </section> 
+
     <script src="{{ asset('js/client/home.js') }}"></script>
     <script src="{{ asset('js/client/app.js') }}"></script>
     <script>

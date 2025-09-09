@@ -162,12 +162,63 @@ header:hover{
     display: block;
 }
 
-.search-heading {
-    padding: 10px;
+/* Ô tìm kiếm căn giữa */
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.search-form input[type="text"] {
+    border: none;
+    outline: none;
+    padding: 5px 10px;
     font-size: 14px;
-    font-weight: 600;
+    background: transparent;
+    width: 150px;
+}
+
+.search-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 5px;
+    font-size: 14px;
+}
+
+.search-history {
+    width: 180px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 100;
+    margin-top: 5px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.search-heading {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 10px;
+    border-bottom: 1px solid #ddd;
+    margin: 0;
+}
+
+.search-history.show {
+    display: block;
+}
+
+.search-history h3 {
+    font-size: 13px;
+    padding: 8px;
+    margin: 0;
     border-bottom: 1px solid #eee;
-    color: #333;
 }
 
 .search-history-list {
@@ -176,16 +227,44 @@ header:hover{
     padding: 0;
 }
 
-.search-history-list .item a {
-    display: block;
-    padding: 10px 15px;
-    font-size: 14px;
-    color: #333;
-    transition: background 0.2s;
+.search-history-list .item a:hover {
+    text-decoration: underline;
+}
+.search-history-list .item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    background-color: white;
 }
 
-.search-history-list .item a:hover {
-    background-color: #f0f0f0;
+.search-history-list .history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.keyword-link {
+    text-decoration: none;
+    color: #000;
+    flex: 1;
+    font-size: 14px;
+}
+
+.delete-history {
+    color: #aaa;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.delete-history:hover {
+    color: red;
+}
+.clear-history:hover {
+    text-decoration: underline;
+    color: red;
 }
 
 .aspect-ratio-169 {
@@ -454,4 +533,19 @@ footer{
 
 .logout-btn i {
     font-size: 15px;
+}
+.cart-icon {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: bold;
 }

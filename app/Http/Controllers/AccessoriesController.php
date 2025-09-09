@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WatchBox;
 use App\Models\WatchStrap;
-use App\Models\WatchGlass; // nếu có
 use Illuminate\Support\Str;
-
+use App\Models\WatchGlass;
 
 class AccessoriesController extends Controller
 {
@@ -60,7 +59,7 @@ class AccessoriesController extends Controller
         $folder = match ($type) {
             'straps' => 'accessories/straps',
             'boxes' => 'accessories/boxes',
-            'glasses' => 'accessories/glass',
+            'glasses' => 'accessories/glasses',
             default => abort(404),
         };
 
@@ -144,60 +143,68 @@ class AccessoriesController extends Controller
 
     // ✅ Giao diện sửa phụ kiện
     public function update(Request $request, $type, $id)
-    {
-        $model = $this->getModelFromType($type);
-        $item = $model::findOrFail($id);
+{
+    $model = $this->getModelFromType($type);
+    $item  = $model::findOrFail($id);
 
-        $request->validate([
-        'name' => 'required|string|max:255',
-        'price' => 'required|numeric|min:0',
+    // chung
+    $request->validate([
+        'name'     => 'required|string|max:255',
+        'price'    => 'required|numeric|min:0',
         'quantity' => 'required|integer|min:0',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-        'description' => 'nullable|string',
-            ]);
+        'image'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
 
-        if ($type === 'straps' || $type === 'glasses') {
-            $request->validate([
-                'material' => 'required|string|max:255',
-                'color' => 'required|string|max:100',
-            ]);
-        }
-
-        $item->name = $request->name;
-        $item->price = $request->price;
-        $item->quantity = $request->quantity;
-        $item->description = $request->description;
-
-        if ($type === 'straps' || $type === 'glasses') {
-            $item->material = $request->material;
-            $item->color = $request->color;
-        }
-
-
-        if ($request->hasFile('image')) {
-            $folder = match ($type) {
-                'straps' => 'accessories/straps',
-                'boxes' => 'accessories/boxes',
-                'glasses' => 'accessories/glass',
-                default => abort(404),
-            };
-
-            $image = $request->file('image');
-            $imageName = $image->getClientOriginalName();
-            $image->storeAs('public/' . $folder, $imageName);
-
-            $item->image = $imageName;
-        }
-
-        $item->save();
-
-        return redirect()->route('admin.accessories_index.' . $type)
-                        ->with('success', 'Cập nhật phụ kiện thành công!');
+    // vật liệu, màu cho straps/glasses
+    if ($type === 'straps' || $type === 'glasses') {
+        $request->validate([
+            'material' => 'required|string|max:255',
+            'color'    => 'required|string|max:100',
+        ]);
     }
+
+    // description cho boxes/glasses (straps KHÔNG có cột này)
+    if ($type === 'boxes' || $type === 'glasses') {
+        $request->validate(['description' => 'nullable|string']);
+    }
+
+    $item->name     = $request->name;
+    $item->price    = $request->price;
+    $item->quantity = $request->quantity;
+
+    // chỉ gán khi bảng có cột
+    if ($type === 'boxes' || $type === 'glasses') {
+        $item->description = $request->description;
+    }
+
+    if ($type === 'straps' || $type === 'glasses') {
+        $item->material = $request->material;
+        $item->color    = $request->color;
+    }
+
+    if ($request->hasFile('image')) {
+        $folder = match ($type) {
+            'straps'  => 'accessories/straps',
+            'boxes'   => 'accessories/boxes',
+            'glasses' => 'accessories/glasses',
+            default   => abort(404),
+        };
+        $image     = $request->file('image');
+        $imageName = $image->getClientOriginalName();
+        $image->storeAs('public/' . $folder, $imageName);
+        $item->image = $imageName;
+    }
+
+    $item->save();
+
+    return redirect()->route('admin.accessories.' . $type)
+                     ->with('success', 'Cập nhật phụ kiện thành công!');
+}
+
 
 
     // ✅ Xóa phụ kiện
-    public function destroy($type, $id)
+    public function delete($type, $id)
     {
         $model = $this->getModelFromType($type);
         $item = $model::findOrFail($id);
@@ -205,7 +212,7 @@ class AccessoriesController extends Controller
         $folder = match ($type) {
             'straps' => 'accessories/straps',
             'boxes' => 'accessories/boxes',
-            'glasses' => 'accessories/glass',
+            'glasses' => 'accessories/glasses',
             default => abort(404),
         };
 
@@ -216,11 +223,31 @@ class AccessoriesController extends Controller
 
         $item->delete();
 
-        return redirect()->route('admin.accessories_index.' . $type)
-                                ->with('success', 'Xóa phụ kiện thành công!');    }
+        return redirect()->route('admin.accessories.' . $type)
+                                ->with('success', 'Xóa phụ kiện thành công!');    
 
-    
+    }
 
-   
+    public function quickView($type, $id)
+    {
+        switch ($type) {
+            case 'straps':
+                $item = WatchStrap::findOrFail($id);
+                break;
+            case 'boxes':
+                $item = WatchBox::findOrFail($id);
+                break;
+            case 'glasses':
+                $item = WatchGlass::findOrFail($id);
+                break;
+            default:
+                abort(404);
+        }
+
+        return view('client.products.quick_view', [
+            'item' => $item,
+            'type' => $type
+    ]);
+}
 
 }

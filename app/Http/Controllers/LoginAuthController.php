@@ -78,6 +78,3 @@ class LoginAuthController extends Controller
     }
 }
 
-
-
-

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Giỏ hàng')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
@@ -76,14 +77,15 @@
         </div>
 
         <div class="header_other">
-            <li> <input placeholder="Tìm kiếm" type="text"> <i class="fas fa-search"></i>
-                <div class="search-history">
-                    <h3 class="search-heading">Lịch sử tìm kiếm</h3>
-                    <ul class="search-history-list">
-                        <li class="item"> <a href="">Casio</a> </li>
-                        <li class="item"> <a href="">Rolex</a> </li>
+            <li class="search-wrapper">
+                <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">
+                    <input id="searchInput" name="keyword" placeholder="Tìm kiếm" type="text" autocomplete="off">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
 
-                    </ul>
+                <div class="search-history" id="searchHistory">
+                    <h3 class="search-heading">Lịch sử tìm kiếm</h3>
+                    <ul class="search-history-list"></ul>
                 </div>
             </li>
             
@@ -107,7 +109,14 @@
                         @include('client.auth.register')
                 </div>
             </li>
-            <li>  <a class="fa fa-shopping-bag" href="{{ route('cart.index') }}"></a></li>
+            <a href="{{ route('cart.index') }}" class="cart-icon">
+                <i class="fa fa-shopping-bag"></i>
+                @if(session('cart') && array_sum(array_column(session('cart'), 'quantity')) > 0)
+                    <span class="cart-count">
+                        {{ array_sum(array_column(session('cart'), 'quantity')) }}
+                    </span>
+                @endif
+            </a>
             
             @auth
                 <li class="logout-item">
@@ -156,18 +165,32 @@
                         <th>Xóa</th>
                     </tr>
 
-                    @forelse($cartItems as $item)
+                    @php
+                        $cartItems = session('cart') ?? [];
+                    @endphp
+
+                    @forelse ($cartItems as $key => $item)
                         <tr>
-                            <td><img src="{{ asset('storage/' . $item->image_path) }}" alt="{{ $item->name }}"></td>
-                            <td><p>{{ $item->name }}</p></td>
-                            <td><i class="fa-solid fa-square" style="color: {{ $item->color }}"></i></td>
-                            <td><p>{{ $item->size }}</p></td>
+                            {{-- ✅ Hiển thị ảnh đúng folder theo loại --}}
                             <td>
-                                <input type="number" value="{{ $item->quantity }}" min="1" data-id="{{ $item->id }}" class="cart-quantity-input">
+                                <img src="{{ asset('storage/' . (
+                                            $item['type'] === 'product'
+                                                ? 'Watch/' . ($item['category'] === 'Nam' ? 'Watch_nam' : ($item['category'] === 'Cặp đôi' ? 'Watch_cap' : 'Watch_nu'))
+                                                : 'accessories/' . $item['type']
+                                        ) . '/' . $item['image']) }}"
+                                    alt="{{ $item['name'] }}">
                             </td>
-                            <td><p>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} <sub>đ</sub></p></td>
+
+                            <td><p>{{ $item['name'] }}</p></td>
+
+                            <td style="text-align: center;">
+                                <input type="number" value="{{ $item['quantity'] }}" min="1" data-id="{{ $item['id'] }}" class="cart-quantity-input">
+                            </td>
+
+                            <td><p>{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }} <sub>đ</sub></p></td>
+
                             <td>
-                                <form action="{{ route('cart.remove', $item->id) }}" method="POST">
+                                <form action="{{ route('cart.remove', $key) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="remove-btn">X</button>
@@ -175,8 +198,8 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7">Giỏ hàng trống.</td></tr>
-                    @endforelse
+                        <tr><td colspan="5">Giỏ hàng trống.</td></tr>
+                    @endforelse 
                 </table>
             </div>
 
@@ -188,7 +211,7 @@
                     </tr>
                     <tr>
                         <td>Tổng sản phẩm</td>
-                        <td>{{ $cartItems->sum('quantity') }}</td>
+                        <td>{{ array_sum(array_column($cartItems, 'quantity')) }}</td> {{-- ✅ đúng --}}
                     </tr>
                     <tr>
                         <td>TỔNG TIỀN HÀNG</td>
@@ -200,24 +223,14 @@
                     </tr>
                 </table>
 
-                <div class="cart-content-right-text">
-                    <p>Bạn sẽ được miễn phí ship nếu tổng đơn hàng đủ điều kiện</p>
-                    <p style="color: red; font-weight: bold;">
-                        Mua thêm <span style="font-size: 18px;">
-                            {{ number_format(max(0, 8900000 - $cartTotal), 0, ',', '.') }}
-                        </span> để được miễn phí
-                    </p>
-                </div>
-
                 <div class="cart-content-right-button">
-                    <a href="{{ route('products.filter') }}"><button>Tiếp tục mua sắm</button></a>
-                    <a href="{{ route('checkout.index') }}"><button>Thanh Toán</button></a>
+                    <a href="{{ route('checkout') }}"><button>Đặt Hàng</button></a>
                 </div>
 
                 <div class="cart-content-right-dangnhap">
                     @auth
                         <p>Tài khoản: {{ auth()->user()->name }}</p>
-                        <p>Chào mừng bạn quay lại! Bạn sẽ được tích điểm thành viên.</p>
+                        <p>Chào mừng bạn quay lại!</p>
                     @else
                         <p>Hãy <a href="{{ route('client.login') }}"; style ="color: blue; font-weight: bold;" >Đăng nhập</a> để được tích điểm thành viên</p>
                     @endauth
@@ -225,11 +238,7 @@
             </div>
         </div>
 
-        @if(method_exists($cartItems, 'links'))
-            <div class="pagination-wrapper">
-                {{ $cartItems->links() }}
-            </div>
-        @endif
+
 
 
     <main style="margin-top: 100px">

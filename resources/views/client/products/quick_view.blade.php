@@ -1,30 +1,46 @@
 <div class="modal-content">
     <span class="close-modal">&times;</span>
 
-    {{-- ✅ Bên trái --}}
     <div class="modal-quickview-left">
         @php
-    $folder = 'Watch/Watch_nu'; // mặc định
-    $slug = \Illuminate\Support\Str::slug($product->category->name ?? '');
+            use Illuminate\Support\Str;
 
-    if ($slug === 'nam') {
-        $folder = 'Watch/Watch_nam';
-    } elseif ($slug === 'cap-doi') {
-        $folder = 'Watch/Watch_cap';
-    }
-@endphp
-     <img src="{{ asset('storage/' . $folder . '/' . $product->image) }}" alt="{{ $product->name }}">
+            $image = '';
+            $folder = '';
 
+            if (!empty($product)) {
+                $slug = Str::slug($product->category->name ?? '');
+                if ($slug === 'nam') {
+                    $folder = 'Watch/Watch_nam';
+                } elseif ($slug === 'cap-doi') {
+                    $folder = 'Watch/Watch_cap';
+                } else {
+                    $folder = 'Watch/Watch_nu';
+                }
+                $image = asset('storage/' . $folder . '/' . $product->image);
+            } elseif (!empty($item)) {
+                $folder = 'accessories/' . $type;
+                $image = asset('storage/' . $folder . '/' . $item->image);
+            }
+        @endphp
 
+        <img src="{{ $image }}" alt="{{ $product->name ?? $item->name ?? 'Phụ kiện' }}">
     </div>
 
-    {{-- ✅ Bên phải --}}
     <div class="modal-quickview-right">
-        <h2>{{ $product->name }}</h2>
-        <p class="price">{{ number_format($product->price, 0, ',', '.') }}<sup>đ</sup></p>
-        <p><strong>Thương hiệu:</strong> {{ $product->brand->name }}</p>
-        <p><strong>Danh mục:</strong> {{ $product->category->name }}</p>
-        <p class="description">{{ $product->description }}</p>
+        <h2>{{ $product->name ?? $item->name ?? 'Sản phẩm' }}</h2>
+        <p class="price">
+            {{ number_format(($product->price ?? $item->price ?? 0), 0, ',', '.') }}<sup>đ</sup>
+        </p>
+
+        @if (!empty($product))
+            <p><strong>Thương hiệu:</strong> {{ $product->brand->name ?? 'Không rõ' }}</p>
+            <p><strong>Danh mục:</strong> {{ $product->category->name ?? 'Không rõ' }}</p>
+        @elseif (!empty($item))
+            <p><strong>Loại phụ kiện:</strong> {{ ucfirst($type) }}</p>
+        @endif
+
+        <p class="description">{{ $product->description ?? $item->description ?? 'Không có mô tả' }}</p>
 
         <div class="action-row">
             <div class="quantity-box">
@@ -32,7 +48,9 @@
                 <input type="number" id="quantity" name="quantity" min="1" value="1">
             </div>
 
-            <button class="btn-add-to-cart" data-id="{{ $product->id }}">
+            <button class="btn-add-to-cart"
+                    data-id="{{ $product->id ?? $item->id }}"
+                    data-type="{{ isset($product) ? 'product' : $type }}">
                 <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
             </button>
         </div>

@@ -298,7 +298,7 @@ class ProductsSeeder extends Seeder
         $brand = Brand::where('name', 'Rolex')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Rolex"!');
             return;
         }
 
@@ -332,7 +332,7 @@ class ProductsSeeder extends Seeder
         $brand = Brand::where('name', 'Rado')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Rado"!');
             return;
         }
 
@@ -365,7 +365,7 @@ class ProductsSeeder extends Seeder
         $brand = Brand::where('name', 'Citizen')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Citizen"!');
             return;
         }
 
@@ -391,12 +391,12 @@ class ProductsSeeder extends Seeder
 
 
 
-//---------------------------Citizen cặp--------------------------
+//---------------------------Seiko cặp--------------------------
         $category = Category::where('name', 'Cặp đôi')->first();
         $brand = Brand::where('name', 'Seiko')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Seiko"!');
             return;
         }
 
@@ -406,8 +406,6 @@ class ProductsSeeder extends Seeder
     ['Seiko SUR525P1 & SUR531P1', 'SeikoCouple3.jpg', 2800000, 'Nam SUR525P1 xanh dương và nữ SUR531P1 trắng, thiết kế nhẹ nhàng, kính sapphire chất lượng cao.' ],
     ['Seiko SRP/SRP His & Hers Military', 'SeikoCouple4.jpg', 3500000, 'Nam SRP227 & nữ SRP189 – phong cách quân đội, tự động (automatic), đồng bộ dây và bộ máy.' ],
 ];
-
-
 
         foreach ($products as [$name, $image, $price, $description]) {
             DB::table('products')->insert([
@@ -420,11 +418,11 @@ class ProductsSeeder extends Seeder
                 'warranty_months' => 12,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
         }
         // ---------Casio nam-----------------
         $category = Category::where('name', 'Nam')->first();
         $brand  = Brand::where('name', 'Casio')->first();
+
 
         if (!$category || !$brand) {
             $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Casio"!');
@@ -671,6 +669,5 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }   
     }
 }

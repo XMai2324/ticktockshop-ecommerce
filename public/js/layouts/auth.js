@@ -62,7 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
             loginForm.style.display = "block";
         });
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5f3473f3feb09a46c9f6f55d81dc05db7e85d4fa
     // Xử lý nút tra cứu bảo hành
     if (button && form) {
         button.addEventListener("click", function () {
@@ -80,4 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5f3473f3feb09a46c9f6f55d81dc05db7e85d4fa

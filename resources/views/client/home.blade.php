@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/client/cart.css') }}">
 
     @if (session('error'))
         <meta name="login-error" content="1">
@@ -45,7 +46,7 @@
                 </ul>
             </li>
             <li> <a href="">NAM</a> 
-                <ul class="sub_Nu">
+                <ul class="sub_Nam">
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'citizen']) }}">Citizen nam</a></li>
@@ -113,8 +114,8 @@
                     </span>
                 @endif
             </a>
-
-
+            
+            
             @auth
                 <li class="logout-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -187,7 +188,6 @@
             </div>
         </div>
      </section> 
-
     <script src="{{ asset('js/client/home.js') }}"></script>
     <script src="{{ asset('js/client/app.js') }}"></script>
     <script>

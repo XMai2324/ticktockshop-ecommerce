@@ -3,40 +3,34 @@
 
     <div class="modal-quickview-left">
         @php
-            use Illuminate\Support\Str;
-
-            $image = '';
-            $folder = '';
-
-            if (!empty($product)) {
-                $slug = Str::slug($product->category->name ?? '');
-                if ($slug === 'nam') {
-                    $folder = 'Watch/Watch_nam';
-                } elseif ($slug === 'cap-doi') {
-                    $folder = 'Watch/Watch_cap';
-                } else {
-                    $folder = 'Watch/Watch_nu';
-                }
-                $image = asset('storage/' . $folder . '/' . $product->image);
-            } elseif (!empty($item)) {
-                $folder = 'accessories/' . $type;
-                $image = asset('storage/' . $folder . '/' . $item->image);
+            $imageUrl = '';
+            // Sản phẩm đồng hồ
+            if (isset($product)) {
+                $catSlug = \Illuminate\Support\Str::slug(optional($product->category)->name ?? '');
+                if ($catSlug === 'nam')       $folder = 'Watch/Watch_nam';
+                elseif ($catSlug === 'cap-doi') $folder = 'Watch/Watch_cap';
+                else                           $folder = 'Watch/Watch_nu';
+                $imageUrl = asset('storage/' . $folder . '/' . ($product->image ?? ''));
+            }
+            // Phụ kiện
+            elseif (isset($item)) {
+                // nếu folder dùng "glass" cho glasses thì:
+                $accTypeFolder = ($type === 'glasses') ? 'glass' : $type;
+                $imageUrl = asset('storage/accessories/' . $accTypeFolder . '/' . ($item->image ?? ''));
             }
         @endphp
 
-        <img src="{{ $image }}" alt="{{ $product->name ?? $item->name ?? 'Phụ kiện' }}">
+        <img src="{{ $imageUrl }}" alt="{{ $product->name ?? $item->name ?? 'Hình ảnh' }}" style="max-width:100%;height:auto;">
     </div>
 
     <div class="modal-quickview-right">
         <h2>{{ $product->name ?? $item->name ?? 'Sản phẩm' }}</h2>
-        <p class="price">
-            {{ number_format(($product->price ?? $item->price ?? 0), 0, ',', '.') }}<sup>đ</sup>
-        </p>
+        <p class="price">{{ number_format(($product->price ?? $item->price ?? 0), 0, ',', '.') }}<sup>đ</sup></p>
 
-        @if (!empty($product))
-            <p><strong>Thương hiệu:</strong> {{ $product->brand->name ?? 'Không rõ' }}</p>
-            <p><strong>Danh mục:</strong> {{ $product->category->name ?? 'Không rõ' }}</p>
-        @elseif (!empty($item))
+        @if (isset($product))
+            <p><strong>Thương hiệu:</strong> {{ optional($product->brand)->name ?? 'Không rõ' }}</p>
+            <p><strong>Danh mục:</strong> {{ optional($product->category)->name ?? 'Không rõ' }}</p>
+        @elseif (isset($item))
             <p><strong>Loại phụ kiện:</strong> {{ ucfirst($type) }}</p>
         @endif
 

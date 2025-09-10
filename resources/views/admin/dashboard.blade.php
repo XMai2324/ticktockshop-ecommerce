@@ -6,6 +6,8 @@
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/accessories_ad.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -15,7 +17,14 @@
         </div>
 
         <div class="header_menu">
-            <li><a href="">QUẢN LÝ SẢN PHẨM</a></li>
+            <li><a href="">QUẢN LÝ SẢN PHẨM</a>
+                <ul class="sub_menu">
+                    <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
+                    <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
+                    <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
+                    <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
+                </ul>
+        </li>
             <li><a href="#">XỬ LÝ ĐƠN HÀNG</a></li>
             <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="#">ĐÁNH GIÁ</a></li>
@@ -53,9 +62,11 @@
         @yield('content')
     </main>
 
-
    
-
-    <!-- <script src="{{ asset('js/layouts/header.js') }}"></script> -->
+    <script>
+        const IS_AUTHENTICATED = {{ auth()->check() ? 'true' : 'false' }};
+    </script>
+    <script src="{{ asset('js/layouts/auth.js') }}"></script>
+        <script src="{{ asset('js/client/home.js') }}"></script>
 </body>
 </html>

@@ -34,30 +34,38 @@
 
             <form id="warranty-form" action="{{ route('warranty.lookup') }}" method="POST">
                 @csrf
-                <input type="text" name="warranty_code" placeholder="Nhập mã bảo hành" required>
+                <input type="text" name="phone_number" placeholder="Nhập số điện thoại khách hàng" required>
                 <button type="button" id="lookup-button">Tra cứu</button>
             </form>
 
 
-            @if (isset($warranty))
-                @if ($warranty)
-                    <div class="warranty-result" style="background: #f9f9f9; padding: 15px; border: 1px solid #ccc;">
-                        <p><strong>Mã bảo hành:</strong> {{ $warranty->warranty_code }}</p>
-                        <p><strong>Thời hạn:</strong> {{ $warranty->start_date }} đến {{ $warranty->end_date }}</p>
-                        <p><strong>Trạng thái:</strong> 
-                            @if ($warranty->status === 'valid')
+
+
+            @if(isset($warrantyResults) && $warrantyResults->count())
+            <div style="margin-top: 20px;">
+                <p><strong>Tên khách hàng:</strong> {{ $customer_name }}</p>
+
+                @foreach ($warrantyResults as $item)
+                    <div style="padding: 10px; border: 1px solid #ccc; margin-bottom: 10px;">
+                        <p><strong>Mã đơn hàng:</strong> {{ $item['order_code'] }}</p>
+                        <p><strong>Sản phẩm:</strong> {{ $item['product_name'] }}</p>
+                        <p><strong>Thời hạn:</strong> {{ $item['start_date'] ?? 'Chưa có' }} → {{ $item['end_date'] ?? 'Chưa có' }}</p>
+                        <p><strong>Trạng thái:</strong>
+                            @if ($item['status'] === 'valid')
                                 <span style="color:green;">Còn hiệu lực</span>
-                            @elseif ($warranty->status === 'expired')
+                            @elseif ($item['status'] === 'expired')
                                 <span style="color:red;">Đã hết hạn</span>
                             @else
-                                <span>Đã sử dụng</span>
+                                <span>{{ ucfirst($item['status']) }}</span>
                             @endif
                         </p>
                     </div>
-                @else
-                    <p style="color:red;">Không tìm thấy mã bảo hành.</p>
-                @endif
+                @endforeach
+            </div>
+            @elseif(isset($warrantyResults))
+                <p style="color:red;">Không tìm thấy thông tin bảo hành.</p>
             @endif
+
         </div>
 
     </div>

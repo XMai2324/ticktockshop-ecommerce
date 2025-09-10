@@ -1,6 +1,8 @@
 .warranty-lookup {
     margin-top: 40px;
     font-family: 'Segoe UI', sans-serif;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 .warranty-lookup h2 {
@@ -34,6 +36,10 @@
 
 .policy-column {
     flex: 1 1 50%;
+}
+
+strong {
+    line-height: 1.6;
 }
 
 .form-column {

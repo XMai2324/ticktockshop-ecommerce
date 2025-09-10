@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('quickViewModal');
     const modalBody = document.getElementById('quick-view-body');
 
-    // ✅ Hàm cập nhật icon giỏ hàng
+    //s Hàm cập nhật icon giỏ hàng
     function updateCartIcon(quantity) {
         const cartIcon = document.querySelector('.cart-icon');
         let cartCount = document.querySelector('.cart-count');
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 👉 Gộp selector cho cả sản phẩm chính và phụ kiện
+    //  Gộp selector cho cả sản phẩm chính và phụ kiện
     document.querySelectorAll('.product-quick-view, .accessory-quick-view').forEach(item => {
         item.addEventListener('click', function (event) {
             event.preventDefault(); //  Ngăn reload trang
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ✅ Đóng modal + xử lý thêm giỏ hàng
+    //  Đóng modal + xử lý thêm giỏ hàng
     modal.addEventListener('click', function (event) {
         if (event.target.classList.contains('close-modal')) {
             modal.style.display = 'none';
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.success) {
                     alert('Đã thêm vào giỏ hàng!');
 
-                    // ✅ Cập nhật icon giỏ hàng
+                    //  Cập nhật icon giỏ hàng
                     updateCartIcon(data.cart_count);
 
                     modal.style.display = 'none';
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // ✅ Click ra ngoài modal để tắt
+    //  Click ra ngoài modal để tắt
     window.addEventListener('click', function (event) {
         if (event.target == modal) {
             modal.style.display = 'none';

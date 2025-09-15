@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Promotion;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
             OrdersSeeder::class,
             OrderItemsSeeder::class,
             WarrantiesSeeder::class,
+            PromotionsSeeder::class,
         ]);
     }
 }

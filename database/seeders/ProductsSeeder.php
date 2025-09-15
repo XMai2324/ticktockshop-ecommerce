@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Facades\DB;
 
+
 class ProductsSeeder extends Seeder
 {
     public function run(): void

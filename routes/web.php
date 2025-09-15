@@ -8,6 +8,7 @@ use App\Http\Controllers\AccessoriesController;
 use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PromotionsController;
 
 
 
@@ -83,7 +84,7 @@ Route::prefix('accessories')->group(function () {
 });
 
 
-//ADMIN
+//ADMIN accessories
 Route::prefix('admin/accessories')->name('admin.accessories.')->group(function () {
     // List theo loại (view: admin.accessories_index)
     Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
@@ -100,7 +101,7 @@ Route::prefix('admin/accessories')->name('admin.accessories.')->group(function (
 });
 
 
-// Giỏ hàng
+// Giỏ hàng customer
 Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::delete('/cart/remove/{key}', [CartController::class, 'remove'])->name('cart.remove');
@@ -120,7 +121,7 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('products
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
 
-
+//Admin product
 Route::prefix('admin/products')->middleware('auth')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('admin.products_index');
     Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
@@ -129,3 +130,11 @@ Route::prefix('admin/products')->middleware('auth')->group(function () {
 });
 Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
 
+
+//Admin promotion
+Route::prefix('admin')->middleware(['auth'])->group(function(){
+    Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
+    Route::post('promotions', [PromotionsController::class,'store'])->name('admin.promotions.store');
+    Route::put('promotions/{id}', [PromotionsController::class,'update'])->name('admin.promotions.update');
+    Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
+});

@@ -116,6 +116,13 @@
                     <th>Mã</th>
                     <th>Loại</th>
                     <th>Giá trị</th>
+                    <th>Giảm tối đa</th>
+                    <th>Đơn tối thiểu</th>
+                    <th>Giới hạn lượt dùng</th>
+                    <th>Giới hạn mỗi user</th>
+                    <th>Bắt đầu</th>
+                    <th>Kết thúc</th>
+                    <th>Trạng thái</th>
                     <th>Sử dụng</th>
                     <th>Hành động</th>
                 </tr>
@@ -127,10 +134,22 @@
                     <td>{{ $p->code }}</td>
                     <td>{{ $p->type }}</td>
                     <td>{{ $p->value }}</td>
+                    <td>{{ $p->max_discount ?? '∞' }}</td>
+                    <td>{{ $p->min_order ?? 0 }}</td>
+                    <td>{{ $p->usage_limit ?? '∞' }}</td>
+                    <td>{{ $p->per_user_limit ?? '∞' }}</td>
+                    <td>{{ $p->start_at ? $p->start_at->format('d/m/Y') : '-' }}</td>
+                    <td>{{ $p->end_at ? $p->end_at->format('d/m/Y') : '-' }}</td>
+                    <td>
+                        <span class="status {{ $p->is_active ? 'active' : 'inactive' }}">
+                            {{ $p->is_active ? 'Đang hoạt động' : 'Đã tắt' }}
+                        </span>
+                    </td>
                     <td>{{ $p->used_count }}/{{ $p->usage_limit ?? '∞' }}</td>
                     <td>
                         <button class="btn-edit" onclick='editPromotion(@json($p), "{{ route("admin.promotions.update", $p->id) }}")'>
-                        Sửa  </button>
+                            Sửa
+                        </button>
 
                         <form action="{{ route('admin.promotions.delete', $p->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')

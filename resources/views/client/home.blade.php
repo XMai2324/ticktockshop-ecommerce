@@ -159,8 +159,8 @@
         <div class="footer-container">
             <p>Tải ứng dụng TickTock</p>
             <div class="app-google">
-                <a href=""><img src="{{ asset('storage/appstore.png')}}" alt=""></a>
-                <a href=""><img src="{{ asset('storage/googleplay.png')}}" alt=""></a>
+                <a href=""><img src="{{ asset('storage/appstore.jpg')}}" alt=""></a>
+                <a href=""><img src="{{ asset('storage/googleplay.jpg')}}" alt=""></a>
             </div>
             <p>Nhận bản tin TickTock</p>
             <div class="input-email">
@@ -168,7 +168,7 @@
                 <i class="fas fa-arrow-left"></i>
             </div>
             <div class="footer-items">
-                <li><a href=""><img src="{{ asset('storage/dathongbao.png')}}" alt=""></a></li>
+                <li><a href=""><img src="{{ asset('storage/dathongbao.jpg')}}" alt=""></a></li>
                 <li><a href=""></a>Liên hệ</li>
                 <li><a href=""></a>Tuyển dụng</li>
                 <li><a href=""></a>Giới thiệu</li>

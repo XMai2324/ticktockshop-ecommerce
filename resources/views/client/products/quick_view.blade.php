@@ -1,6 +1,7 @@
 <div class="modal-content">
     <span class="close-modal">&times;</span>
 
+
     <div class="modal-quickview-left">
         @php
             use Illuminate\Support\Str;

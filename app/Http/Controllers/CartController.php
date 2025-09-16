@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Str;
 class CartController extends Controller
 {
@@ -95,4 +96,45 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Đã xoá sản phẩm khỏi giỏ hàng');
     }
 
+
+    public function update(Request $request)
+    {
+        $data = $request->validate([
+            'row_id' => 'required',
+            'qty'    => 'required|integer|min:1',
+        ]);
+
+        $cart = session()->get('cart', []);
+
+        if (!isset($cart[$data['row_id']])) {
+            return response()->json(['ok' => false, 'msg' => 'Item not found'], 404);
+        }
+
+        // ✅ CHỈ DÙNG 'quantity' THỐNG NHẤT
+        $cart[$data['row_id']]['quantity'] = $data['qty'];
+
+        session()->put('cart', $cart);
+
+        // Tính lại subtotal dòng
+        $rowPrice    = $cart[$data['row_id']]['price'];
+        $rowQuantity = $cart[$data['row_id']]['quantity'];
+        $rowSubtotal = $rowPrice * $rowQuantity;
+
+        // Tính lại tổng
+        $totalQty = 0;
+        $total    = 0;
+        foreach ($cart as $it) {
+            $q = isset($it['quantity']) ? (int)$it['quantity'] : 0; // phòng xa
+            $totalQty += $q;
+            $total    += $it['price'] * $q;
+        }
+
+        return response()->json([
+            'ok'          => true,
+            'rowSubtotal' => number_format($rowSubtotal, 0, ',', '.'),
+            'cartTotal'   => number_format($total, 0, ',', '.'),
+            'totalQty'    => $totalQty,
+        ]);
+    }
 }
+

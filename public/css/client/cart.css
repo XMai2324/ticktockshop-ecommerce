@@ -69,7 +69,7 @@
 }
 
 .cart-content-left table p {
-    font-size: 12px;
+    font-size: 16px;
     color: #333;
     font-family: var(--main-text-font);
 }
@@ -114,6 +114,7 @@
     color: #333;
     font-family: var(--main-text-font);
     border-bottom: 2px solid #dddddd;
+
     font-weight: bold !important;
 }
 
@@ -124,6 +125,7 @@
     padding: 6px 0;
     text-align: left;
 }
+
 /* ✅ In đậm chữ bên trái và đồng bộ kích thước */
 .cart-content-right table td:first-child {
     font-weight: bold;
@@ -216,6 +218,7 @@
     color: #333;
     font-family: var(--main-text-font);
 }
+
 /* Fix input số lượng trong giỏ hàng */
 .cart-content-left table input[type="number"] {
     width: 60px !important;

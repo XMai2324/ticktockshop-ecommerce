@@ -71,4 +71,3 @@ class WarrantyController extends Controller
         ]);
     }
 }
-

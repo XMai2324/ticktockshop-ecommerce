@@ -20,6 +20,11 @@ use App\Http\Controllers\PromotionsController;
 //     return view('client.home');
 // });
 
+
+Route::get('/login', function () {
+    return view('client.login'); // đúng tên file chị đã có
+})->name('login');
+
 Route::get('/', function () { 
     if (auth()->check()) {
         if (auth()->user()->role === 'admin') {
@@ -111,7 +116,8 @@ Route::get('/cart/clear', function () {
     session()->forget('cart');
     return 'Đã xoá giỏ hàng';
 });
-
+//update giỏ hàng
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 
@@ -138,3 +144,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::put('promotions/{id}', [PromotionsController::class,'update'])->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
 });
+
+
+//thanh toan
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');

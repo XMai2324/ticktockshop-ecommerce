@@ -5,6 +5,7 @@
     <title>TickTock_Shop - ADMIN DASHBOARD</title>
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -14,9 +15,9 @@
         </div>
 
         <div class="header_menu">
-            <li><a href="#">QUẢN LÝ SẢN PHẨM</a></li>
+            <li><a href="">QUẢN LÝ SẢN PHẨM</a></li>
             <li><a href="#">XỬ LÝ ĐƠN HÀNG</a></li>
-            <li><a href="#">THÔNG TIN BẢO HÀNH</a></li>
+            <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="#">ĐÁNH GIÁ</a></li>
         </div>
 
@@ -47,8 +48,14 @@
         </div>
     </header>
 
+    
+    <main style="margin-top: 100px">
+        @yield('content')
+    </main>
+
+
    
 
-    <script src="{{ asset('js/layouts/header.js') }}"></script>
+    <!-- <script src="{{ asset('js/layouts/header.js') }}"></script> -->
 </body>
 </html>

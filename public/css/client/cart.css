@@ -69,7 +69,7 @@
 }
 
 .cart-content-left table p {
-    font-size: 12px;
+    font-size: 16px;
     color: #333;
     font-family: var(--main-text-font);
 }
@@ -114,14 +114,39 @@
     color: #333;
     font-family: var(--main-text-font);
     border-bottom: 2px solid #dddddd;
+
+    font-weight: bold !important;
 }
 
 .cart-content-right table td {
-    font-size: 12px;
-    color: #333;
+    font-size: 13px;
+    color: #000;
     font-family: var(--main-text-font);
     padding: 6px 0;
     text-align: left;
+}
+
+/* ✅ In đậm chữ bên trái và đồng bộ kích thước */
+.cart-content-right table td:first-child {
+    font-weight: bold;
+    font-size: 15px;
+    color: #000;
+}
+
+/* ✅ Bên phải: Số tiền không in đậm, đồng bộ kích thước */
+.cart-content-right table td:last-child {
+    text-align: right;
+    font-size: 15px;
+    font-weight: normal;
+    color: #000;
+}
+
+/* ✅ Nếu có thẻ <p> bao bọc số tiền */
+.cart-content-right table td:last-child p {
+    font-size: 15px;
+    font-weight: normal !important;
+    color: #000;
+    margin: 0;
 }
 
 .cart-content-right tr:nth-child(4) td {
@@ -156,22 +181,21 @@
     font-family: var(--main-text-font);
 }
 
-.cart-content-right-button button:first-child {
-    background-color: #fff;
-    color: black;
-    border: 1px solid black;
-    margin-right: 20px;
-}
-
-/*đổi màu khi di chuột đến nút thanh toán ....*/
-.cart-content-right-button button:first-child:hover {
-    background-color: #da4747;
-}
 
 .cart-content-right-button button:last-child {
-    background-color: black;
+    background-color: #e53935;
     color: #fff;
-    border: 1px solid black;
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+.cart-content-right-button button:last-child:hover {
+    background-color: #c62828; 
+    cursor: pointer;
 }
 
 /* --- ĐĂNG NHẬP NHẮC NHỞ --- */
@@ -183,4 +207,62 @@
     font-size: 12px;
     color: #333;
     font-family: var(--main-text-font);
+}
+
+/* Fix input số lượng trong giỏ hàng */
+.cart-content-left table input[type="number"] {
+    width: 60px !important;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+/* Tên sản phẩm */
+.cart-content-left td:nth-child(2) p {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Thành tiền */
+.cart-content-left td:nth-child(4) p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+}
+/* Phần TỔNG TIỀN GIỎ HÀNG */
+.cart-content-right table td,
+.cart-content-right table th {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.cart-content-right tr:last-child td p {
+    font-weight: bold;
+    font-size: 18px;
+    color: black;
+}
+
+/* Thông báo miễn phí ship */
+.cart-content-right-text p {
+    font-size: 15px;
+}
+.cart-content-right-text p span {
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+}
+.cart-icon {
+    position: relative;
+}
+
+.cart-icon .cart-count {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
 }

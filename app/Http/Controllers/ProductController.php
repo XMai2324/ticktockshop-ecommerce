@@ -19,54 +19,77 @@ class ProductController extends Controller
         $brandSlug = $request->input('brand');
         $sort = $request->input('sort');
         $priceRange = $request->input('price_range');
+        $keyword = $request->input('keyword');
 
         $query = Product::query();
 
-        // ✅ Tìm category theo slug
+        // Khai báo mặc định để tránh lỗi
         $currentCategory = null;
+        $currentBrand = null;
+
+        // ✅ Lọc theo từ khóa thông minh (brand + category)
+        if ($keyword) {
+            $slugKeyword = Str::slug(Str::ascii(mb_strtolower($keyword))); // chuẩn hóa từ khóa tìm
+
+            $allBrands = $brands->keyBy(fn($b) => Str::slug(Str::ascii(mb_strtolower($b->name))));
+            $allCategories = $categories->keyBy(fn($c) => Str::slug(Str::ascii(mb_strtolower($c->name))));
+
+            $matchedBrand = null;
+            $matchedCategory = null;
+
+            foreach ($allBrands as $slug => $brand) {
+                if (Str::contains($slugKeyword, $slug)) {
+                    $matchedBrand = $brand;
+                    break;
+                }
+            }
+
+            foreach ($allCategories as $slug => $category) {
+                $slugWords = explode('-', $slug);
+                foreach ($slugWords as $word) {
+                    if (Str::contains($slugKeyword, $word)) {
+                        $matchedCategory = $category;
+                        break 2;
+                    }
+                }
+            }
+
+            if ($matchedBrand) {
+                $currentBrand = $matchedBrand;
+                $query->where('brand_id', $matchedBrand->id);
+            }
+
+            if ($matchedCategory) {
+                $currentCategory = $matchedCategory;
+                $query->where('category_id', $matchedCategory->id);
+            }
+
+            // fallback nếu brand/category không khớp
+            if (!$matchedBrand && !$matchedCategory) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            }
+        }
+
+        // Lọc theo category từ URL
         if ($categorySlug) {
             $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
                 return Str::slug($cat->name) === $categorySlug;
             });
 
-            // Nếu không tìm thấy category → return trang trắng không sản phẩm
-            if (!$currentCategory) {
-                return view('client.products', [
-                    'products' => collect(), // Trống
-                    'categories' => $categories,
-                    'brands' => $brands,
-                    'currentCategory' => null,
-                    'currentBrand' => null,
-                    'selectedSort' => $sort,
-                    'selectedPriceRange' => $priceRange,
-                    'errorMessage' => 'Không tìm thấy danh mục sản phẩm.'
-                ]);
+            if ($currentCategory) {
+                $query->where('category_id', $currentCategory->id);
             }
-
-            $query->where('category_id', $currentCategory->id);
         }
 
-        // ✅ Tìm brand theo slug
-        $currentBrand = null;
+        // Lọc theo brand từ URL
         if ($brandSlug) {
             $currentBrand = $brands->first(function ($br) use ($brandSlug) {
                 return Str::slug($br->name) === $brandSlug;
             });
 
-            if (!$currentBrand) {
-                return view('client.products', [
-                    'products' => collect(), // Trống
-                    'categories' => $categories,
-                    'brands' => $brands,
-                    'currentCategory' => $currentCategory,
-                    'currentBrand' => null,
-                    'selectedSort' => $sort,
-                    'selectedPriceRange' => $priceRange,
-                    'errorMessage' => 'Không tìm thấy thương hiệu.'
-                ]);
+            if ($currentBrand) {
+                $query->where('brand_id', $currentBrand->id);
             }
-
-            $query->where('brand_id', $currentBrand->id);
         }
 
         // Lọc theo khoảng giá
@@ -75,7 +98,7 @@ class ProductController extends Controller
             $query->whereBetween('price', [(int) $min, (int) $max]);
         }
 
-        // Sắp xếp theo giá
+        // Sắp xếp
         if ($sort === 'asc') {
             $query->orderBy('price', 'asc');
         } elseif ($sort === 'desc') {
@@ -92,20 +115,15 @@ class ProductController extends Controller
             'currentBrand' => $currentBrand,
             'selectedSort' => $sort,
             'selectedPriceRange' => $priceRange,
-            'errorMessage' => null
+            'keyword' => $keyword,
         ]);
     }
+
+
 
     public function quickView($slug)
     {
         $product = Product::where('slug', $slug)->with('category', 'brand')->firstOrFail();
         return view('client.products.quick_view', compact('product'));
     }
-
-    public function show($id)
-    {
-        $product = Product::findOrFail($id);
-        return view('client.product_detail', compact('product'));
-    }
-
 }

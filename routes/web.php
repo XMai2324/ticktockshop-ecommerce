@@ -12,8 +12,11 @@ use App\Http\Controllers\CheckoutController;
 
 
 // Route::get('/', function () {
-//     //return view('client.home');
-//     return view('admin.dashboard');
+//     if (request()->has('checkout')) {
+//         return view('client.checkout');
+//     }
+
+//     return view('client.home');
 // });
 
 Route::get('/login', function () {
@@ -34,6 +37,7 @@ Route::get('/', function () {
     
 Route::get('/products', [ProductController::class, 'filterProducts'])->name('products.filter');
 Route::get('/quick-view/{slug}', [ProductController::class, 'quickView']);
+Route::get('/accessories/quick-view/{type}/{id}', [AccessoriesController::class, 'quickView']);
 
 
     //User routes
@@ -80,15 +84,24 @@ Route::get('/admin/warranty', [WarrantyController::class, 'showAdmin'])->middlew
 Route::post('/warranty/lookup', [WarrantyController::class, 'lookup'])->name('warranty.lookup');
 
 // Giỏ hàng
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::delete('/cart/remove/{key}', [CartController::class, 'remove'])->name('cart.remove');
+// Xóa giỏ hàng 
+Route::get('/cart/clear', function () {
+    session()->forget('cart');
+    return 'Đã xoá giỏ hàng';
+});
+//update giỏ hàng
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+
 
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+// Lịch sử tìm kiếm
+Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
-
-Route::get('/accessories', [AccessoriesController::class, 'index'])->name('accessories.index');
-
-Route::get('/login', function () {
-    return view('client.login'); // nếu có file login.blade.php
-})->name('login');
+//thanh toan
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');

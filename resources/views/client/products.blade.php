@@ -10,36 +10,48 @@
 
 @section('content')
 <section class="product-page">
-    <div class="container">
-        <div class="product-page-top row">
-            <p><a href="{{ route('client.home') }}">Trang chủ</a></p> <span>&#10230;</span>
-            @if(isset($currentCategory))
-                <p><a href="{{ route('products.filter', ['category' => Str::slug($currentCategory->name)]) }}">{{ $currentCategory->name }}</a></p> <span>&#10230;</span>
-            @endif
-            <p>
-                @if(isset($currentBrand) && isset($currentCategory))
-                    <a href="{{ route('products.filter', [
-                        'category' => Str::slug($currentCategory->name),
-                        'brand' => Str::slug($currentBrand->name)
-                    ]) }}">
-                        {{ $currentBrand->name }} {{ strtolower($currentCategory->name) }}
-                    </a>
-                @else
-                    Tất cả sản phẩm
-                @endif
-            </p>
+        <div class="container">
+            <div class="product-page-top row">
+                <p><a href="{{ route('home') }}">Trang chủ</a></p> <span>&#10230;</span>
+                @if(isset($keyword) && $keyword)
+                    <p>{{ $keyword }}</p>
 
-        </div>
+                @elseif(isset($currentBrand) && isset($currentCategory))
+                    <p>
+                        <a href="{{ route('products.filter', [
+                            'category' => Str::slug($currentCategory->name),
+                            'brand' => Str::slug($currentBrand->name)
+                        ]) }}">
+                            {{ $currentBrand->name }} {{ strtolower($currentCategory->name) }}
+                        </a>
+                    </p>
+
+                @elseif(isset($currentBrand))
+                    <p><a href="{{ route('products.filter', ['slug' => $currentBrand->slug]) }}">{{ $currentBrand->name }}</a></p>
+
+                @elseif(isset($currentCategory))
+                    <p><a href="{{ route('products.filter', ['category' => Str::slug($currentCategory->name)]) }}">{{ $currentCategory->name }}</a></p>
+
+                @else
+                    <p>Tất cả sản phẩm</p>
+                @endif
+            </div>
+
             <div class="product-page-right-top row">
                 <div class="product-page-right-top-item">
-                    <p>
+                    <p class="product-page-title">
                         @if(isset($currentBrand) && isset($currentCategory))
-                            {{ ($currentBrand->name) }} {{ ($currentCategory->name) }}
+                            {{ strtoupper($currentBrand->name) }} - {{ strtoupper($currentCategory->name) }}
+                        @elseif(isset($currentBrand))
+                            SẢN PHẨM THƯƠNG HIỆU: {{ strtoupper($currentBrand->name) }}
+                        @elseif(isset($currentCategory))
+                            SẢN PHẨM LOẠI: {{ strtoupper($currentCategory->name) }}
                         @else
                             TẤT CẢ SẢN PHẨM
                         @endif
                     </p>
-                </div>
+
+                </div>  
 
                 {{-- Dropdown: Khoảng giá --}}
                 <div class="filter-group">
@@ -123,10 +135,15 @@
     <!-- Quick View Modal -->
 <div id="quickViewModal" class="modal" style="display: none;">
         <div id="quick-view-body">
-            <!-- Nội dung sản phẩm sẽ được nạp vào đây bằng AJAX -->
+
         </div>
 </div>
 
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('js/client/app.js') }}" defer></script>
+    <script src="{{ asset('js/client/quickview.js') }}" defer></script>
 @endsection
 
 @section('scripts')

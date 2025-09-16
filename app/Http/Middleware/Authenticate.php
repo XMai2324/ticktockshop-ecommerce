@@ -9,11 +9,10 @@ class Authenticate extends Middleware
     /**
      * Get the path the user should be redirected to when not authenticated.
      */
-    // protected function redirectTo($request)
-    // {
-    //     if (! $request->expectsJson()) {
-    //         // Có thể chuyển hướng về trang đăng nhập user hoặc tùy theo đường dẫn
-    //         return route('client.login'); 
-    //     }
-    // }
+//     protected function redirectTo($request)
+// {
+//     if (! $request->expectsJson()) {
+//         return route('client.login'); // nếu không dùng 'login' mặc định
+//     }
+// }
 }

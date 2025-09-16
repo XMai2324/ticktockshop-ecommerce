@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        schema::create('watch_boxes', function(Blueprint $table){
-            $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('description');
-            $table->bigInteger('price');
-            $table->timestamps();
+        Schema::table('watch_straps', function (Blueprint $table) {
+            $table->string('image')->nullable()->after('color');
         });
     }
 
@@ -26,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('watch_boxes');        
+        Schema::table('watch_straps', function (Blueprint $table) {
+            $table->dropColumn('image');
+
+        });
     }
 };

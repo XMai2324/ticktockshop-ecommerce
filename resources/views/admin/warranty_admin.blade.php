@@ -1,4 +1,4 @@
-@extends('client.home')
+@extends('admin.dashboard')
 
 @section('title', 'Tra cứu bảo hành')
 

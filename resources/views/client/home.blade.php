@@ -27,7 +27,8 @@
         </div>
 
         <div class="header_menu">
-            <li> <a href="">THƯƠNG HIỆU</a>
+            <li>
+                <a href="">THƯƠNG HIỆU</a>
                 <ul class="sub_TH">
                     <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
                     <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
@@ -36,7 +37,10 @@
                     <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>
                 </ul>
             </li>
-            <li> <a href="">NỮ</a>
+
+            {{-- NỮ: click vào tiêu đề sẽ ra tất cả sản phẩm Nữ --}}
+            <li>
+                <a href="{{ route('products.byCategory', 'nu') }}">NỮ</a>
                 <ul class="sub_Nu">
                     <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'casio']) }}">Casio nữ</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rolex']) }}">Rolex nữ</a></li>
@@ -45,7 +49,10 @@
                     <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'seiko']) }}">Seiko nữ</a></li>
                 </ul>
             </li>
-            <li> <a href="">NAM</a> 
+
+            {{-- NAM --}}
+            <li>
+                <a href="{{ route('products.byCategory', 'nam') }}">NAM</a>
                 <ul class="sub_Nam">
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
@@ -53,7 +60,11 @@
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rado']) }}">Rado nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'seiko']) }}">Seiko nam</a></li>
                 </ul>
-            <li> <a href="">CẶP ĐÔI</a>
+            </li>
+
+            {{-- CẶP ĐÔI --}}
+            <li>
+                <a href="{{ route('products.byCategory', 'cap-doi') }}">CẶP ĐÔI</a>
                 <ul class="sub_Doi">
                     <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio đôi</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rolex']) }}">Rolex đôi</a></li>
@@ -62,15 +73,18 @@
                     <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko đôi</a></li>
                 </ul>
             </li>
-            <li> <a href="">PHỤ KIỆN</a> 
+
+            {{-- PHỤ KIỆN --}}
+            <li>
+                <a href="">PHỤ KIỆN</a>
                 <ul class="sub_pk">
                     <li><a href="{{ route('accessories.straps') }}">Dây đeo</a></li>
-                    <li><a href="{{ route('accessories.boxes') }}">Hộp Đựng</a></li>
+                    <li><a href="{{ route('accessories.boxes') }}">Hộp đựng</a></li>
                     <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
-
                 </ul>
             </li>
-            <li> <a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a> </li>
+
+            <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
         </div>
 
         <div class="header_other">
@@ -106,16 +120,16 @@
                         @include('client.auth.register')
                 </div>
             </li>
-            <a href="{{ route('cart.index') }}" class="cart-icon">
+            <li>  <a href="{{ route('cart.index') }}" class="cart-icon">
                 <i class="fa fa-shopping-bag"></i>
                 @if(session('cart') && array_sum(array_column(session('cart'), 'quantity')) > 0)
                     <span class="cart-count">
                         {{ array_sum(array_column(session('cart'), 'quantity')) }}
                     </span>
                 @endif
-            </a>
-            
-            
+                </a>
+            </li>
+
             @auth
                 <li class="logout-item">
                     <form action="{{ route('logout') }}" method="POST">
@@ -154,7 +168,6 @@
         @yield('content')
     </main>
 
-
     <section class="footer">
         <div class="footer-container">
             <p>Tải ứng dụng TickTock</p>
@@ -187,7 +200,9 @@
                 @Ivymoda All rights reserved
             </div>
         </div>
+
      </section> 
+
     <script src="{{ asset('js/client/home.js') }}"></script>
     <script src="{{ asset('js/client/app.js') }}"></script>
     <script>

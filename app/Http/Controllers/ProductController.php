@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    // ================== LỌC SẢN PHẨM ==================
     public function filterProducts(Request $request)
     {
-        $categories   = Category::all();
-        $brands       = Brand::all();
+        $categories = Category::all();
+        $brands     = Brand::all();
+
         $categorySlug = $request->input('category');
         $brandSlug    = $request->input('brand');
         $sort         = $request->input('sort');
@@ -26,42 +28,7 @@ class ProductController extends Controller
         $currentCategory = null;
         $currentBrand    = null;
 
-        // Tìm theo keyword thông minh
-        if ($keyword) {
-            $slugKeyword   = Str::slug(Str::ascii(mb_strtolower($keyword)));
-            $allBrands     = $brands->keyBy(fn($b) => Str::slug(Str::ascii(mb_strtolower($b->name))));
-            $allCategories = $categories->keyBy(fn($c) => Str::slug(Str::ascii(mb_strtolower($c->name))));
-            $matchedBrand = $matchedCategory = null;
-
-            foreach ($allBrands as $slug => $brand) {
-                if (Str::contains($slugKeyword, $slug)) {
-                    $matchedBrand = $brand;
-                    break;
-                }
-            }
-            foreach ($allCategories as $slug => $category) {
-                foreach (explode('-', $slug) as $word) {
-                    if (Str::contains($slugKeyword, $word)) {
-                        $matchedCategory = $category;
-                        break 2;
-                    }
-                }
-            }
-
-            if ($matchedBrand) {
-                $currentBrand = $matchedBrand;
-                $query->where('brand_id', $matchedBrand->id);
-            }
-            if ($matchedCategory) {
-                $currentCategory = $matchedCategory;
-                $query->where('category_id', $matchedCategory->id);
-            }
-            if (!$matchedBrand && !$matchedCategory) {
-                $query->where('name', 'like', '%'.$keyword.'%');
-            }
-        }
-
-        // Lọc theo category từ URL
+        // Nếu có category slug
         if ($categorySlug) {
             $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
                 return Str::slug($cat->name) === $categorySlug;
@@ -71,7 +38,7 @@ class ProductController extends Controller
             }
         }
 
-        // Lọc theo brand từ URL
+        // Nếu có brand slug
         if ($brandSlug) {
             $currentBrand = $brands->first(function ($br) use ($brandSlug) {
                 return Str::slug($br->name) === $brandSlug;
@@ -81,10 +48,41 @@ class ProductController extends Controller
             }
         }
 
+        // Lọc theo từ khóa
+        if ($keyword) {
+            $slugKeyword = Str::slug(Str::ascii(mb_strtolower($keyword)));
+
+            $allBrands = $brands->keyBy(fn($b) => Str::slug(Str::ascii(mb_strtolower($b->name))));
+            $allCategories = $categories->keyBy(fn($c) => Str::slug(Str::ascii(mb_strtolower($c->name))));
+
+            foreach ($allBrands as $slug => $brand) {
+                if (Str::contains($slugKeyword, $slug)) {
+                    $currentBrand = $brand;
+                    $query->where('brand_id', $brand->id);
+                    break;
+                }
+            }
+
+            foreach ($allCategories as $slug => $category) {
+                $slugWords = explode('-', $slug);
+                foreach ($slugWords as $word) {
+                    if (Str::contains($slugKeyword, $word)) {
+                        $currentCategory = $category;
+                        $query->where('category_id', $category->id);
+                        break 2;
+                    }
+                }
+            }
+
+            if (!$currentBrand && !$currentCategory) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            }
+        }
+
         // Lọc theo khoảng giá
-        if ($priceRange) {
-            [$min, $max] = explode('-', $priceRange);
-            $query->whereBetween('price', [(int)$min, (int)$max]);
+        if ($priceRange && str_contains($priceRange, '-')) {
+            [$min, $max] = explode('-', $priceRange, 2);
+            $query->whereBetween('price', [(int) $min, (int) $max]);
         }
 
         // Sắp xếp
@@ -108,18 +106,64 @@ class ProductController extends Controller
         ]);
     }
 
+    // ================== HIỂN THỊ TOÀN BỘ THEO CATEGORY ==================
+    public function byCategory(Request $request, string $slug)
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        $query = Product::with(['brand','category'])
+            ->where('category_id', $category->id);
+
+        // Lọc theo khoảng giá (an toàn hơn với regex + intval)
+        $priceRange = $request->input('price_range');
+        if ($priceRange && preg_match('/^\d+\-\d+$/', $priceRange)) {
+            [$min, $max] = array_map('intval', explode('-', $priceRange, 2));
+            if ($min <= $max) {
+                $query->whereBetween('price', [$min, $max]);
+            }
+        }
+
+        // Sắp xếp
+        $sort = $request->input('sort');
+        if ($sort === 'asc') {
+            $query->orderBy('price', 'asc');
+        } elseif ($sort === 'desc') {
+            $query->orderBy('price', 'desc');
+        } else {
+            // mặc định mới nhất (nếu muốn)
+            $query->latest('id');
+        }
+
+        $products = $query->paginate(12);
+
+        return view('client.products', [
+            'products'           => $products,
+            'categories'         => Category::all(),
+            'brands'             => Brand::all(),
+            'currentCategory'    => $category,
+            'currentBrand'       => null,
+            'selectedSort'       => $sort,
+            'selectedPriceRange' => $priceRange,
+            'keyword'            => null,
+        ]);
+    }
+
+
+    // ================== QUICK VIEW ==================
     public function quickView($slug)
     {
         $product = Product::where('slug', $slug)->with('category', 'brand')->firstOrFail();
         return view('client.products.quick_view', compact('product'));
     }
 
+    // ================== ADMIN INDEX ==================
     public function index(Request $request)
     {
-        $brands = Brand::all();
+        $brands     = Brand::all();
         $categories = Category::all();
 
         $products = Product::with('brand');
+
         if ($request->has('brand')) {
             $products->where('brand_id', $request->brand);
         }
@@ -131,6 +175,7 @@ class ProductController extends Controller
         ]);
     }
 
+    // ================== STORE ==================
     public function store(Request $request)
     {
         $request->validate([
@@ -143,23 +188,24 @@ class ProductController extends Controller
         ]);
 
         $category = Category::findOrFail($request->category_id);
-        $catSlug  = Str::slug($category->name);
-        $folder = match ($catSlug) {
-            'nam' => 'Watch/Watch_nam',
-            'nu' => 'Watch/Watch_nu',
+        $slug = Str::slug($category->name);
+
+        $folder = match($slug) {
+            'nam'     => 'Watch/Watch_nam',
+            'nu'      => 'Watch/Watch_nu',
             'cap-doi' => 'Watch/Watch_cap',
-            default => 'Watch/Watch_nu',
+            default   => 'Watch/Watch_nu',
         };
 
         $originalName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
         $extension    = $request->file('image')->getClientOriginalExtension();
         $imageName    = Str::slug($originalName) . '.' . $extension;
-        $request->file('image')->storeAs('public/'.$folder, $imageName);
+        $request->file('image')->storeAs('public/' . $folder, $imageName);
 
         $productName = $request->name;
         $slug = Str::slug($productName);
         if (empty($slug)) {
-            $slug = 'dong-ho-'.time();
+            $slug = 'dong-ho-' . time();
         }
 
         Product::create([
@@ -176,6 +222,7 @@ class ProductController extends Controller
         return redirect()->route('admin.products_index')->with('success', 'Thêm đồng hồ thành công!');
     }
 
+    // ================== UPDATE ==================
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
@@ -198,15 +245,17 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $category = Category::findOrFail($request->category_id);
-            $catSlug  = Str::slug($category->name);
-            $folder = match ($catSlug) {
-                'nam' => 'Watch/Watch_nam',
+            $slug     = Str::slug($category->name);
+
+            $folder = match ($slug) {
+                'nam'     => 'Watch/Watch_nam',
                 'cap-doi' => 'Watch/Watch_cap',
-                default => 'Watch/Watch_nu',
+                default   => 'Watch/Watch_nu',
             };
 
             $imageName = $request->file('image')->getClientOriginalName();
-            $request->file('image')->storeAs('public/'.$folder, $imageName);
+            $request->file('image')->storeAs('public/' . $folder, $imageName);
+
             $product->image = $imageName;
         }
 
@@ -215,18 +264,19 @@ class ProductController extends Controller
         return redirect()->route('admin.products_index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
 
+    // ================== DESTROY ==================
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
 
         $categorySlug = Str::slug($product->category->name ?? '');
         $folder = match ($categorySlug) {
-            'nam' => 'Watch/Watch_nam',
+            'nam'     => 'Watch/Watch_nam',
             'cap-doi' => 'Watch/Watch_cap',
-            default => 'Watch/Watch_nu',
+            default   => 'Watch/Watch_nu',
         };
 
-        $imagePath = 'public/'.$folder.'/'.$product->image;
+        $imagePath = 'public/' . $folder . '/' . $product->image;
         if (Storage::exists($imagePath)) {
             Storage::delete($imagePath);
         }

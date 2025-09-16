@@ -55,7 +55,7 @@ class CartController extends Controller
                 $modelClass = match ($type) {
                     'straps' => \App\Models\WatchStrap::class,
                     'boxes' => \App\Models\WatchBox::class,
-                    'glass' => \App\Models\WatchGlass::class,
+                    'glasses' => \App\Models\WatchGlass::class,
                     default => null,
                 };
 
@@ -95,4 +95,5 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Đã xoá sản phẩm khỏi giỏ hàng');
     }
+
 }

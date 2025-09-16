@@ -1,6 +1,4 @@
-
 @extends('client.cart')
-
 
 @section('title', 'Thanh toán')
 

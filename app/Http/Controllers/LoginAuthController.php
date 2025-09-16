@@ -77,3 +77,4 @@ class LoginAuthController extends Controller
         return redirect()->route('client.home');
     }
 }
+

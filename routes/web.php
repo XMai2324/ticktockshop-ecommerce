@@ -9,8 +9,26 @@ use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 
+<<<<<<< HEAD
 // Trang chủ
 Route::get('/', function () {
+=======
+
+
+// Route::get('/', function () {
+//     if (request()->has('checkout')) {
+//         return view('client.checkout');
+//     }
+
+//     return view('client.home');
+// });
+
+Route::get('/login', function () {
+    return view('client.login'); // đúng tên file chị đã có
+})->name('login');
+
+Route::get('/', function () { 
+>>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
     if (auth()->check()) {
         if (auth()->user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -95,8 +113,24 @@ Route::get('/cart/clear', function () {
     session()->forget('cart');
     return 'Đã xoá giỏ hàng';
 });
+<<<<<<< HEAD
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 
 // ================== SEARCH ==================
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
+=======
+//update giỏ hàng
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+
+
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+// Lịch sử tìm kiếm
+Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
+
+//thanh toan
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
+>>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8

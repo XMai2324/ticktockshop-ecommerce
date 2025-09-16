@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'TickTock Shop')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('storage/logo1.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
@@ -172,8 +172,8 @@
         <div class="footer-container">
             <p>Tải ứng dụng TickTock</p>
             <div class="app-google">
-                <a href=""><img src="{{ asset('storage/appstore.png')}}" alt=""></a>
-                <a href=""><img src="{{ asset('storage/googleplay.png')}}" alt=""></a>
+                <a href=""><img src="{{ asset('storage/appstore.jpg')}}" alt=""></a>
+                <a href=""><img src="{{ asset('storage/googleplay.jpg')}}" alt=""></a>
             </div>
             <p>Nhận bản tin TickTock</p>
             <div class="input-email">
@@ -181,7 +181,7 @@
                 <i class="fas fa-arrow-left"></i>
             </div>
             <div class="footer-items">
-                <li><a href=""><img src="{{ asset('storage/dathongbao.png')}}" alt=""></a></li>
+                <li><a href=""><img src="{{ asset('storage/dathongbao.jpg')}}" alt=""></a></li>
                 <li><a href=""></a>Liên hệ</li>
                 <li><a href=""></a>Tuyển dụng</li>
                 <li><a href=""></a>Giới thiệu</li>

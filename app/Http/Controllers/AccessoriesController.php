@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\WatchBox;
 use App\Models\WatchStrap;
+<<<<<<< HEAD
 use Illuminate\Support\Str;
+=======
+
+>>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
 use App\Models\WatchGlass;
 
 class AccessoriesController extends Controller
@@ -206,6 +210,7 @@ class AccessoriesController extends Controller
     // ✅ Xóa phụ kiện
     public function delete($type, $id)
     {
+<<<<<<< HEAD
         $model = $this->getModelFromType($type);
         $item = $model::findOrFail($id);
 
@@ -226,6 +231,14 @@ class AccessoriesController extends Controller
         return redirect()->route('admin.accessories.' . $type)
                                 ->with('success', 'Xóa phụ kiện thành công!');    
 
+=======
+        $items = WatchGlass::all();
+        return view('client.accessories', [
+            'items' => $items,
+
+            'type' => 'glass'
+        ]);
+>>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
     }
 
     public function quickView($type, $id)

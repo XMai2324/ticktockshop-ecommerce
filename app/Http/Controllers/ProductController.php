@@ -79,6 +79,31 @@ class ProductController extends Controller
             }
         }
 
+<<<<<<< HEAD
+=======
+        // Lọc theo category từ URL
+        if ($categorySlug) {
+            $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
+                return Str::slug($cat->name) === $categorySlug;
+            });
+
+            if ($currentCategory) {
+                $query->where('category_id', $currentCategory->id);
+            }
+        }
+
+        // Lọc theo brand từ URL
+        if ($brandSlug) {
+            $currentBrand = $brands->first(function ($br) use ($brandSlug) {
+                return Str::slug($br->name) === $brandSlug;
+            });
+
+            if ($currentBrand) {
+                $query->where('brand_id', $currentBrand->id);
+            }
+        }
+
+>>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
         // Lọc theo khoảng giá
         if ($priceRange && str_contains($priceRange, '-')) {
             [$min, $max] = explode('-', $priceRange, 2);

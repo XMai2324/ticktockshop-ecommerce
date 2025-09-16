@@ -149,3 +149,8 @@
     <script src="{{ asset('js/client/app.js') }}" defer></script>
     <script src="{{ asset('js/client/quickview.js') }}" defer></script>
 @endsection
+
+@section('scripts')
+    <script src="{{ asset('js/client/app.js') }}" defer></script>
+    <script src="{{ asset('js/client/quickview.js') }}" defer></script>
+@endsection

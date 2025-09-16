@@ -113,6 +113,7 @@ class ProductsSeeder extends Seeder
                 'warranty_months' => 12,
                 'created_at' => now(),
                 'updated_at' => now(),
+
             ]);
         } 
         // -----------Citizen nữ----------
@@ -934,8 +935,19 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+<<<<<<< HEAD
         }
 
+=======
+        } 
+        // -----------Citizen nữ----------
+        $category = Category::where('name', 'Nữ')->first();
+        $brand  = Brand::where('name', 'Citizen')->first();
+
+        if (!$category || !$brand) {
+        $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Citizen"!');
+        return;
+>>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
         }   
     }
 

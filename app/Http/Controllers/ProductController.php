@@ -78,9 +78,6 @@ class ProductController extends Controller
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
         }
-
-<<<<<<< HEAD
-=======
         // Lọc theo category từ URL
         if ($categorySlug) {
             $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
@@ -102,8 +99,6 @@ class ProductController extends Controller
                 $query->where('brand_id', $currentBrand->id);
             }
         }
-
->>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
         // Lọc theo khoảng giá
         if ($priceRange && str_contains($priceRange, '-')) {
             [$min, $max] = explode('-', $priceRange, 2);

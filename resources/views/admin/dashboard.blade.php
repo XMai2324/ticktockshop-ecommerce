@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/accessories_ad.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
@@ -28,6 +29,7 @@
             <li><a href="#">XỬ LÝ ĐƠN HÀNG</a></li>
             <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="#">ĐÁNH GIÁ</a></li>
+            <li><a href="{{route('admin.promotions_index')}}">KHUYẾN MÃI</a></li>
         </div>
 
         <div class="header_other">
@@ -58,9 +60,13 @@
     </header>
 
     
+    
     <main style="margin-top: 100px">
         @yield('content')
     </main>
+
+
+
 
    
     <script>

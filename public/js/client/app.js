@@ -1,69 +1,89 @@
+document.addEventListener('DOMContentLoaded', () => {
+  // Nếu layout đã có <main>, KHÔNG cần <main> lồng bên trong products.blade.php
+  const mainContainer = document.querySelector('main');
+  if (!mainContainer) return;
 
+  let inflight; // AbortController cho request đang chạy
 
-    // LỌC SẮP XẾP & KHOẢNG GIÁ
-document.addEventListener('DOMContentLoaded', function () {
+  async function ajaxGoto(url, push = true) {
+    try {
+      // Hủy request trước (nếu có) để tránh race condition khi thao tác nhanh
+      if (inflight) inflight.abort();
+      inflight = new AbortController();
 
-    // Lọc theo SẮP XẾP
-    const sortSelect = document.querySelector('select[name="sort"]');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function () {
-            const value = this.value;
-            const url = new URL(window.location.href);
+      const y = window.scrollY; // nhớ vị trí cuộn hiện tại
+      const resp = await fetch(url, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        signal: inflight.signal
+      });
+      const html = await resp.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const newMain = doc.querySelector('main');
+      if (!newMain) throw new Error('No <main> found in response');
 
-            if (value === 'asc' || value === 'desc') {
-                url.searchParams.set('sort', value);
-            } else {
-                url.searchParams.delete('sort');
-            }
+      mainContainer.innerHTML = newMain.innerHTML; // thay nội dung
+      if (push) history.pushState({}, '', url);
+      window.scrollTo({ top: y }); // giữ nguyên vị trí cuộn
+    } catch (e) {
+      if (e.name === 'AbortError') return; // bị hủy do thao tác nhanh -> bỏ qua
+      // fallback: chuyển trang bình thường khi có lỗi
+      window.location.href = url;
+    } finally {
+      inflight = null;
+    }
+  }
 
-            window.location.href = url.toString();
-        });
+  // =========================
+  // Event delegation: FILTERS
+  // =========================
+  document.addEventListener('change', (e) => {
+    const sel = e.target;
+    if (!sel || sel.tagName !== 'SELECT') return;
+
+    // sort
+    if (sel.name === 'sort') {
+      const url = new URL(window.location.href);
+      const val = sel.value;
+      if (val === 'asc' || val === 'desc') url.searchParams.set('sort', val);
+      else url.searchParams.delete('sort');
+
+      // đổi filter thì reset về page=1
+      url.searchParams.delete('page');
+      ajaxGoto(url.toString());
     }
 
-    // Lọc theo KHOẢNG GIÁ
-    const priceSelect = document.querySelector('select[name="price_range"]');
-    if (priceSelect) {
-        priceSelect.addEventListener('change', function () {
-            const value = this.value;
-            const url = new URL(window.location.href);
+    // price_range
+    if (sel.name === 'price_range') {
+      const url = new URL(window.location.href);
+      const val = sel.value;
+      if (val) url.searchParams.set('price_range', val);
+      else url.searchParams.delete('price_range');
 
-            if (value) {
-                url.searchParams.set('price_range', value);
-            } else {
-                url.searchParams.delete('price_range');
-            }
-
-            window.location.href = url.toString();
-        });
+      // đổi filter thì reset về page=1
+      url.searchParams.delete('page');
+      ajaxGoto(url.toString());
     }
+  });
 
-    // ===============================
-    // 2. XEM NHANH SẢN PHẨM (MODAL)
-    // ===============================
-    const modal = document.getElementById('productModal');
-    const modalContent = document.getElementById('modal-product-content');
-    const closeModal = document.querySelector('.close-modal');
+  // ===========================
+  // Event delegation: PAGINATION
+  // ===========================
+  document.addEventListener('click', (e) => {
+    // Bắt click vào link phân trang bên trong .pagination-wrapper
+    const a = e.target.closest('.pagination-wrapper a');
+    if (!a) return;
+    // Cho phép mở tab mới nếu user bấm Ctrl/Cmd/chuột giữa
+    const openInNew = e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1;
+    if (openInNew) return;
 
-    if (modal && modalContent && closeModal) {
-        document.querySelectorAll('.product-quick-view').forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                const slug = this.dataset.slug;
+    e.preventDefault();
+    ajaxGoto(a.href);
+  });
 
-                fetch(`/quick-view/${slug}`)
-                    .then(res => res.text())
-                    .then(html => {
-                        modalContent.innerHTML = html;
-                        modal.style.display = 'flex';
-                    });
-            });
-        });
-
-        closeModal.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    }
+  // ===========================
+  // Back/Forward của trình duyệt
+  // ===========================
+  window.addEventListener('popstate', () => {
+    ajaxGoto(location.href, false);
+  });
 });

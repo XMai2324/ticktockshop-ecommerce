@@ -4,30 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Str;
-
 class CartController extends Controller
 {
     public function index()
     {
-        // Giả sử lấy giỏ hàng từ session
-       $cartItems = collect(session()->get('cart', []));
-
-        $cartTotal = $cartItems->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
+        $cartItems = collect(session()->get('cart', []));
+        $cartTotal = $cartItems->sum(fn ($item) => $item['price'] * $item['quantity']);
 
         return view('client.cart', compact('cartItems', 'cartTotal'));
     }
 
-   public function addToCart(Request $request)
+    public function addToCart(Request $request)
     {
-        $id = $request->input('id');
-        $type = $request->input('type');
+        $id       = $request->input('id');
+        $type     = $request->input('type');
         $quantity = (int) $request->input('quantity', 1);
 
         $cart = session()->get('cart', []);
-        $key = $type . '_' . $id;
+        $key  = $type . '_' . $id;
 
         if (isset($cart[$key])) {
             $cart[$key]['quantity'] += $quantity;
@@ -35,57 +29,62 @@ class CartController extends Controller
             if ($type === 'product') {
                 $product = \App\Models\Product::with('category')->findOrFail($id);
 
-                $categorySlug = \Str::slug(optional($product->category)->name ?? '');
+                $categorySlug = \Illuminate\Support\Str::slug(optional($product->category)->name ?? '');
                 $folder = match ($categorySlug) {
-                    'nam' => 'Watch/Watch_nam',
+                    'nam'     => 'Watch/Watch_nam',
                     'cap-doi' => 'Watch/Watch_cap',
-                    default => 'Watch/Watch_nu',
+                    default   => 'Watch/Watch_nu',
                 };
 
                 $cart[$key] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->price,
-                    'image' => $product->image,
-                    'folder' => $folder,
+                    'id'       => $product->id,
+                    'name'     => $product->name,
+                    'price'    => $product->price,
+                    'image'    => $product->image,
+                    'folder'   => $folder,
                     'category' => optional($product->category)->name ?? '',
                     'quantity' => $quantity,
-                    'type' => 'product',
+                    'type'     => 'product',
                 ];
             } else {
                 $modelClass = match ($type) {
-                    'straps' => \App\Models\WatchStrap::class,
-                    'boxes' => \App\Models\WatchBox::class,
+                    'straps'  => \App\Models\WatchStrap::class,
+                    'boxes'   => \App\Models\WatchBox::class,
                     'glasses' => \App\Models\WatchGlass::class,
-                    default => null,
+                    default   => null,
                 };
 
                 if (!$modelClass) {
-                    return response()->json(['success' => false, 'message' => 'Loại phụ kiện không hợp lệ']);
+                    return response()->json(['success' => false, 'message' => 'Loại phụ kiện không hợp lệ'], 422);
                 }
 
                 $item = $modelClass::findOrFail($id);
 
                 $cart[$key] = [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'price' => $item->price,
-                    'image' => $item->image,
-                    'folder' => 'accessories/' . $type,
+                    'id'       => $item->id,
+                    'name'     => $item->name,
+                    'price'    => $item->price,
+                    'image'    => $item->image,
+                    'folder'   => 'accessories/' . $type,
                     'quantity' => $quantity,
-                    'type' => $type,
+                    'type'     => $type,
                 ];
             }
         }
+
         session()->put('cart', $cart);
+        $totals = $this->totals($cart);
 
         return response()->json([
-            'success' => true,
-            'cart_count' => array_sum(array_column(session('cart'), 'quantity')),
+            'success'    => true,
+            'cart_count' => $totals['total_qty'],
+            'total_qty'  => $totals['total_qty'],
+            'cart_total' => $totals['cart_total'],
         ]);
     }
 
-    public function remove($key)
+    // XÓA ITEM – Trả JSON cho AJAX, redirect khi truy cập thường
+    public function remove(Request $request, $key)
     {
         $cart = session()->get('cart', []);
 
@@ -94,51 +93,70 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
+        $totals = $this->totals($cart);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success'    => true,
+                'total_qty'  => $totals['total_qty'],
+                'cart_total' => $totals['cart_total'],
+                'cart_count' => $totals['total_qty'],
+            ]);
+        }
+
         return redirect()->route('cart.index')->with('success', 'Đã xoá sản phẩm khỏi giỏ hàng');
     }
 
-<<<<<<< HEAD
-}
-=======
+    // CẬP NHẬT SL – hỗ trợ cả quantity & qty, trả JSON số thuần
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'row_id' => 'required',
-            'qty'    => 'required|integer|min:1',
-        ]);
+        $rowId    = $request->input('row_id');
+        $quantity = (int) ($request->input('quantity', $request->input('qty')));
+
+        if (!$rowId || $quantity < 1) {
+            return response()->json(['success' => false, 'message' => 'Dữ liệu không hợp lệ'], 422);
+        }
 
         $cart = session()->get('cart', []);
-
-        if (!isset($cart[$data['row_id']])) {
-            return response()->json(['ok' => false, 'msg' => 'Item not found'], 404);
+        if (!isset($cart[$rowId])) {
+            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
         }
 
-        // ✅ CHỈ DÙNG 'quantity' THỐNG NHẤT
-        $cart[$data['row_id']]['quantity'] = $data['qty'];
-
+        $cart[$rowId]['quantity'] = $quantity;
         session()->put('cart', $cart);
 
-        // Tính lại subtotal dòng
-        $rowPrice    = $cart[$data['row_id']]['price'];
-        $rowQuantity = $cart[$data['row_id']]['quantity'];
-        $rowSubtotal = $rowPrice * $rowQuantity;
-
-        // Tính lại tổng
-        $totalQty = 0;
-        $total    = 0;
-        foreach ($cart as $it) {
-            $q = isset($it['quantity']) ? (int)$it['quantity'] : 0; // phòng xa
-            $totalQty += $q;
-            $total    += $it['price'] * $q;
-        }
+        $rowPrice    = $cart[$rowId]['price'];
+        $rowSubtotal = $rowPrice * $cart[$rowId]['quantity'];
+        $totals      = $this->totals($cart);
 
         return response()->json([
-            'ok'          => true,
+            'success'     => true,
+            // số thuần (để JS định dạng)
+            'subtotal'    => $rowSubtotal,
+            'cart_total'  => $totals['cart_total'],
+            'total_qty'   => $totals['total_qty'],
+            'cart_count'  => $totals['total_qty'],
+
+            // nếu bạn còn JS cũ dùng các key này thì vẫn tương thích:
             'rowSubtotal' => number_format($rowSubtotal, 0, ',', '.'),
-            'cartTotal'   => number_format($total, 0, ',', '.'),
-            'totalQty'    => $totalQty,
+            'cartTotal'   => number_format($totals['cart_total'], 0, ',', '.'),
+            'totalQty'    => $totals['total_qty'],
+            'ok'          => true,
         ]);
     }
-}
 
->>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
+    // ===== Helpers =====
+    private function totals(array $cart): array
+    {
+        $totalQty  = 0;
+        $cartTotal = 0;
+
+        foreach ($cart as $it) {
+            $q         = (int) ($it['quantity'] ?? 0);
+            $totalQty += $q;
+            $cartTotal += ($it['price'] ?? 0) * $q;
+        }
+
+        return ['total_qty' => $totalQty, 'cart_total' => $cartTotal];
+    }
+}

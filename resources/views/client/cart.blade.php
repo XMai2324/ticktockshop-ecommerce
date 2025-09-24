@@ -7,8 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Giỏ hàng')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ asset('storage/logo1.png') }}">
-
+    <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
@@ -20,74 +19,14 @@
 </head>
 <body>
 
-<<<<<<< HEAD
-        <div class="header_menu">
-            <li>
-                <a href="">THƯƠNG HIỆU</a>
-                <ul class="sub_TH">
-                    <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
-                    <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
-                    <li><a href="{{ route('products.filter', ['brand' => 'citizen']) }}">Citizen</a></li>
-                    <li><a href="{{ route('products.filter', ['brand' => 'rado']) }}">Rado</a></li>
-                    <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>
-                </ul>
-            </li>
-
-            {{-- NỮ: click vào tiêu đề sẽ ra tất cả sản phẩm Nữ --}}
-            <li>
-                <a href="{{ route('products.byCategory', 'nu') }}">NỮ</a>
-                <ul class="sub_Nu">
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'casio']) }}">Casio nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rolex']) }}">Rolex nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'citizen']) }}">Citizen nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rado']) }}">Rado nữ</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'seiko']) }}">Seiko nữ</a></li>
-                </ul>
-            </li>
-
-            {{-- NAM --}}
-            <li>
-                <a href="{{ route('products.byCategory', 'nam') }}">NAM</a>
-                <ul class="sub_Nam">
-                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'citizen']) }}">Citizen nam</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rado']) }}">Rado nam</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'seiko']) }}">Seiko nam</a></li>
-                </ul>
-            </li>
-
-            {{-- CẶP ĐÔI --}}
-            <li>
-                <a href="{{ route('products.byCategory', 'cap-doi') }}">CẶP ĐÔI</a>
-                <ul class="sub_Doi">
-                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio đôi</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rolex']) }}">Rolex đôi</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rado']) }}">Rado đôi</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'citizen']) }}">Citizen đôi</a></li>
-                    <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko đôi</a></li>
-                </ul>
-            </li>
-
-            {{-- PHỤ KIỆN --}}
-            <li>
-                <a href="">PHỤ KIỆN</a>
-                <ul class="sub_pk">
-                    <li><a href="{{ route('accessories.straps') }}">Dây đeo</a></li>
-                    <li><a href="{{ route('accessories.boxes') }}">Hộp đựng</a></li>
-                    <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
-                </ul>
-            </li>
-            <li> <a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a> </li>
-        </div>
-=======
 <header>
     <div class="logo">
         <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
     </div>
 
     <div class="header_menu">
-        <li><a href="">THƯƠNG HIỆU</a>
+        <li>
+            <a href="">THƯƠNG HIỆU</a>
             <ul class="sub_TH">
                 <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
                 <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
@@ -96,7 +35,10 @@
                 <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>
             </ul>
         </li>
-        <li><a href="">NỮ</a>
+
+        {{-- NỮ --}}
+        <li>
+            <a href="{{ route('products.byCategory', 'nu') }}">NỮ</a>
             <ul class="sub_Nu">
                 <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'casio']) }}">Casio nữ</a></li>
                 <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rolex']) }}">Rolex nữ</a></li>
@@ -105,7 +47,10 @@
                 <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'seiko']) }}">Seiko nữ</a></li>
             </ul>
         </li>
-        <li><a href="">NAM</a>
+
+        {{-- NAM --}}
+        <li>
+            <a href="{{ route('products.byCategory', 'nam') }}">NAM</a>
             <ul class="sub_Nam">
                 <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                 <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
@@ -114,7 +59,10 @@
                 <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'seiko']) }}">Seiko nam</a></li>
             </ul>
         </li>
-        <li><a href="">CẶP ĐÔI</a>
+
+        {{-- CẶP ĐÔI --}}
+        <li>
+            <a href="{{ route('products.byCategory', 'cap-doi') }}">CẶP ĐÔI</a>
             <ul class="sub_Doi">
                 <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio đôi</a></li>
                 <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rolex']) }}">Rolex đôi</a></li>
@@ -123,16 +71,19 @@
                 <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko đôi</a></li>
             </ul>
         </li>
-        <li><a href="">PHỤ KIỆN</a>
+
+        {{-- PHỤ KIỆN --}}
+        <li>
+            <a href="">PHỤ KIỆN</a>
             <ul class="sub_pk">
                 <li><a href="{{ route('accessories.straps') }}">Dây đeo</a></li>
-                <li><a href="{{ route('accessories.boxes') }}">Hộp Đựng</a></li>
+                <li><a href="{{ route('accessories.boxes') }}">Hộp đựng</a></li>
                 <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
             </ul>
         </li>
+
         <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
     </div>
->>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
 
     <div class="header_other">
         <li class="search-wrapper">
@@ -194,7 +145,6 @@
     </div>
 
     @php
-        // An toàn: nếu controller chưa truyền $cartTotal thì tự tính
         $cartItems = session('cart') ?? [];
         $cartTotalView = isset($cartTotal)
             ? $cartTotal
@@ -206,15 +156,17 @@
             {{-- Bảng sản phẩm --}}
             <div class="cart-content-left">
                 <table>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Đơn giá</th>
-                        <th>SL</th>
-                        <th>Tổng tiền</th>
-                        <th>Xóa</th>
-                    </tr>
-
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>SL</th>
+                            <th>Tổng tiền</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     @forelse ($cartItems as $key => $item)
                         <tr>
                             <td>
@@ -230,6 +182,7 @@
                             </td>
 
                             <td><p>{{ $item['name'] }}</p></td>
+
                             <td>
                                 <p>{{ number_format($item['price'], 0, ',', '.') }} <sub>đ</sub></p>
                             </td>
@@ -249,15 +202,19 @@
                             </td>
 
                             <td>
-                                <form action="{{ route('cart.remove', $key) }}" method="POST">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="remove-btn">X</button>
-                                </form>
+                                {{-- Nút X xoá bằng AJAX --}}
+                                <button type="button"
+                                        class="remove-btn"
+                                        aria-label="Xoá sản phẩm"
+                                        data-url="{{ route('cart.remove', $key) }}">
+                                    X
+                                </button>
                             </td>
                         </tr>
                     @empty
                         <tr><td colspan="6">Giỏ hàng trống.</td></tr>
                     @endforelse
+                    </tbody>
                 </table>
             </div>
 
@@ -300,50 +257,12 @@
     </div>
 </section>
 
-<<<<<<< HEAD
-    <main style="margin-top: 100px">
-        @yield('content')
-    </main>
-
-    <section class="footer">
-        <div class="footer-container">
-            <p>Tải ứng dụng TickTock</p>
-            <div class="app-google">
-                <a href=""><img src="{{ asset('storage/appstore.png')}}" alt=""></a>
-                <a href=""><img src="{{ asset('storage/googleplay.png')}}" alt=""></a>
-            </div>
-            <p>Nhận bản tin TickTock</p>
-            <div class="input-email">
-                <input type="text" placeholder="Nhập email của bạn">
-                <i class="fas fa-arrow-left"></i>
-            </div>
-            <div class="footer-items">
-                <li><a href=""><img src="{{ asset('storage/dathongbao.png')}}" alt=""></a></li>
-                <li><a href=""></a>Liên hệ</li>
-                <li><a href=""></a>Tuyển dụng</li>
-                <li><a href=""></a>Giới thiệu</li>
-                <li>
-                    <a href=""><i class="fab fa-facebook-f"></i></a>
-                    <a href=""><i class="fab fa-youtube"></i></a>
-                    <a href=""><i class="fab fa-twitter"></i></a>
-                </li>
-            </div>
-            <div class="footer-text">
-                Công ty Cổ phần Dự Kim với số đăng ký kinh doanh: 0105777650 <br>
-                Địa chỉ đăng ký: Tổ dân phố Tháp, P.Đại Mỗ, Q.Nam Từ Liêm, TP.Hà Nội, Việt Nam - 0243 205 2222 <br>
-                Đặt hàng online: <b>0246 662 3434</b>
-            </div>
-            <div class="footer-bottom">
-                @Ivymoda All rights reserved
-            </div>
-=======
 <section class="footer">
     <div class="footer-container">
         <p>Tải ứng dụng TickTock</p>
         <div class="app-google">
             <a href=""><img src="{{ asset('storage/appstore.jpg')}}" alt=""></a>
             <a href=""><img src="{{ asset('storage/googleplay.jpg')}}" alt=""></a>
->>>>>>> 6fb48dd72ac4be54a2a26ff5b43d6a47ec6ea6c8
         </div>
         <p>Nhận bản tin TickTock</p>
         <div class="input-email">
@@ -370,7 +289,7 @@
     </div>
 </section>
 
-{{-- JS hiện có --}}
+{{-- JS --}}
 <script src="{{ asset('js/client/home.js') }}"></script>
 <script src="{{ asset('js/client/app.js') }}"></script>
 <script>const IS_AUTHENTICATED = {{ auth()->check() ? 'true' : 'false' }};</script>
@@ -378,7 +297,10 @@
 <script src="{{ asset('js/client/quickview.js') }}" defer></script>
 <script src="{{ asset('js/client/cart.js') }}" defer></script>
 
-<script>window.CART_UPDATE_URL = "{{ route('cart.update') }}";</script>
+{{-- URL APIs cho JS --}}
+<script>
+  window.CART_UPDATE_URL = "{{ route('cart.update') }}";
+</script>
 
 @yield('scripts')
 </body>

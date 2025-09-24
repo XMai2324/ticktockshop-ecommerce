@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'TickTock Shop')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="{{ asset('storage/logo1.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
@@ -22,11 +22,11 @@
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
-        </div>
+    <div class="logo">
+        <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
+    </div>
 
-        <div class="header_menu">
+    <div class="header_menu">
             <li>
                 <a href="">THƯƠNG HIỆU</a>
                 <ul class="sub_TH">
@@ -87,62 +87,52 @@
             <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
         </div>
 
-        <div class="header_other">
-            <li class="search-wrapper">
-                <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">
-                    <input id="searchInput" name="keyword" placeholder="Tìm kiếm" type="text" autocomplete="off">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </form>
+    <div class="header_other">
+        <li class="search-wrapper">
+            <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">
+                <input id="searchInput" name="keyword" placeholder="Tìm kiếm" type="text" autocomplete="off">
+                <button type="submit"><i class="fas fa-search"></i></button>
+            </form>
+            <div class="search-history" id="searchHistory">
+                <h3 class="search-heading">Lịch sử tìm kiếm</h3>
+                <ul class="search-history-list"></ul>
+            </div>
+        </li>
 
-                <div class="search-history" id="searchHistory">
-                    <h3 class="search-heading">Lịch sử tìm kiếm</h3>
-                    <ul class="search-history-list"></ul>
-                </div>
-            </li>
-           
-            <li class="header-user">
-                    <i class="fa fa-user"></i>
-
-                    @auth
-                        <span class="user-name">{{ Auth::user()->name }}</span>
-                    @else
-                        <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
-                    @endauth
-                </li>
-
-
-
-                <div class="overlay" id="login-overlay">
-                        {{-- Form đăng nhập --}}
-                        @include('client.auth.login')
-
-                        {{-- Form đăng ký --}}
-                        @include('client.auth.register')
-                </div>
-            </li>
-            <li>  <a href="{{ route('cart.index') }}" class="cart-icon">
-                <i class="fa fa-shopping-bag"></i>
-                @if(session('cart') && array_sum(array_column(session('cart'), 'quantity')) > 0)
-                    <span class="cart-count">
-                        {{ array_sum(array_column(session('cart'), 'quantity')) }}
-                    </span>
-                @endif
-                </a>
-            </li>
-
+        <li class="header-user">
+            <i class="fa fa-user"></i>
             @auth
-                <li class="logout-item">
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="logout-btn">
-                            <i class="fa fa-sign-out-alt"></i>
-                        </button>
-                    </form>
-                </li>
+                <span class="user-name">{{ Auth::user()->name }}</span>
+            @else
+                <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
             @endauth
+        </li>
 
+        <div class="overlay" id="login-overlay">
+            @include('client.auth.login')
+            @include('client.auth.register')
         </div>
-    </header>
+
+        <a href="{{ route('cart.index') }}" class="cart-icon">
+            <i class="fa fa-shopping-bag"></i>
+            @php
+                $cartItems = session('cart') ?? [];
+                $totalQty  = array_sum(array_column($cartItems, 'quantity'));
+            @endphp
+            @if($totalQty > 0)
+                <span class="cart-count" id="cart-count">{{ $totalQty }}</span>
+            @endif
+        </a>
+
+        @auth
+            <li class="logout-item">
+                <form action="{{ route('logout') }}" method="POST">@csrf
+                    <button type="submit" class="logout-btn"><i class="fa fa-sign-out-alt"></i></button>
+                </form>
+            </li>
+        @endauth
+    </div>
+</header>
     <section id="slide">
         <div class="aspect-ratio-169">
             <img src="{{ asset('storage/slide1.jpg')}}" alt="">
@@ -210,5 +200,7 @@
     </script>
     <script src="{{ asset('js/layouts/auth.js') }}"></script>
     @yield('scripts')
+    @include('client.partials.quickview-modal')
+
 </body>
 </html>

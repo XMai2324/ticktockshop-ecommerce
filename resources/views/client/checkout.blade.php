@@ -160,7 +160,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('checkout.placeOrder') }}" id="checkout-form">
+        <form method="POST" data-cart-count="{{ count(session('cart', [])) }}" action="{{ route('checkout.placeOrder') }}" id="checkout-form">
             @csrf
             <div class="delivery-content">
                 <div class="delivery-content-left">

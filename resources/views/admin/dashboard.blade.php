@@ -26,7 +26,7 @@
                     <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
                 </ul>
         </li>
-            <li><a href="#">XỬ LÝ ĐƠN HÀNG</a></li>
+            <li><a href="{{ route('admin.orders.index') }}">XỬ LÝ ĐƠN HÀNG</a></li>
             <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="#">ĐÁNH GIÁ</a></li>
             <li><a href="{{route('admin.promotions_index')}}">KHUYẾN MÃI</a></li>

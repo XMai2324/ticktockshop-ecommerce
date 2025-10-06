@@ -9,6 +9,7 @@ use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PromotionsController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -160,4 +161,27 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::post('promotions',      [PromotionsController::class, 'store'])->name('admin.promotions.store');
     Route::put('promotions/{id}',  [PromotionsController::class, 'update'])->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class, 'destroy'])->name('admin.promotions.delete');
+});
+/*
+|--------------------------------------------------------------------------
+| HISTORY ORDER
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ORDER
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    // Orders
+    Route::get('orders',          [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('orders/{id}',     [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::get('orders/{id}/edit',[OrderController::class, 'edit'])->name('admin.orders.edit');
+    Route::put('orders/{id}',     [OrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
 });

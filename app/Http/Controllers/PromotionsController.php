@@ -102,28 +102,41 @@ class PromotionsController extends Controller
     /**
      * Cập nhật
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
+        // Debug để xem dữ liệu gửi lên
+        \Log::info('Update promotion data:', $request->all());
+        
         $promotion = Promotion::findOrFail($id);
 
-        $data = $this->validateData($request, $promotion->id);
+        $data = $request->validate([
+            'name' => 'required|string',
+            'code' => 'required|string|unique:promotions,code,'.$id,
+            'type' => 'required|in:percent,fixed',
+            'value' => 'required|numeric',
+            'max_discount' => 'nullable|numeric',
+            'min_order_value' => 'nullable|numeric',
+            'usage_limit' => 'nullable|integer',
+            'per_user_limit' => 'nullable|integer',
+            'start_at' => 'nullable|date',
+            'end_at' => 'nullable|date',
+            'is_active' => 'boolean'
+        ]);
 
-        $data['start_at'] = $this->toCarbonOrNull($request->input('start_at'));
-        $data['end_at']   = $this->toCarbonOrNull($request->input('end_at'));
+        // Convert dates
+        $data['start_at'] = $data['start_at'] ? Carbon::parse($data['start_at']) : null;
+        $data['end_at'] = $data['end_at'] ? Carbon::parse($data['end_at']) : null;
 
-        if ($data['start_at'] && $data['end_at'] && $data['end_at']->lt($data['start_at'])) {
-            return back()->withInput()->withErrors(['end_at' => 'Thời gian kết thúc phải sau thời gian bắt đầu']);
+        try {
+            $promotion->update($data);
+            return redirect()
+                ->route('admin.promotions_index')
+                ->with('success', 'Cập nhật khuyến mãi thành công');
+        } catch (\Exception $e) {
+            \Log::error('Error updating promotion: ' . $e->getMessage());
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Có lỗi xảy ra khi cập nhật']);
         }
-
-        if ($data['type'] !== 'percent') {
-            $data['max_discount'] = null;
-        }
-
-        $promotion->update($data);
-
-        return redirect()
-            ->route('admin.promotions_index')
-            ->with('success', 'Đã cập nhật khuyến mãi');
     }
 
     /**

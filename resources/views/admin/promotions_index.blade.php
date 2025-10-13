@@ -7,7 +7,7 @@
 
     {{-- ========== LEFT: FORM ADD/EDIT ========== --}}
     <aside class="panel-left">
-        <h3 id="form-title" >Thêm khuyến mãi</h3>
+        <h3 id="form-title-left" >Thêm khuyến mãi</h3>
 
         {{-- Hiện lỗi validate nếu có --}}
         @if ($errors->any())
@@ -107,7 +107,7 @@
 
     {{-- ========== RIGHT: DANH SÁCH ========== --}}
     <section class="panel-right">
-        <h3 id="form-title">Danh sách khuyến mãi</h3>
+        <h3 id="form-title-right">Danh sách khuyến mãi</h3>
 
         <table class="table">
             <thead>
@@ -133,9 +133,9 @@
                     <td>{{ $p->name }}</td>
                     <td>{{ $p->code }}</td>
                     <td>{{ $p->type }}</td>
-                    <td>{{ $p->value }}</td>
+                    <td>{{ number_format($p->value) }}{{ $p->type === 'fixed' ? 'vnd' : '%' }}</td>
                     <td>{{ $p->max_discount ?? '∞' }}</td>
-                    <td>{{ $p->min_order ?? 0 }}</td>
+                    <td>{{ number_format($p->min_order_value ?? 0) }}vnd</td>
                     <td>{{ $p->usage_limit ?? '∞' }}</td>
                     <td>{{ $p->per_user_limit ?? '∞' }}</td>
                     <td>{{ $p->start_at ? $p->start_at->format('d/m/Y') : '-' }}</td>
@@ -147,9 +147,10 @@
                     </td>
                     <td>{{ $p->used_count }}/{{ $p->usage_limit ?? '∞' }}</td>
                     <td>
-                        <button class="btn-edit" onclick='editPromotion(@json($p), "{{ route("admin.promotions.update", $p->id) }}")'>
+                        <button class="btn-edit" 
+                                onclick='editPromotion(@json($p), "{{ route("admin.promotions.update", $p->id) }}")'>
                             Sửa
-                        </button>
+                        </button>   
 
                         <form action="{{ route('admin.promotions.delete', $p->id) }}" method="POST" style="display:inline;">
                             @csrf @method('DELETE')

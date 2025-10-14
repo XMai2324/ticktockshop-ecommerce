@@ -151,16 +151,14 @@ Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(funct
 });
 Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN PROMOTIONS
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('promotions',       [PromotionsController::class, 'index'])->name('admin.promotions_index');
-    Route::post('promotions',      [PromotionsController::class, 'store'])->name('admin.promotions.store');
-    Route::put('promotions/{id}',  [PromotionsController::class, 'update'])->name('admin.promotions.update');
-    Route::delete('promotions/{id}', [PromotionsController::class, 'destroy'])->name('admin.promotions.delete');
+
+//Admin promotion
+Route::prefix('admin')->middleware(['auth'])->group(function(){
+    Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
+    Route::post('promotions', [PromotionsController::class,'store'])->name('admin.promotions.store');
+    Route::put('promotions/{id}', [PromotionsController::class,'update'])
+         ->name('admin.promotions.update');
+    Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
 });
 /*
 |--------------------------------------------------------------------------

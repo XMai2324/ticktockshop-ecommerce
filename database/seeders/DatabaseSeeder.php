@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             OrdersSeeder::class,
             OrderItemsSeeder::class,
             WarrantiesSeeder::class,
-            PromotionsSeeder::class,
+            PromotionSeeder::class,
         ]);
     }
 }

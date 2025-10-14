@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('code')->unique();                 // Mã KM khi khách nhập
-            $table->enum('type', ['percent', 'fixed']);       // percent: theo %, fixed: trừ thẳng tiền
-            $table->decimal('value', 12, 2);                  // Ví dụ 10 nghĩa là 10%, hoặc 50000 VND
-            $table->decimal('max_discount', 12, 2)->nullable();// Giới hạn giảm tối đa cho mã %
+            $table->string('code')->unique();
+            $table->enum('type', ['percent', 'fixed']);
+            $table->decimal('value', 12, 2);
+            $table->decimal('max_discount', 12, 2)->nullable();
             $table->decimal('min_order_value', 12, 2)->default(0);
-            $table->unsignedInteger('usage_limit')->nullable();    // Tổng lượt dùng toàn hệ thống
-            $table->unsignedInteger('per_user_limit')->nullable(); // Lượt tối đa mỗi user
+            $table->unsignedInteger('usage_limit')->nullable();
+            $table->unsignedInteger('per_user_limit')->nullable();
             $table->unsignedInteger('used_count')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamp('start_at')->nullable();
@@ -29,9 +29,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('promotions');

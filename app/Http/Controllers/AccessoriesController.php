@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\WatchBox;
 use App\Models\WatchStrap;
 use Illuminate\Support\Str;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
 use App\Models\WatchGlass;
 
 class AccessoriesController extends Controller
@@ -226,6 +230,15 @@ class AccessoriesController extends Controller
         return redirect()->route('admin.accessories.' . $type)
                                 ->with('success', 'Xóa phụ kiện thành công!');    
 
+<<<<<<< HEAD
+=======
+        $items = WatchGlass::all();
+        return view('client.accessories', [
+            'items' => $items,
+
+            'type' => 'glass'
+        ]);
+>>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
     }
 
     public function quickView($type, $id)

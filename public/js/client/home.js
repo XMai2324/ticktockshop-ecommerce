@@ -179,14 +179,3 @@ function deleteFromHistory(keyword) {
       }
     });
 });
-
-
-
-
-
-
-
-  
-
-
-

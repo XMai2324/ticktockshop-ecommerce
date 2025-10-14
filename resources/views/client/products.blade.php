@@ -117,8 +117,6 @@
                     @endforelse
                 </div>
 
-
-
                 {{-- Phân trang --}}
                 <div class="product-page-right-bottom row">
                     <div class="product-page-right-bottom-items">

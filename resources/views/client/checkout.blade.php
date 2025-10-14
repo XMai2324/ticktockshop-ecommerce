@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -62,8 +63,14 @@
                     <li><a href="#">Seiko cặp</a></li>
                 </ul>
             </li>
-            <li> <a title="sản phẩm mới" href="#">PHỤ KIỆN</a> </li>
-            <li> <a href="#">THÔNG TIN</a> </li>
+            <li> <a title="sản phẩm mới" href="#">PHỤ KIỆN</a> 
+                <ul class="sub_pk">
+                    <li><a href="{{ route('accessories.straps') }}">Dây đeo</a></li>
+                    <li><a href="{{ route('accessories.boxes') }}">Hộp Đựng</a></li>
+                    <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
+                </ul>
+            </li>
+            <li> <a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a> </li>
         </div>
 
         <div class="header_other">
@@ -168,36 +175,18 @@
                                 <th>Số lượng</th>
                                 <th>Thành tiền</th>
                             </tr>
-                            @forelse($cartItems as $item)
-                                @php
-                                    // Hỗ trợ cả array và object
-                                    $name  = is_array($item) ? ($item['name'] ?? '') : ($item->name ?? '');
-                                    $qty   = is_array($item) ? ($item['qty'] ?? ($item['quantity'] ?? 1))
-                                                            : ($item->qty ?? ($item->quantity ?? 1));
-                                    $price = is_array($item) ? ($item['price'] ?? 0) : ($item->price ?? 0);
-                                    $line  = (int)$qty * (int)$price;
-                                @endphp
+
+                            @forelse ($cartItems as $item)
+                                @php $line = (int)$item['qty'] * (int)$item['price']; @endphp
                                 <tr>
-                                    <td>{{ $name }}</td>
-                                    <td>{{ $qty }}</td>
+                                    <td>{{ $item['name'] }}</td>
+                                    <td>{{ $item['qty'] }}</td>
                                     <td><p>{{ number_format($line, 0, ',', '.') }} <sup>đ</sup></p></td>
                                 </tr>
                             @empty
                                 <tr><td colspan="3">Giỏ hàng trống</td></tr>
                             @endforelse
-                            @forelse($cartItems as $item)
-                                <tr>
-                                    <td>{{ $item['name'] }}</td>
-                                    <td>{{ $item['qty'] }}</td>
-                                    <td>
-                                        <p>{{ number_format($item['qty'] * $item['price'], 0, ',', '.') }} <sup>đ</sup></p>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3">Giỏ hàng trống</td>
-                                </tr>
-                            @endforelse
+                            
 
                             <tr class="total">
                                 <td colspan="2" style="font-weight:bold;">Tổng</td>

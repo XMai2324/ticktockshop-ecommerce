@@ -35,4 +35,10 @@ class Order extends Model
     {
         return $this->hasOne(Payment::class);
     }
+
+    public function promotion()
+    {
+        return $this->belongsTo(Promotion::class);
+    }
+
 }

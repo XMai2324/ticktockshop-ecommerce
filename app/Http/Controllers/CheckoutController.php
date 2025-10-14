@@ -8,7 +8,7 @@ class CheckoutController extends Controller
 {
     public function show(Request $request)
     {
-        // Ví dụ: nếu Anh đang lưu giỏ ở session dưới dạng objects hoặc arrays
+        
         $raw = session('cart', []); // hoặc lấy từ Cart::content() hay DB
 
         $cartItems = collect($raw)->map(function ($row) {

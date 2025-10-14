@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/client/cart.css') }}">
 
     @if (session('error'))
         <meta name="login-error" content="1">
@@ -45,7 +46,8 @@
                 </ul>
             </li>
             <li> <a href="">NAM</a> 
-                <ul class="sub_Nu">
+                <ul class="sub_Nam">
+
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'citizen']) }}">Citizen nam</a></li>
@@ -105,15 +107,15 @@
                         @include('client.auth.register')
                 </div>
             </li>
-            <a href="{{ route('cart.index') }}" class="cart-icon">
+            <li>  <a href="{{ route('cart.index') }}" class="cart-icon">
                 <i class="fa fa-shopping-bag"></i>
                 @if(session('cart') && array_sum(array_column(session('cart'), 'quantity')) > 0)
                     <span class="cart-count">
                         {{ array_sum(array_column(session('cart'), 'quantity')) }}
                     </span>
                 @endif
-            </a>
-
+                </a>
+            </li>
 
             @auth
                 <li class="logout-item">
@@ -153,7 +155,6 @@
         @yield('content')
     </main>
 
-
     <section class="footer">
         <div class="footer-container">
             <p>Tải ứng dụng TickTock</p>
@@ -186,6 +187,7 @@
                 @Ivymoda All rights reserved
             </div>
         </div>
+
      </section> 
 
     <script src="{{ asset('js/client/home.js') }}"></script>

@@ -8,6 +8,7 @@ use App\Http\Controllers\AccessoriesController;
 use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\PromotionsController;
 
 
 
@@ -18,10 +19,6 @@ use App\Http\Controllers\CheckoutController;
 
 //     return view('client.home');
 // });
-
-Route::get('/login', function () {
-    return view('client.login'); // đúng tên file chị đã có
-})->name('login');
 
 Route::get('/', function () { 
     if (auth()->check()) {
@@ -38,6 +35,8 @@ Route::get('/', function () {
 Route::get('/products', [ProductController::class, 'filterProducts'])->name('products.filter');
 Route::get('/quick-view/{slug}', [ProductController::class, 'quickView']);
 Route::get('/accessories/quick-view/{type}/{id}', [AccessoriesController::class, 'quickView']);
+
+
 
 
     //User routes
@@ -59,19 +58,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     })->name('admin.dashboard');
 });
 
-
 Route::post('/logout', function () {
     Auth::logout();
     return redirect('/');
 })->name('logout');
-
-
-Route::get('/products/filter', [ProductController::class, 'filterProducts'])->name('products.filter');
-
-
-Route::get('/accessories/straps', [AccessoriesController::class, 'showStraps'])->name('accessories.straps');
-Route::get('/accessories/boxes', [AccessoriesController::class, 'showBoxes'])->name('accessories.boxes');
-Route::get('/accessories/glasses', [AccessoriesController::class, 'showGlasses'])->name('accessories.glasses');
 
 
 // Trang bảo hành khách
@@ -83,10 +73,39 @@ Route::get('/admin/warranty', [WarrantyController::class, 'showAdmin'])->middlew
 // Xử lý tra cứu từ form
 Route::post('/warranty/lookup', [WarrantyController::class, 'lookup'])->name('warranty.lookup');
 
-// Giỏ hàng
+
+
+
+// Client
+Route::prefix('accessories')->group(function () {
+    Route::get('/straps', [AccessoriesController::class, 'showStraps'])->name('accessories.straps');
+    Route::get('/boxes', [AccessoriesController::class, 'showBoxes'])->name('accessories.boxes');
+    Route::get('/glasses', [AccessoriesController::class, 'showGlasses'])->name('accessories.glasses');
+});
+
+
+//ADMIN accessories
+Route::prefix('admin/accessories')->name('admin.accessories.')->group(function () {
+    // List theo loại (view: admin.accessories_index)
+    Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
+    Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
+    Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
+
+    // Trang tổng (nếu có)
+    Route::get('/', [AccessoriesController::class, 'index'])->name('index');
+
+    // CRUD
+    Route::post('/{type}/store',   [AccessoriesController::class, 'store'])->name('store');
+    Route::put('/{type}/{id}',     [AccessoriesController::class, 'update'])->name('update');
+    Route::delete('/{type}/{id}',  [AccessoriesController::class, 'delete'])->name('delete');
+});
+
+
+// Giỏ hàng customer
 Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::delete('/cart/remove/{key}', [CartController::class, 'remove'])->name('cart.remove');
+
 // Xóa giỏ hàng 
 Route::get('/cart/clear', function () {
     session()->forget('cart');
@@ -94,7 +113,6 @@ Route::get('/cart/clear', function () {
 });
 //update giỏ hàng
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 
 
@@ -105,3 +123,21 @@ Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search
 //thanh toan
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
+
+//Admin product
+Route::prefix('admin/products')->middleware('auth')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('admin.products_index');
+    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/{id}', [ProductController::class, 'update'])->name('admin.products.update'); // ✅ thêm dòng này
+    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+});
+Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
+
+
+//Admin promotion
+Route::prefix('admin')->middleware(['auth'])->group(function(){
+    Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
+    Route::post('promotions', [PromotionsController::class,'store'])->name('admin.promotions.store');
+    Route::put('promotions/{id}', [PromotionsController::class,'update'])->name('admin.promotions.update');
+    Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
+});

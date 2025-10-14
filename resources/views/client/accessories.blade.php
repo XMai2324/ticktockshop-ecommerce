@@ -39,12 +39,12 @@
             @endforelse
 
 
-        @elseif($type === 'glass')
+        @elseif($type === 'glasses')
             @forelse($items as $glass)
                 <div class="col-3">
                     <div class="product-card">
-                        <a href="#" class="accessory-quick-view" data-id="{{ $glass->id }}" data-type="glass">
-                            <img src="{{ asset('storage/accessories/glass/' . $glass->image) }}" alt="{{ $glass->name }}" class="product-image">
+                        <a href="#" class="accessory-quick-view" data-id="{{ $glass->id }}" data-type="glasses">
+                            <img src="{{ asset('storage/accessories/glasses/' . $glass->image) }}" alt="{{ $glass->name }}" class="product-image">
                             <h3 class="product-name">{{ $glass->name }}</h3>
                             <p class="product-price">{{ number_format($glass->price, 0, ',', '.') }}₫</p>
                             <p class="product-desc">{{ $glass->description }}</p>

@@ -4,10 +4,10 @@
 
 .product-page-top {
     margin-bottom: 30px;
-    background-color: #f5f5f5; 
+    background-color: #f5f5f5;
     padding: 10px 20px;
     border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
     font-size: 14px;
@@ -21,9 +21,9 @@
 }
 
 .product-page-top p a:hover {
-    color: #d62828; 
+    color: #d62828;
     font-weight: 600;
-    text-decoration: underline; 
+    text-decoration: underline;
 }
 
 
@@ -346,4 +346,3 @@
 .btn-add-to-cart:hover {
     background-color: #e22e2e;
 }
-

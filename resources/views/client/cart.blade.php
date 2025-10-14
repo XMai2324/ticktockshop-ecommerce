@@ -25,7 +25,8 @@
     </div>
 
     <div class="header_menu">
-        <li><a href="">THƯƠNG HIỆU</a>
+        <li>
+            <a href="">THƯƠNG HIỆU</a>
             <ul class="sub_TH">
                 <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
                 <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
@@ -34,7 +35,10 @@
                 <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>
             </ul>
         </li>
-        <li><a href="">NỮ</a>
+
+        {{-- NỮ --}}
+        <li>
+            <a href="{{ route('products.byCategory', 'nu') }}">NỮ</a>
             <ul class="sub_Nu">
                 <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'casio']) }}">Casio nữ</a></li>
                 <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'rolex']) }}">Rolex nữ</a></li>
@@ -43,7 +47,10 @@
                 <li><a href="{{ route('products.filter', ['category' => 'nu', 'brand' => 'seiko']) }}">Seiko nữ</a></li>
             </ul>
         </li>
-        <li><a href="">NAM</a>
+
+        {{-- NAM --}}
+        <li>
+            <a href="{{ route('products.byCategory', 'nam') }}">NAM</a>
             <ul class="sub_Nam">
                 <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                 <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
@@ -52,7 +59,10 @@
                 <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'seiko']) }}">Seiko nam</a></li>
             </ul>
         </li>
-        <li><a href="">CẶP ĐÔI</a>
+
+        {{-- CẶP ĐÔI --}}
+        <li>
+            <a href="{{ route('products.byCategory', 'cap-doi') }}">CẶP ĐÔI</a>
             <ul class="sub_Doi">
                 <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'casio']) }}">Casio đôi</a></li>
                 <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'rolex']) }}">Rolex đôi</a></li>
@@ -61,13 +71,17 @@
                 <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko đôi</a></li>
             </ul>
         </li>
-        <li><a href="">PHỤ KIỆN</a>
+
+        {{-- PHỤ KIỆN --}}
+        <li>
+            <a href="">PHỤ KIỆN</a>
             <ul class="sub_pk">
                 <li><a href="{{ route('accessories.straps') }}">Dây đeo</a></li>
-                <li><a href="{{ route('accessories.boxes') }}">Hộp Đựng</a></li>
+                <li><a href="{{ route('accessories.boxes') }}">Hộp đựng</a></li>
                 <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
             </ul>
         </li>
+
         <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
     </div>
 
@@ -131,7 +145,6 @@
     </div>
 
     @php
-        // An toàn: nếu controller chưa truyền $cartTotal thì tự tính
         $cartItems = session('cart') ?? [];
         $cartTotalView = isset($cartTotal)
             ? $cartTotal
@@ -143,15 +156,17 @@
             {{-- Bảng sản phẩm --}}
             <div class="cart-content-left">
                 <table>
-                    <tr>
-                        <th>Sản phẩm</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Đơn giá</th>
-                        <th>SL</th>
-                        <th>Tổng tiền</th>
-                        <th>Xóa</th>
-                    </tr>
-
+                    <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>SL</th>
+                            <th>Tổng tiền</th>
+                            <th>Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     @forelse ($cartItems as $key => $item)
                         <tr>
                             <td>
@@ -167,6 +182,7 @@
                             </td>
 
                             <td><p>{{ $item['name'] }}</p></td>
+
                             <td>
                                 <p>{{ number_format($item['price'], 0, ',', '.') }} <sub>đ</sub></p>
                             </td>
@@ -186,15 +202,19 @@
                             </td>
 
                             <td>
-                                <form action="{{ route('cart.remove', $key) }}" method="POST">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="remove-btn">X</button>
-                                </form>
+                                {{-- Nút X xoá bằng AJAX --}}
+                                <button type="button"
+                                        class="remove-btn"
+                                        aria-label="Xoá sản phẩm"
+                                        data-url="{{ route('cart.remove', $key) }}">
+                                    X
+                                </button>
                             </td>
                         </tr>
                     @empty
                         <tr><td colspan="6">Giỏ hàng trống.</td></tr>
                     @endforelse
+                    </tbody>
                 </table>
             </div>
 
@@ -269,7 +289,7 @@
     </div>
 </section>
 
-{{-- JS hiện có --}}
+{{-- JS --}}
 <script src="{{ asset('js/client/home.js') }}"></script>
 <script src="{{ asset('js/client/app.js') }}"></script>
 <script>const IS_AUTHENTICATED = {{ auth()->check() ? 'true' : 'false' }};</script>
@@ -277,7 +297,10 @@
 <script src="{{ asset('js/client/quickview.js') }}" defer></script>
 <script src="{{ asset('js/client/cart.js') }}" defer></script>
 
-<script>window.CART_UPDATE_URL = "{{ route('cart.update') }}";</script>
+{{-- URL APIs cho JS --}}
+<script>
+  window.CART_UPDATE_URL = "{{ route('cart.update') }}";
+</script>
 
 @yield('scripts')
 </body>

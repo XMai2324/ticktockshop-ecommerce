@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\WatchBox;
 use App\Models\WatchStrap;
 use Illuminate\Support\Str;
+
 use App\Models\WatchGlass;
 
 class AccessoriesController extends Controller
 {
-    
+
     private function loadAccessoryView($type, $isAdmin = false)
     {
         switch ($type) {
@@ -224,8 +225,14 @@ class AccessoriesController extends Controller
         $item->delete();
 
         return redirect()->route('admin.accessories.' . $type)
-                                ->with('success', 'Xóa phụ kiện thành công!');    
+                                ->with('success', 'Xóa phụ kiện thành công!');
 
+        $items = WatchGlass::all();
+        return view('client.accessories', [
+            'items' => $items,
+
+            'type' => 'glass'
+        ]);
     }
 
     public function quickView($type, $id)

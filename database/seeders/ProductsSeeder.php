@@ -52,7 +52,7 @@ class ProductsSeeder extends Seeder
                 ['Casio LTP-VT01D-1BUDF', 'Casio22.png', 1730000, 'Sự kết hợp hoàn hảo giữa nét cổ điển và hiện đại với tone đen bạc.'],
                 ['Casio LTP-V005L-2BUDF', 'Casio23.jpg', 1760000, 'Dây da xanh navy trẻ trung, thiết kế đơn giản dễ đeo.'],
                 ['Casio LTP-V002GL-9AUDF', 'Casio24.png', 5790000, 'Màu vàng đồng chủ đạo, mặt số cổ điển, thích hợp mọi lứa tuổi.'],
-            ]; 
+            ];
             foreach ($products as [$name, $image, $price, $description]) {
             DB::table('products')->insert([
                 'name' => $name,
@@ -65,8 +65,8 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
-   
+        }
+
 
         // -----------Rolex nữ----------
         $category = Category::where('name', 'Nữ')->first();
@@ -75,7 +75,7 @@ class ProductsSeeder extends Seeder
         if (!$category || !$brand) {
         $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Rolex"!');
         return;
-        }   
+        }
 
         $products = [
             ['Rolex Lady-Datejust 28', 'Rolex1.jpg', 265000000, 'Đồng hồ Rolex Lady-Datejust 28 thiết kế thanh lịch với viền khía và dây Jubilee sang trọng.'],
@@ -116,7 +116,7 @@ class ProductsSeeder extends Seeder
                 'updated_at' => now(),
 
             ]);
-        } 
+        }
         // -----------Citizen nữ----------
         $category = Category::where('name', 'Nữ')->first();
         $brand  = Brand::where('name', 'Citizen')->first();
@@ -124,7 +124,7 @@ class ProductsSeeder extends Seeder
         if (!$category || !$brand) {
         $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Citizen"!');
         return;
-        }   
+        }
         $products = [
             ['Citizen Eco-Drive Silhouette', 'Citizen1.png', 4900000, 'Đồng hồ Eco-Drive Silhouette với dây kim loại mạ vàng hồng, mặt số khảm trai sang trọng, hoạt động bằng ánh sáng.'],
             ['Citizen Eco-Drive Bianca', 'Citizen2.jpg', 5300000, 'Thiết kế nữ tính với dây da trắng, mặt số xanh navy ánh trai, công nghệ ánh sáng không cần thay pin.'],
@@ -150,7 +150,7 @@ class ProductsSeeder extends Seeder
             ['Citizen EW1676-52D', 'Citizen22.webp', 6150000, 'Dây kim loại tông vàng phối bạc, mặt số khảm trai với cọc số ánh vàng sang trọng.'],
             ['Citizen EM0990-53L', 'Citizen23.png', 5650000, 'Thiết kế dây thép hiếm có, mặt số tông xanh – bạc tạo sự nổi bật.'],
             ['Citizen L Crystal Garden', 'Citizen24.jpg', 8900000, 'Đồng hồ đính pha lê Swarovski, họa tiết hoa mờ trên mặt số tạo hiệu ứng huyền ảo.'],
-        ];      
+        ];
         foreach ($products as [$name, $image, $price, $description]) {
             DB::table('products')->insert([
                 'name' => $name,
@@ -163,7 +163,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        } 
+        }
 
         // -----------Rado nữ----------
         $category = Category::where('name', 'Nữ')->first();
@@ -221,7 +221,7 @@ class ProductsSeeder extends Seeder
         if (!$category || !$brand) {
         $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Seiko"!');
         return;
-        }       
+        }
 
         $products = [
             ['Seiko Classic White Dial', 'Seiko1.webp', 1250000, 'Mặt số trắng đơn giản, dây thép không gỉ, phù hợp đi làm hoặc đi học.'],
@@ -292,7 +292,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -301,7 +301,7 @@ class ProductsSeeder extends Seeder
         $brand = Brand::where('name', 'Rolex')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Rolex"!');
             return;
         }
 
@@ -326,7 +326,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -335,7 +335,7 @@ class ProductsSeeder extends Seeder
         $brand = Brand::where('name', 'Rado')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Rado"!');
             return;
         }
 
@@ -358,7 +358,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -368,7 +368,7 @@ class ProductsSeeder extends Seeder
         $brand = Brand::where('name', 'Citizen')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Citizen"!');
             return;
         }
 
@@ -389,17 +389,17 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
 
-//---------------------------Citizen cặp--------------------------
+//---------------------------Seiko cặp--------------------------
         $category = Category::where('name', 'Cặp đôi')->first();
         $brand = Brand::where('name', 'Seiko')->first();
 
         if (!$category || !$brand) {
-            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Casio"!');
+            $this->command->error('Không tìm thấy categories "Cặp đôi" hoặc brands "Seiko"!');
             return;
         }
 
@@ -409,8 +409,6 @@ class ProductsSeeder extends Seeder
     ['Seiko SUR525P1 & SUR531P1', 'SeikoCouple3.jpg', 2800000, 'Nam SUR525P1 xanh dương và nữ SUR531P1 trắng, thiết kế nhẹ nhàng, kính sapphire chất lượng cao.' ],
     ['Seiko SRP/SRP His & Hers Military', 'SeikoCouple4.jpg', 3500000, 'Nam SRP227 & nữ SRP189 – phong cách quân đội, tự động (automatic), đồng bộ dây và bộ máy.' ],
 ];
-
-
 
         foreach ($products as [$name, $image, $price, $description]) {
             DB::table('products')->insert([
@@ -424,12 +422,12 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-
         }
 
         // ---------Casio nam-----------------
         $category = Category::where('name', 'Nam')->first();
         $brand  = Brand::where('name', 'Casio')->first();
+
 
         if (!$category || !$brand) {
             $this->command->error('Không tìm thấy categories "Nam" hoặc brands "Casio"!');
@@ -536,7 +534,7 @@ class ProductsSeeder extends Seeder
         }
 
         $products = [
-            
+
             ['Rado Chronograph Blue Leather', 'rado-nam-1.webp', 25900000, 'Mặt xanh navy nổi bật, dây da lịch lãm, thiết kế thể thao sang trọng.'],
             ['Rado Classic Black Leather', 'rado-nam-2.webp', 23800000, 'Thiết kế cổ điển, mặt đen tối giản, dây da nâu sang trọng.'],
             ['Rado Green Stainless Steel', 'rado-nam-3.webp', 27500000, 'Mặt xanh lạ mắt, dây kim loại sáng bóng – thanh lịch và hiện đại.'],
@@ -676,7 +674,6 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }   
     }
 }
-
+        }

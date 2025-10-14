@@ -21,6 +21,14 @@ use App\Http\Controllers\PromotionsController;
 //     return view('client.home');
 // });
 
+<<<<<<< HEAD
+=======
+
+Route::get('/login', function () {
+    return view('client.login'); // đúng tên file chị đã có
+})->name('login');
+
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 Route::get('/', function () { 
 =======
 /*
@@ -157,9 +165,12 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //thanh toan
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
+=======
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 
 //Admin product
 Route::prefix('admin/products')->middleware('auth')->group(function () {
@@ -179,6 +190,7 @@ Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(funct
 });
 Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
 
+<<<<<<< HEAD
 /*
 |--------------------------------------------------------------------------
 | ADMIN PROMOTIONS
@@ -190,3 +202,19 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('promotions/{id}',  [PromotionsController::class, 'update'])->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class, 'destroy'])->name('admin.promotions.delete');
 });
+=======
+
+//Admin promotion
+Route::prefix('admin')->middleware(['auth'])->group(function(){
+    Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
+    Route::post('promotions', [PromotionsController::class,'store'])->name('admin.promotions.store');
+    Route::put('promotions/{id}', [PromotionsController::class,'update'])
+         ->name('admin.promotions.update');
+    Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
+});
+
+
+//thanh toan
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928

@@ -81,9 +81,13 @@ class ProductController extends Controller
 <<<<<<< HEAD
 
         // Lọc theo category từ URL (giữ nguyên theo code gốc)
+<<<<<<< HEAD
 =======
         // Lọc theo category từ URL
 >>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
+=======
+
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
         if ($categorySlug) {
             $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
                 return Str::slug($cat->name) === $categorySlug;

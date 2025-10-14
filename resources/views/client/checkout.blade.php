@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -9,6 +12,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>@yield('title', 'Thanh Toán')</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<<<<<<< HEAD
         <link rel="icon" type="image/png" href="{{ asset('storage/logo1.png') }}">
 =======
 <!DOCTYPE html>
@@ -25,6 +29,13 @@
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/checkout.css') }}">
+=======
+        <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
+        <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/client/checkout.css') }}">
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 
     @if (session('error')) <meta name="login-error" content="1">@endif
     @if (session('register_error')) <meta name="register-error" content="1">@endif
@@ -208,7 +219,11 @@
                             @empty
                                 <tr><td colspan="3">Giỏ hàng trống</td></tr>
                             @endforelse
+<<<<<<< HEAD
                             
+=======
+                           
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 
                             <tr class="total">
                                 <td colspan="2" style="font-weight:bold;">Tổng</td>

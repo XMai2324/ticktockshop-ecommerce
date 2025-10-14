@@ -7,9 +7,12 @@ use App\Models\WatchBox;
 use App\Models\WatchStrap;
 use Illuminate\Support\Str;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
+=======
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 use App\Models\WatchGlass;
 
 class AccessoriesController extends Controller
@@ -231,6 +234,7 @@ class AccessoriesController extends Controller
                                 ->with('success', 'Xóa phụ kiện thành công!');    
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         $items = WatchGlass::all();
         return view('client.accessories', [
@@ -239,6 +243,8 @@ class AccessoriesController extends Controller
             'type' => 'glass'
         ]);
 >>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
+=======
+>>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
     }
 
     public function quickView($type, $id)

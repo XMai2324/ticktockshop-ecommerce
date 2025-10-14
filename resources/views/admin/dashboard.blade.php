@@ -17,47 +17,39 @@
             <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
         </div>
 
-        <div class="header_menu">
-            <li><a href="">QUẢN LÝ SẢN PHẨM</a>
-                <ul class="sub_menu">
-                    <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
-                    <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
-                    <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
-                    <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
-                </ul>
-        </li>
+        <!-- Đổi div -> ul và đóng </ul> đúng chuẩn -->
+        <ul class="header_menu">
+            <li>
+            <a href="">QUẢN LÝ SẢN PHẨM</a>
+            <ul class="sub_menu">
+                <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
+                <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
+                <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
+                <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
+            </ul>
+            </li>
             <li><a href="#">XỬ LÝ ĐƠN HÀNG</a></li>
             <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="#">ĐÁNH GIÁ</a></li>
-            <li><a href="{{route('admin.promotions_index')}}">KHUYẾN MÃI</a></li>
-        </div>
+            <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
+        </ul>
 
-        <div class="header_other">
-            <li> <input placeholder="Tìm kiếm" type="text"> <i class="fas fa-search"></i>
-                <div class="search-history">
-                    <h3 class="search-heading">Lịch sử tìm kiếm</h3>
-                    <ul class="search-history-list">
-                        <li class="item"> <a href="">Casio</a> </li>
-                        <li class="item"> <a href="">Rolex</a> </li>
-
-                    </ul>
-                </div>
-            </li>
-
+        <ul class="header_other">
             <li class="header-user">
-                <i class="fa fa-user"></i>
-                <span class="user-name">{{ Auth::user()->name }}</span>
+            <i class="fa fa-user"></i>
+            <span class="user-name">{{ Auth::user()->name }}</span>
             </li>
             <li class="logout-item">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="logout-btn">
-                        <i class="fa fa-sign-out-alt"></i>
-                    </button>
-                </form>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="logout-btn" title="Đăng xuất">
+                <i class="fa fa-sign-out-alt"></i>
+                </button>
+            </form>
             </li>
-        </div>
+        </ul>
     </header>
+
 
     
     

@@ -356,8 +356,15 @@ header:hover{
   align-items: center;
   justify-content: center;  /* căn giữa cả dòng nếu bạn muốn */
   gap: 8px;            /*khoảng cách giữa các phần tử*/
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 15px;
+}
+.forgot_pass {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
 }
 
 .register-link span {
@@ -429,73 +436,33 @@ header:hover{
 
 
 /* -----------------------Footer---------------------- */
-footer{
-    text-align: center;
-}
-.footer-container{
-    text-align: center;
-    align-items: center;
-    padding: 150px 0 50px 0;
-}
-.app-google{
-    margin: 50px;
-}
-.app-google img{
-    height: 50px;
-}
-.footer-container p{
-    line-height: 20px;
-    letter-spacing: 1px;
-    font-size: 17px;
-    color: #000;
-    font-weight: bold;
-}
-.footer-container input{
-    margin-top: 50px;
-    border: none;
-    border-bottom: 1px solid #000;
-    padding-bottom: 20px;
-    width: 400px;
-    text-align: center;
-    outline: none;
-}
-.footer-items{
+/* Footer */
+.footer {
+    margin-top: 0;
     display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    height: 70px;
-    list-style-type: none;
+    height: auto;
+    background: #eceaea;
+    color: rgb(100, 96, 96);
+    padding: 20px 50px;
+    gap: 20px;
 }
-.footer-items img{
-    height: 50px;
+
+.left_footer {
+    width: 55%;
+    font-size: 20px;
 }
-.footer-items li {
-    text-decoration: none;
-    padding: 0 12px;
-    position: relative;
+
+.footer-logo img {
+    width: 150px;
+    margin-bottom: 10px;
 }
-.footer-items li::after{
-    content:"";
-    display: block;
-    width: 1px;
-    height: 80%;
-    background: #cccccc;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.footer-items li:last-child::after{
-    display: none;
-}
-.footer-items li:last-child a{
-    margin-right: 12px;
-    color: #333;
-}
-.footer-bottom{
-    margin: 20px 0;
+
+.right_footer {
+    width: 45%;
+    justify-content: space-between;
+    align-content: center;
+    justify-items: center;
+    line-height: 30px;
 }
 
 

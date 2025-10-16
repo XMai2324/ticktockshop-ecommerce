@@ -77,5 +77,39 @@ class LoginAuthController extends Controller
         return redirect()->route('client.home');
     }
 
+        // Hiển thị form reset mật khẩu trực tiếp
+    public function showResetForm()
+    {
+        return view('client.auth.reset_pass'); // form chỉ có email + mật khẩu mới + xác nhận
+    }
+
+    // Xử lý reset trực tiếp
+    public function resetDirect(Request $request)
+    {
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required|confirmed|min:6',
+        ], [
+            'email.required'     => 'Vui lòng nhập email',
+            'email.email'        => 'Email không hợp lệ',
+            'password.required'  => 'Vui lòng nhập mật khẩu',
+            'password.confirmed' => 'Xác nhận mật khẩu không khớp',
+            'password.min'       => 'Mật khẩu tối thiểu 6 ký tự',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => 'Không tìm thấy tài khoản với email này']);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        Auth::login($user); // tự đăng nhập sau khi đổi mật khẩu
+        return redirect()->route('client.home');
+    }
+
+
 }
 

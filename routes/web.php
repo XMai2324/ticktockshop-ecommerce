@@ -49,6 +49,11 @@ Route::get('/login', [LoginAuthController::class, 'showLoginForm'])->name('clien
 Route::post('/login', [LoginAuthController::class, 'login'])->name('client.login');
 Route::post('/client/register', [LoginAuthController::class, 'register'])->name('client.register');
 
+Route::get('/reset_pass', [LoginAuthController::class, 'showResetForm'])->name('client.reset_pass');
+Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->name('client.pass_update');
+
+
+
 
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', function () {

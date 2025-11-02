@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 */
 Route::get('/products/filter', [ProductController::class, 'filterProducts'])->name('products.filter');
 Route::get('/products/category/{slug}', [ProductController::class, 'byCategory'])->name('products.byCategory');
-Route::get('/quick-view/{slug}', [ProductController::class, 'quickView']);
+Route::get('/product/{product:slug}', [ProductController::class, 'showDetail'])->name('product.detail');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 /*

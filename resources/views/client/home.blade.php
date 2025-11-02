@@ -22,9 +22,9 @@
 </head>
 <body>
     <header>
-    <div class="logo">
-        <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
-    </div>
+        <div class="logo">
+            <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
+        </div>
 
     <div class="header_menu">
             <li>
@@ -113,15 +113,21 @@
             @include('client.auth.register')
         </div>
 
-        <a href="{{ route('cart.index') }}" class="cart-icon">
+        @php
+            $cartItems = session('cart') ?? [];
+            $totalQty  = array_sum(array_column($cartItems, 'quantity'));
+        @endphp
+
+        <a href="{{ route('cart.index') }}" class="cart-icon" aria-label="Giỏ hàng">
             <i class="fa fa-shopping-bag"></i>
-            @php
-                $cartItems = session('cart') ?? [];
-                $totalQty  = array_sum(array_column($cartItems, 'quantity'));
-            @endphp
-            @if($totalQty > 0)
-                <span class="cart-count" id="cart-count">{{ $totalQty }}</span>
-            @endif
+            {{-- Luôn render badge để JS có thể cập nhật ngay sau khi thêm vào giỏ --}}
+            <span
+                class="cart-count js-cart-count"
+                id="cart-count"
+                aria-live="polite"
+                aria-atomic="true"
+                data-count="{{ $totalQty }}">{{ $totalQty }}
+            </span>
         </a>
 
         @auth

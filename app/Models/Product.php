@@ -13,8 +13,9 @@ class Product extends Model
         'image',
         'category_id',
         'brand_id',
-        'warranty_month',
+        'warranty_months',
     ];
+
     public function category()
     {
         return $this->belongsTo(Category::class);

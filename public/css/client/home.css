@@ -421,6 +421,15 @@ header:hover{
 
 
 
+.cart-icon { position: relative; display: inline-flex; align-items: center; }
+.cart-count{
+  position:absolute; top:-6px; right:-10px;
+  min-width:20px; height:20px; padding:0 6px;
+  border-radius:999px; background:#d8343a; color:#fff;
+  font-size:12px; line-height:20px; text-align:center; font-weight:700;
+}
+.cart-count[data-count="0"] { display:none; }
+
 
 
 

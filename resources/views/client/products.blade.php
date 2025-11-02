@@ -1,5 +1,9 @@
 @extends('client.home')
 
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @section('title')
     @if(isset($currentBrand) && isset($currentCategory))
         {{ $currentBrand->name . ' ' . $currentCategory->name }} - TickTock Shop
@@ -12,8 +16,11 @@
 <main>
 <section class="product-page">
     <div class="container">
+        {{-- ==== Breadcrumb ==== --}}
         <div class="product-page-top row">
-            <p><a href="{{ route('home') }}">Trang chủ</a></p> <span>&#10230;</span>
+            <p><a href="{{ route('home') }}">Trang chủ</a></p> 
+            <span>&#10230;</span>
+
             @if(isset($keyword) && $keyword)
                 <p>{{ $keyword }}</p>
             @elseif(isset($currentBrand) && isset($currentCategory))
@@ -37,6 +44,7 @@
         </div>
 
         <div class="product-page-right-top row">
+            {{-- ==== Tiêu đề danh sách ==== --}}
             <div class="product-page-right-top-item">
                 <p class="product-page-title">
                     @if(isset($currentBrand) && isset($currentCategory))
@@ -51,13 +59,11 @@
                 </p>
             </div>  
 
-            {{-- Dropdown: Khoảng giá --}}
+            {{-- ==== Dropdown: Khoảng giá ==== --}}
             <div class="filter-group">
                 @php
-                    $url = fn($arr) => request()->fullUrlWithQuery($arr);
                     $pr  = request('price_range');
                 @endphp
-
                 <select class="filter-select select-box" name="price_range">
                     <option value="" {{ $pr==null ? 'selected' : '' }}>-- Khoảng giá --</option>
                     <option value="0-1000000"           {{ $pr=='0-1000000' ? 'selected' : '' }}>Dưới 1 triệu</option>
@@ -76,7 +82,7 @@
                 </select>
             </div>
 
-            {{-- Dropdown: Sắp xếp --}}
+            {{-- ==== Dropdown: Sắp xếp ==== --}}
             <div class="product-page-right-top-item">
                 <select class="select-box" name="sort">
                     <option value="" {{ request('sort') == null ? 'selected' : '' }}>Sắp xếp</option>
@@ -85,26 +91,26 @@
                 </select>
             </div>
 
-            {{-- Danh sách sản phẩm --}}
+            {{-- ==== Danh sách sản phẩm ==== --}}
             <div class="product-page-right-content">
                 @forelse($products as $product)
-                    <div class="product-page-right-content-item">
-                        @php
-                            $categoryFolder = 'Watch/Watch_nu'; // mặc định
-
-                            if (isset($product->category)) {
-                                $slug = \Illuminate\Support\Str::slug($product->category->name);
-
-                                if ($slug === 'nam') {
-                                    $categoryFolder = 'Watch/Watch_nam';
-                                } elseif ($slug === 'cap-doi') {
-                                    $categoryFolder = 'Watch/Watch_cap';
-                                }
+                    @php
+                        $categoryFolder = 'Watch/Watch_nu';
+                        if ($product->category) {
+                            $slug = Str::slug($product->category->name);
+                            if ($slug === 'nam') {
+                                $categoryFolder = 'Watch/Watch_nam';
+                            } elseif ($slug === 'cap-doi') {
+                                $categoryFolder = 'Watch/Watch_cap';
                             }
-                        @endphp
-                        <a href="javascript:void(0);" class="product-quick-view" data-slug="{{ $product->slug }}">
-                            <img src="{{ asset('storage/' . $categoryFolder . '/' . $product->image) }}" alt="{{ $product->name }}">
-                            <h1>{{ $product->name }}</h1>
+                        }
+                    @endphp
+
+                    <div class="product-page-right-content-item">
+                        {{-- Liên kết sang trang chi tiết --}}
+                        <a href="{{ route('product.detail', ['product' => $product->slug]) }}" class="product-card">
+                            <img loading="lazy" src="{{ asset('storage/' . $categoryFolder . '/' . $product->image) }}" alt="{{ $product->name }}">
+                            <h2>{{ $product->name }}</h2>
                             <p>{{ number_format($product->price, 0, ',', '.') }}<sup>đ</sup></p>
                         </a>
                     </div>
@@ -113,7 +119,7 @@
                 @endforelse
             </div>
 
-            {{-- Phân trang --}}
+            {{-- ==== Phân trang ==== --}}
             <div class="product-page-right-bottom row">
                 <div class="product-page-right-bottom-items">
                     <p>Hiển thị {{ $products->count() }} sản phẩm</p>
@@ -126,10 +132,29 @@
     </div>
 </section>
 </main>
-
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/client/app.js') }}" defer></script>
-    <script src="{{ asset('js/client/quickview.js') }}" defer></script>
+<script src="{{ asset('js/client/quickview.js') }}" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const priceSelect = document.querySelector('select[name="price_range"]');
+    const sortSelect  = document.querySelector('select[name="sort"]');
+
+    function updateQuery(param, value) {
+        const url = new URL(window.location.href);
+        if (value) url.searchParams.set(param, value);
+        else url.searchParams.delete(param);
+        url.searchParams.delete('page'); // reset về trang đầu tiên khi lọc/sắp xếp
+        window.location.href = url.toString();
+    }
+
+    if (priceSelect) {
+        priceSelect.addEventListener('change', (e) => updateQuery('price_range', e.target.value));
+    }
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => updateQuery('sort', e.target.value));
+    }
+});
+</script>
 @endsection

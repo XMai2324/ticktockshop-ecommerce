@@ -6,20 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('slug')->unique()->nullable()->after('name');
+            // đến đây slug đã được backfill duy nhất
+            $table->unique('slug', 'products_slug_unique');
         });
-    }      
+    }
 
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('slug');
+            $table->dropUnique('products_slug_unique');
         });
     }
 };

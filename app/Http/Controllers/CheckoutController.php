@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use App\Models\Promotion;
+use App\Models\Promotion;;
+use App\Models\Payment;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -70,7 +72,18 @@ class CheckoutController extends Controller
                'price'      => $item['qty'] * $item['price'], // tổng tiền item
            ]);
        }
-   
+   // ✅ 5. Lưu thông tin thanh toán
+Payment::create([
+    'order_id'        => $order->id,
+    'method'          => $data['payment_method'], // cash or bank
+    'status' => ($data['payment_method'] === 'cash') ? 'pending' : 'paid',
+
+    'transaction_code' => ($data['payment_method'] == 'bank')
+    ? 'PAY' . strtoupper(Str::random(10))
+    : null,
+
+    'payment_date'    => now(),
+]);
        // 5. Xóa giỏ hàng & coupon trong session
        session()->forget(['cart','coupon']);
    

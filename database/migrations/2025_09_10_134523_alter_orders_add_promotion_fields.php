@@ -6,28 +6,35 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        // Nếu chưa có bảng orders thì bỏ qua migration này
+        if (!Schema::hasTable('orders')) {
+            return;
+        }
+
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreignId('promotion_id')->nullable()
-                  ->constrained('promotions')->nullOnDelete();
-            $table->string('promotion_code')->nullable()->index(); // Lưu snapshot mã
-            $table->decimal('discount_amount', 12, 2)->default(0); // Số tiền đã giảm
-            $table->decimal('final_price', 12, 2)->default(0);     // Tổng sau giảm
+            if (!Schema::hasColumn('orders', 'promotion_id')) {
+                $table->unsignedBigInteger('promotion_id')->nullable()->after('id'); // chỉnh after() cho phù hợp
+
+                // Nếu có bảng promotions và bạn muốn ràng buộc:
+                // $table->foreign('promotion_id')->references('id')->on('promotions')->nullOnDelete();
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
+        if (!Schema::hasTable('orders')) {
+            return;
+        }
+
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('promotion_id');
-            $table->dropColumn(['promotion_code', 'discount_amount', 'final_price']);
+            if (Schema::hasColumn('orders', 'promotion_id')) {
+                // Nếu đã tạo foreign key ở up(), drop FK trước:
+                // $table->dropForeign(['promotion_id']);
+                $table->dropColumn('promotion_id');
+            }
         });
     }
 };

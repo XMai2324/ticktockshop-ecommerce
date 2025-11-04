@@ -175,4 +175,3 @@
 
 <script src="{{ asset('js/admin/create.js') }}"></script>
 <script src="{{ asset('js/admin/edit.js') }}"></script>
-

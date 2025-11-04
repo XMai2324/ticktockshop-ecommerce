@@ -226,6 +226,13 @@ class AccessoriesController extends Controller
         return redirect()->route('admin.accessories.' . $type)
                                 ->with('success', 'Xóa phụ kiện thành công!');    
 
+
+        $items = WatchGlass::all();
+        return view('client.accessories', [
+            'items' => $items,
+
+            'type' => 'glass'
+        ]);
     }
 
     public function quickView($type, $id)

@@ -13,11 +13,8 @@ class BrandsSeeder extends Seeder
      */
     public function run(): void
     {
-
         $brands = ['Casio','Rolex', 'Citizen', 'Rado' ,'Seiko'];
-
         foreach ($brands as $name) {
-
             Brand::create(['name' => $name]);
         }
     }

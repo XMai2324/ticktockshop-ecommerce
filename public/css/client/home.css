@@ -25,7 +25,7 @@ header {
     top: 0;
     left: 0;
     z-index: 999;
-    background-color: rgba(225, 225, 225, 0.3) ;
+    background-color: rgba(157, 154, 154, 0.3) ;
 }
 header.sticky{
     background-color: white;

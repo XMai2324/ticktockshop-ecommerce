@@ -62,6 +62,7 @@
 
 
 
+
     <script>
         const IS_AUTHENTICATED = {{ auth()->check() ? 'true' : 'false' }};
     </script>

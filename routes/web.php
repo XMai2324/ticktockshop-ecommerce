@@ -21,6 +21,7 @@ Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->role === 'admin'
             ? redirect()->route('admin.dashboard')
+            // ? redirect()->route('admin.products_index')
             : redirect()->route('client.home');
     }
     return view('client.home');
@@ -34,6 +35,31 @@ Route::get('/', function () {
 Route::get('/login', [LoginAuthController::class, 'showLoginForm'])->name('client.login');
 Route::post('/login', [LoginAuthController::class, 'login'])->name('client.login.submit');
 Route::post('/client/register', [LoginAuthController::class, 'register'])->name('client.register');
+
+
+Route::get('/reset_pass', [LoginAuthController::class, 'showResetForm'])->name('client.reset_pass');
+Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->name('client.pass_update');
+
+
+
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/products_index', function () {
+        return view('client.home');
+    })->name('client.home');
+});
+
+//Admin routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/products_index', function () {
+        return view('admin.products_index');
+    })->name('admin.products_index');
+});
+// Route::middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('/admin/dashboard', function () {
+//         return view('admin.products_index');
+//     })->name('admin.products_index');
+// });
 
 Route::post('/logout', function () {
     Auth::logout();
@@ -55,7 +81,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 */
 Route::get('/products/filter', [ProductController::class, 'filterProducts'])->name('products.filter');
 Route::get('/products/category/{slug}', [ProductController::class, 'byCategory'])->name('products.byCategory');
-Route::get('/quick-view/{slug}', [ProductController::class, 'quickView']);
+Route::get('/product/{product:slug}', [ProductController::class, 'showDetail'])->name('product.detail');
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
 
 /*

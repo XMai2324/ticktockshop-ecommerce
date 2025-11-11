@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -151,6 +152,8 @@
         <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
     </div>
 
+
+
     <div class="header_other">
         <li class="search-wrapper">
             <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">
@@ -166,13 +169,13 @@
         <li class="header-user">
             <div class="user-menu">
                 <i class="fa fa-user"></i>
-        
+
                 @auth
                     <span class="user-name">{{ Auth::user()->name }}</span>
-        
+
                     <ul class="dropdown-menu-user">
                         <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
-                     
+
                     </ul>
                 @else
                     <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
@@ -362,7 +365,7 @@
                     <img id="qr-image" src="{{ asset('storage/maqr.jpg') }}" alt="QR thanh toán">
                     <p id="qr-timer">Thời gian còn lại: <span id="qr-countdown">60</span>s</p>
                 </div>
-                
+
                 </div>
             </div>
         </form>
@@ -370,38 +373,39 @@
 </section>
 
 <section class="footer">
-    <div class="footer-container">
-        <p>Tải ứng dụng TickTock</p>
-        <div class="app-google">
-            <a href=""><img src="{{ asset('storage/appstore.jpg')}}" alt=""></a>
-            <a href=""><img src="{{ asset('storage/googleplay.jpg')}}" alt=""></a>
+        <div class="left_footer">
+            <div class="footer-logo">
+                <img src="{{ asset('storage/logo2.png')}}" alt="footer-logo">
+            </div>
+            <p><strong>TickTock Shop</strong> là hệ thống cửa hàng đồng hồ chính hãng tại Việt Nam,
+                chuyên cung cấp các thương hiệu nổi tiếng thế giới như Casio, Seiko, Citizen,
+                Rolex, Rado cùng nhiều phụ kiện đi kèm (dây đeo, hộp đựng, kính cường lực).
+            </p>
+            <p>
+                Với phương châm <em>“Uy tín tạo niềm tin”</em>, TickTock Shop luôn cam kết
+                sản phẩm 100% chính hãng, bảo hành chính hãng toàn quốc, dịch vụ giao hàng nhanh chóng
+                và đội ngũ tư vấn nhiệt tình để mang đến trải nghiệm mua sắm hoàn hảo nhất cho khách hàng.
+            </p>
         </div>
-        <p>Nhận bản tin TickTock</p>
-        <div class="input-email">
-            <input type="text" placeholder="Nhập email của bạn">
-            <i class="fas fa-arrow-left"></i>
+        <div class="right_footer">
+            <h4>Liên hệ</h4>
+            <p><i class="fa-solid fa-location-dot"></i> 123 Nguyễn Trãi, Thanh Xuân, Hà Nội</p>
+            <p><i class="fa-solid fa-phone"></i> 0123 456 789</p>
+            <p><i class="fa-regular fa-envelope"></i> support@ticktockshop.com</p>
+
+            <h4>Giờ làm việc</h4>
+            <p>Thứ 2 - Thứ 7: 8:00 - 21:30</p>
+            <p>Chủ nhật & ngày lễ: 9:00 - 18:00</p>
+
+            <h4>Kết nối với chúng tôi</h4>
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
         </div>
-        <div class="footer-items">
-            <li><a href=""><img src="{{ asset('storage/dathongbao.jpg')}}" alt=""></a></li>
-            <li><a href="#">Liên hệ</a></li>
-            <li><a href="#">Tuyển dụng</a></li>
-            <li><a href="#">Giới thiệu</a></li>
-            <li>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-            </li>
-        </div>
-        <div class="footer-text">
-            Công ty Cổ phần TickTock với số đăng ký kinh doanh: 0105777650 <br>
-            Địa chỉ đăng ký: 273 An Dương vương, P.7, Q.5, TP.Hồ Chí Minh, Việt Nam - 0243 205 2222 <br>
-            Đặt hàng online: <b>0246 662 3434</b>
-        </div>
-        <div class="footer-bottom">
-            @TickTock All rights reserved
-        </div>
-    </div>
-</section>
+    </section>
 
 {{-- Scripts --}}
 <script src="{{ asset('js/client/home.js') }}"></script>
@@ -473,11 +477,11 @@
     function startTimer() {
         let timeLeft = 60;
         document.getElementById("qr-countdown").textContent = timeLeft;
-    
+
         timer = setInterval(() => {
             timeLeft--;
             document.getElementById("qr-countdown").textContent = timeLeft;
-    
+
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 alert("Mã QR đã hết hạn, vui lòng tải lại trang để tạo mã mới!");
@@ -485,11 +489,11 @@
             }
         }, 1000);
     }
-    
+
     document.querySelectorAll('input[name="payment_method"]').forEach((radio) => {
         radio.addEventListener("change", function () {
             const qrBox = document.getElementById("qr-container");
-    
+
             if (this.value === "bank") {
                 qrBox.style.display = "block";
                 clearInterval(timer);
@@ -500,7 +504,7 @@
             }
         });
     });
-    
+
     // Nếu page reload và đang chọn bank -> hiển thị QR lại
     window.onload = function() {
         const selected = document.querySelector('input[name="payment_method"]:checked');
@@ -510,5 +514,5 @@
         }
     };
     </script>
-    
+
 </html>

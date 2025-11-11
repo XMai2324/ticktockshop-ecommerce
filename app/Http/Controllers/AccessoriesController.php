@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\WatchBox;
 use App\Models\WatchStrap;
 use Illuminate\Support\Str;
-
 use App\Models\WatchGlass;
 
 class AccessoriesController extends Controller
@@ -226,6 +225,7 @@ class AccessoriesController extends Controller
 
         return redirect()->route('admin.accessories.' . $type)
                                 ->with('success', 'Xóa phụ kiện thành công!');
+
 
         $items = WatchGlass::all();
         return view('client.accessories', [

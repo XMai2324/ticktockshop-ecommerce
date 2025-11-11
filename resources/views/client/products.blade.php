@@ -1,5 +1,9 @@
 @extends('client.home')
 
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @section('title')
     @if (isset($currentBrand) && isset($currentCategory))
         {{ $currentBrand->name . ' ' . $currentCategory->name }} - TickTock Shop
@@ -165,6 +169,26 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ asset('js/client/app.js') }}" defer></script>
-    <script src="{{ asset('js/client/quickview.js') }}" defer></script>
+<script src="{{ asset('js/client/quickview.js') }}" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const priceSelect = document.querySelector('select[name="price_range"]');
+    const sortSelect  = document.querySelector('select[name="sort"]');
+
+    function updateQuery(param, value) {
+        const url = new URL(window.location.href);
+        if (value) url.searchParams.set(param, value);
+        else url.searchParams.delete(param);
+        url.searchParams.delete('page'); // reset về trang đầu tiên khi lọc/sắp xếp
+        window.location.href = url.toString();
+    }
+
+    if (priceSelect) {
+        priceSelect.addEventListener('change', (e) => updateQuery('price_range', e.target.value));
+    }
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => updateQuery('sort', e.target.value));
+    }
+});
+</script>
 @endsection

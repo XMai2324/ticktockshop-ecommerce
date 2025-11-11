@@ -346,3 +346,34 @@
 .btn-add-to-cart:hover {
     background-color: #e22e2e;
 }
+
+/* -------------------------- */
+/* Rating*/
+.product-rating {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.product-rating .stars {
+    color: #ffb400;
+    font-size: 1.1rem;
+}
+
+.product-rating .rating-number {
+    font-weight: bold;
+    color: #333;
+}
+
+.product-rating .rating-count {
+    color: #666;
+    font-size: 12px;
+}
+
+.product-rating.no-rating {
+    margin-top: 4px;
+    color: #aaa;
+    font-size: 12px;
+}

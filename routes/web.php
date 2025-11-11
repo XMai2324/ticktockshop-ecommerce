@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\RatingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,29 @@ Route::get('/products/filter', [ProductController::class, 'filterProducts'])->na
 Route::get('/products/category/{slug}', [ProductController::class, 'byCategory'])->name('products.byCategory');
 Route::get('/quick-view/{slug}', [ProductController::class, 'quickView']);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
+
+/*
+|--------------------------------------------------------------------------
+| RATINGS
+|--------------------------------------------------------------------------
+*/
+// Danh sách đánh giá của sản phẩm
+Route::get('/products/{product}/ratings', [RatingController::class, 'index'])->name('products.ratings.index');
+
+// Tạo hoặc cập nhật đánh giá (user must be authenticated)
+Route::post('/products/{product}/ratings', [RatingController::class, 'store'])
+    ->middleware('auth')
+    ->name('products.ratings.store');
+
+// Cập nhật một đánh giá (chỉ chủ sở hữu)
+Route::patch('/ratings/{rating}', [RatingController::class, 'update'])
+    ->middleware('auth')
+    ->name('ratings.update');
+
+// Xóa một đánh giá (Admin hoặc chủ sở hữu)
+Route::delete('/ratings/{rating}', [RatingController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('ratings.destroy');
 
 /*
 |--------------------------------------------------------------------------
@@ -159,7 +183,25 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::put('promotions/{id}', [PromotionsController::class,'update'])
          ->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
+
+// Ratings management (admin)
+    Route::get('ratings', [RatingController::class, 'adminIndex'])
+        ->middleware(['role:admin'])
+        ->name('admin.ratings.index');
+
+    Route::get('ratings/data', [RatingController::class, 'data'])
+        ->middleware(['role:admin'])
+        ->name('admin.ratings.data');
+
+    Route::delete('ratings/{id}', [RatingController::class, 'destroy'])
+        ->middleware(['role:admin'])
+        ->name('admin.ratings.destroy');
+
+    Route::post('ratings/{id}/response', [RatingController::class, 'updateResponse'])
+        ->middleware(['role:admin'])
+        ->name('admin.ratings.updateResponse');
 });
+
 /*
 |--------------------------------------------------------------------------
 | HISTORY ORDER

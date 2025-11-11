@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Rating;
+use App\Models\Order;
 
 class ProductController extends Controller
 {
@@ -16,7 +19,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands     = Brand::all();
-
+        $query = Product::with('ratings');
         $categorySlug = $request->input('category');
         $brandSlug    = $request->input('brand');
         $sort         = $request->input('sort');
@@ -131,7 +134,7 @@ class ProductController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        $query = Product::with(['brand','category'])
+        $query = Product::with(['brand','category', 'ratings'])
             ->where('category_id', $category->id);
 
         // Lọc theo khoảng giá (an toàn hơn với regex + intval)
@@ -174,6 +177,34 @@ class ProductController extends Controller
     {
         $product = Product::where('slug', $slug)->with('category', 'brand')->firstOrFail();
         return view('client.products.quick_view', compact('product'));
+    }
+
+    // ================== SHOW (PRODUCT DETAIL) ==================
+    public function show($id)
+    {
+        $product = Product::with(['brand','category','ratings.user'])->findOrFail($id);
+
+        $avgRating = round($product->ratings()->avg('rating') ?? 0, 2);
+        $ratingCount = $product->ratings()->count();
+
+        $user = Auth::user();
+        $canRate = false;
+        $userRating = null;
+
+        if ($user) {
+            // user đã từng mua sản phẩm hay chưa (kiểm tra trong orders -> items)
+            $hasOrdered = Order::where('user_id', $user->id)
+                ->whereHas('items', function ($q) use ($product) {
+                    $q->where('product_id', $product->id);
+                })
+                ->exists();
+
+            $canRate = $hasOrdered;
+
+            $userRating = Rating::where('user_id', $user->id)->where('product_id', $product->id)->first();
+        }
+
+        return view('client.product_show', compact('product', 'avgRating', 'ratingCount', 'canRate', 'userRating'));
     }
 
     // ================== ADMIN INDEX ==================

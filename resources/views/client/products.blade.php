@@ -128,7 +128,7 @@
                                         alt="{{ $product->name }}">
                                     <h1>{{ $product->name }}</h1>
                                     <p>{{ number_format($product->price, 0, ',', '.') }}<sup>đ</sup></p>
-                                    {{-- ⭐ Hiển thị đánh giá trung bình --}}
+                                    {{-- Hiển thị đánh giá trung bình --}}
                                     @php
                                         $avg = $product->avg_rating ?? 0;
                                         $count = $product->rating_count ?? 0;

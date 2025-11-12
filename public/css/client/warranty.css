@@ -1,0 +1,93 @@
+.warranty-lookup {
+    margin-top: 40px;
+    font-family: 'Segoe UI', sans-serif;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.warranty-lookup h2 {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #222;
+}
+
+.warranty-lookup h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.warranty-lookup ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.warranty-lookup li {
+    margin-bottom: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.warranty-lookup li i {
+    color: #ff9800;
+    margin-right: 8px;
+    min-width: 20px;
+}
+
+.policy-column {
+    flex: 1 1 50%;
+}
+
+strong {
+    line-height: 1.6;
+}
+
+.form-column {
+    flex: 1 1 40%;
+    border-left: 1px solid #ddd;
+    padding-left: 30px;
+}
+
+.form-column form input[type="text"] {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-column form button {
+    padding: 10px 20px;
+    background-color: #222;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.form-column form button:hover {
+    background-color: #444;
+}
+
+.warranty-result {
+    background: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .warranty-lookup .row {
+        flex-direction: column;
+    }
+
+    .form-column {
+        border-left: none;
+        padding-left: 0;
+        margin-top: 30px;
+    }
+
+}

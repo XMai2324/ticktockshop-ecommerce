@@ -1,0 +1,91 @@
+.promotions-layout {
+    display: flex;
+    gap: 10px;
+}
+
+.panel-left, .panel-right {
+    margin-top: 40px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+#form-title-left{
+    text-align: center;
+}
+
+#form-title-right{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.panel-left {
+    flex: 1;
+    max-width: 400px;
+    margin-left: 30px;
+
+}
+
+.panel-left .btn-primary{
+    margin-left: 40%;
+}
+
+
+.panel-left .field{
+    line-height: 3;
+}
+
+
+.panel-right {
+    flex: 2;
+    margin-right: 30px;
+
+}
+
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.btn-primary{
+    background-color: #8092a4;
+    color: white;
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover{
+    background-color: #218838;
+}
+
+.btn-edit {
+    background: #3498db;
+    color: #fff;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: #fff;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-edit:hover { background: #2980b9; }
+.btn-delete:hover { background: #c0392b; }

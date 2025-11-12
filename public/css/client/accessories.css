@@ -1,0 +1,94 @@
+.container {
+    padding: 50px 80px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+.col-3 {
+    flex: 0 0 calc(25% - 30px);
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+
+.col-3:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.product-card {
+    text-align: center;
+}
+
+.product-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.product-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    min-height: 50px;
+}
+
+.product-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #e91e63;
+    margin-bottom: 8px;
+}
+
+.product-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    min-height: 60px;
+}
+
+/* ======== MÀU RIÊNG CHO TỪNG LOẠI PHỤ KIỆN ======== */
+
+/* Dây đeo: Xanh */
+#straps-section .product-card {
+    border-top: 4px solid #2196f3;
+}
+#straps-section .product-name {
+    color: #0d47a1;
+}
+#straps-section .product-price {
+    color: #1e88e5;
+}
+
+/* Hộp đựng: Hồng */
+#boxes-section .product-card {
+    border-top: 4px solid #e91e63;
+}
+#boxes-section .product-name {
+    color: #880e4f;
+}
+#boxes-section .product-price {
+    color: #d81b60;
+}
+
+/* Kính cường lực: Xanh lá */
+#glasses-section .product-card {
+    border-top: 4px solid #4caf50;
+}
+#glasses-section .product-name {
+    color: #2e7d32;
+}
+#glasses-section .product-price {
+    color: #43a047;
+}

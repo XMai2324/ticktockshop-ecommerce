@@ -75,12 +75,6 @@ class ProductController extends Controller
             }
         }
 
-        // Lọc theo category từ URL
-        if ($categorySlug) {
-            $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
-                return Str::slug($cat->name) === $categorySlug;
-            });
-
         // ===== Lọc theo khoảng giá =====
         if ($priceRange && str_contains($priceRange, '-')) {
             [$min, $max] = explode('-', $priceRange, 2);
@@ -107,7 +101,7 @@ class ProductController extends Controller
             'keyword'            => $keyword,
         ]);
     }
-    }
+
     // ================== HIỂN THỊ THEO DANH MỤC ==================
     public function byCategory(Request $request, string $slug)
     {

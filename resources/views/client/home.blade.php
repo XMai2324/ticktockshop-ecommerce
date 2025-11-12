@@ -28,6 +28,45 @@
     <meta name="forgot-error" content="1">
     @endif
 
+    <style>
+        .user-menu {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dropdown-menu-user {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    min-width: 160px;
+    list-style: none;
+    padding: 5px 0;
+    z-index: 999;
+}
+
+.dropdown-menu-user li {
+    padding: 10px;
+}
+
+.dropdown-menu-user li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-menu-user li:hover {
+    background: #f5f5f5;
+}
+
+.user-menu:hover .dropdown-menu-user {
+    display: block;
+}
+
+    </style>
+    
 </head>
 <body>
     <header>
@@ -109,13 +148,22 @@
         </li>
 
         <li class="header-user">
-            <i class="fa fa-user"></i>
-            @auth
-                <span class="user-name">{{ Auth::user()->name }}</span>
-            @else
-                <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
-            @endauth
+            <div class="user-menu">
+                <i class="fa fa-user"></i>
+        
+                @auth
+                    <span class="user-name">{{ Auth::user()->name }}</span>
+        
+                    <ul class="dropdown-menu-user">
+                        <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
+                     
+                    </ul>
+                @else
+                    <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
+                @endauth
+            </div>
         </li>
+        
 
         <div class="overlay" id="login-overlay">
             @include('client.auth.login')

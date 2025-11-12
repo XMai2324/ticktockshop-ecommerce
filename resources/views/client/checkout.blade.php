@@ -15,6 +15,74 @@
 
     @if (session('error')) <meta name="login-error" content="1">@endif
     @if (session('register_error')) <meta name="register-error" content="1">@endif
+    <style>
+        .user-menu {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dropdown-menu-user {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    min-width: 160px;
+    list-style: none;
+    padding: 5px 0;
+    z-index: 999;
+}
+
+.dropdown-menu-user li {
+    padding: 10px;
+}
+
+.dropdown-menu-user li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.dropdown-menu-user li:hover {
+    background: #f5f5f5;
+}
+
+.user-menu:hover .dropdown-menu-user {
+    display: block;
+}
+#qr-container {
+    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px dashed #3a8bff;
+    border-radius: 12px;
+    background: #f8fbff;
+    width: fit-content;
+    text-align: center;
+}
+
+#qr-container p {
+    margin-bottom: 10px;
+}
+
+#qr-image {
+    width: 260px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+#qr-timer {
+    margin-top: 8px;
+    color: #ff2e2e;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+    </style>
 </head>
 <body>
 
@@ -99,12 +167,20 @@
         </li>
 
         <li class="header-user">
-            <i class="fa fa-user"></i>
-            @auth
-                <span class="user-name">{{ Auth::user()->name }}</span>
-            @else
-                <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
-            @endauth
+            <div class="user-menu">
+                <i class="fa fa-user"></i>
+        
+                @auth
+                    <span class="user-name">{{ Auth::user()->name }}</span>
+        
+                    <ul class="dropdown-menu-user">
+                        <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
+                     
+                    </ul>
+                @else
+                    <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
+                @endauth
+            </div>
         </li>
 
         <div class="overlay" id="login-overlay">
@@ -206,7 +282,7 @@
                                 <input type="radio" name="payment_method" value="cash" {{ old('payment_method','cash')==='cash'?'checked':'' }}> Thanh toán khi nhận hàng
                             </label>
                             <label>
-                                <input type="radio" name="payment_method" value="bank" {{ old('payment_method')==='bank'?'checked':'' }}> Thanh toán bằng ngân hàng
+                                <input type="radio" id="bank-payment" name="payment_method" value="bank" {{ old('payment_method')==='bank'?'checked':'' }}> Thanh toán bằng ngân hàng
                             </label>
                         </div>
                     </div>
@@ -283,12 +359,13 @@
                         <button type="submit" class="qr-payment"><span style="font-weight:bold;">THANH TOÁN</span></button>
                     </div>
 
-                    {{-- QR khi chọn ngân hàng --}}
-                    <div id="qr-container" style="display:none; margin-top:20px;">
-                        <p><strong>Mã QR thanh toán:</strong></p>
-                        <img id="qr-image" src="{{ asset('images/QR.png') }}" alt="QR thanh toán" style="width:300px; height:300px;">
-                        <p id="qr-timer" style="color:red; font-weight:bold;">Thời gian còn lại: 60s</p>
-                    </div>
+                   {{-- QR khi chọn ngân hàng --}}
+                   <div id="qr-container">
+                    <p><strong>Mã QR thanh toán:</strong></p>
+                    <img id="qr-image" src="{{ asset('storage/maqr.jpg') }}" alt="QR thanh toán">
+                    <p id="qr-timer">Thời gian còn lại: <span id="qr-countdown">60</span>s</p>
+                </div>
+                
                 </div>
             </div>
         </form>
@@ -395,4 +472,47 @@
 </div>
 
 </body>
+<script>
+    let timer;
+    function startTimer() {
+        let timeLeft = 60;
+        document.getElementById("qr-countdown").textContent = timeLeft;
+    
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById("qr-countdown").textContent = timeLeft;
+    
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                alert("Mã QR đã hết hạn, vui lòng tải lại trang để tạo mã mới!");
+                document.getElementById("qr-container").style.display = "none";
+            }
+        }, 1000);
+    }
+    
+    document.querySelectorAll('input[name="payment_method"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+            const qrBox = document.getElementById("qr-container");
+    
+            if (this.value === "bank") {
+                qrBox.style.display = "block";
+                clearInterval(timer);
+                startTimer();
+            } else {
+                qrBox.style.display = "none";
+                clearInterval(timer);
+            }
+        });
+    });
+    
+    // Nếu page reload và đang chọn bank -> hiển thị QR lại
+    window.onload = function() {
+        const selected = document.querySelector('input[name="payment_method"]:checked');
+        if (selected && selected.value === "bank") {
+            document.getElementById("qr-container").style.display = "block";
+            startTimer();
+        }
+    };
+    </script>
+    
 </html>

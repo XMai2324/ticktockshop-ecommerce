@@ -11,6 +11,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\VNPayController;
 
 /*
 |--------------------------------------------------------------------------

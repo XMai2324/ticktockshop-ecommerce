@@ -141,7 +141,6 @@
                                                 {!! str_repeat('☆', 5 - floor($avg)) !!}
                                             </span>
                                             <span class="rating-number">{{ $avg }}/5</span>
-                                            <span class="rating-count">({{ $count }})</span>
                                         </div>
                                     @else
                                         <div class="product-rating no-rating">Chưa có đánh giá</div>

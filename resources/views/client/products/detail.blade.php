@@ -151,34 +151,17 @@
                                     Bảo hành 12 tháng chính hãng trên toàn quốc.
                                 </div>
                             </details>
-                            <details class="review-details">
-                                <summary>Xem chi tiết đánh giá ({{$product->rating_count}})</summary>
-
-                                <div id="review-panel" class="review-panel">
-                                    <div class="review-list-scroll">
-                                        @forelse($product->ratings as $r)
-                                            <div class="review-item">
-                                                <div class="review-header">
-                                                    <strong>Khách hàng: {{ $r->user->name ?? 'Người dùng' }}</strong>
-                                                    <span class="stars">{!! str_repeat('★', $r->rating) . str_repeat('☆', 5 - $r->rating) !!}</span>
-                                                </div>
-
-                                                <p>{{ $r->comment }}</p>
-                                                <span class="review-time">{{ $r->created_at->format('d/m/Y H:i') }}</span>
-
-                                                @if ($r->response)
-                                                    <div class="admin-response">
-                                                        <strong>Phản hồi của shop:</strong>
-                                                        <p>{{ $r->response }}</p>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        @empty
-                                            <p class="no-review-msg">Chưa có đánh giá.</p>
-                                        @endforelse
-                                    </div>
+                            <div class="product-rating-summary">
+                                <div class="rating-in_detail_product">
+                                    <span class="avg-rating">{{ number_format($product->avg_rating, 1) }}</span>
+                                    <span class="stars">
+                                        {!! str_repeat('★', 1) !!}
+                                    </span>
+                                    <span class="rating-text" id="btn-show-reviews">
+                                        Đánh giá sản phẩm ({{ $product->ratings->count() }})  >
+                                    </span>
                                 </div>
-                            </details>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -212,10 +195,14 @@
                         </div>
                     @endif
                 @endisset
-
             </div>
         </section>
     </main>
+@endsection
+
+@section('scripts')
+    <link rel="stylesheet" href="{{ asset('css/client/review_rating.css') }}">
+    <script src="{{ asset('js/client/review_rating.js') }}" defer></script>
 @endsection
 
 @section('scripts')
@@ -262,3 +249,4 @@
         });
     </script>
 @endsection
+@include('client.products.review_rating')

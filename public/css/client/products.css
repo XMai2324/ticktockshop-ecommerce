@@ -507,7 +507,7 @@ details[open] summary::after {
   }
 }
 
-/* Rating*/
+/* Rating on product*/
 .product-rating {
     margin-top: 4px;
     display: flex;
@@ -536,3 +536,35 @@ details[open] summary::after {
     color: #aaa;
     font-size: 12px;
 }
+
+/* Product rating summary on product detail page */
+ .product-rating-summary {
+    margin: 15px 0;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.product-rating-summary:hover {
+    cursor: pointer;
+}
+.product-rating-summary .avg-rating {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000000;
+    margin-right: 3px;
+}
+
+.product-rating-summary .stars {
+    color:  #ffb400;
+    font-size: 28px;
+    letter-spacing: 1px;
+    margin-right: 5px;
+}
+
+.product-rating-summary .rating-text {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 500;
+}
+

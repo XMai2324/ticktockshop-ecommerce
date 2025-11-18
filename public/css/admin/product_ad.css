@@ -209,3 +209,36 @@
     }
 }
 
+#btn-filter-hidden {
+    margin-left: 10px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    border: none;
+    background: #6c757d;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#btn-filter-hidden.active {
+    background: #d6336c !important; /* Màu đỏ → đang lọc ẩn */
+}
+
+.product-card { position: relative; }
+
+.hidden-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #d6336c;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.product-hidden {
+    opacity: 0.4;
+    filter: grayscale(60%);
+}

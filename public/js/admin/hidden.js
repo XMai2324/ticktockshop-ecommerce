@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Cập nhật lại dataset để lần sau dùng
                 btn.setAttribute("data-hidden", isHidden ? "1" : "0");
+                card.dataset.hidden = isHidden ? "1" : "0"; // 🔥 THÊM DÒNG NÀY
 
                 // Đổi text nút + cập nhật giao diện
                 if (isHidden) {
@@ -73,4 +74,34 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    // ========== FILTER ẨN / HIỆN ==========
+    const btnFilterHidden = document.getElementById('btn-filter-hidden');
+
+    if (btnFilterHidden) {
+        let filterOn = false; // mặc định: tắt bộ lọc
+
+        btnFilterHidden.addEventListener('click', function () {
+            filterOn = !filterOn;
+
+            // Cập nhật giao diện nút
+            btnFilterHidden.classList.toggle('active', filterOn);
+            btnFilterHidden.textContent = filterOn
+                ? 'Chỉ hiển thị sản phẩm ẩn'
+                : 'Hiện sản phẩm ẩn';
+
+            // Lọc từng card sản phẩm
+            document.querySelectorAll('.product-card').forEach(function (card) {
+                const hidden = card.dataset.hidden === '1';
+
+                if (filterOn) {
+                    // Bật lọc → chỉ hiện sản phẩm ẩn
+                    card.style.display = hidden ? 'block' : 'none';
+                } else {
+                    // Tắt lọc → hiện tất cả (ẩn thì vẫn bị làm mờ bằng CSS)
+                    card.style.display = 'block';
+                }
+            });
+        });
+    }
 });

@@ -99,22 +99,35 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 //     Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
 // });
 
-Route::prefix('admin/accessories')
-    ->name('admin.accessories_')
-    ->middleware(['auth', 'role:admin'])
-    ->group(function () {
-        Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
-        Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
-        Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
-        Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
 
-        Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
-        Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
-        Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
+    // Trang index chung (mặc định dây đeo) – menu dùng route('admin.accessories.index')
+    Route::get('/accessories', [AccessoriesController::class, 'adminStraps'])
+        ->name('accessories.index');
 
-        // Ẩn / hiện
-        Route::post('/toggle/{type}/{id}', [AccessoriesController::class, 'toggleHidden'])->name('toggle');
-    });
+    // Từng loại
+    Route::get('/accessories/straps', [AccessoriesController::class, 'adminStraps'])
+        ->name('accessories.straps');
+
+    Route::get('/accessories/boxes', [AccessoriesController::class, 'adminBoxes'])
+        ->name('accessories.boxes');
+
+    Route::get('/accessories/glasses', [AccessoriesController::class, 'adminGlasses'])
+        ->name('accessories.glasses');
+
+    // Thêm / sửa / xoá
+    Route::post('/accessories/{type}', [AccessoriesController::class, 'store'])
+        ->name('accessories.store');
+
+    Route::put('/accessories/{type}/{id}', [AccessoriesController::class, 'update'])
+        ->name('accessories.update');
+
+    Route::delete('/accessories/{type}/{id}', [AccessoriesController::class, 'delete'])
+        ->name('accessories.delete');
+
+    Route::post('/accessories/toggle/{type}/{id}', [AccessoriesController::class, 'toggleHidden'])
+        ->name('accessories.toggle');
+});
 
 
 /*

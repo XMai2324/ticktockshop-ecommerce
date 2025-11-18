@@ -38,7 +38,7 @@ class AccessoriesController extends Controller
         $type  = 'straps';
         $items = WatchStrap::where('is_hidden', false)->get();
 
-        return view('client.accessories.index', compact('items', 'type'));
+        return view('client.accessories_index', compact('items', 'type'));
     }
 
     public function showBoxes()
@@ -46,7 +46,7 @@ class AccessoriesController extends Controller
         $type  = 'boxes';
         $items = WatchBox::where('is_hidden', false)->get();
 
-        return view('client.accessories.index', compact('items', 'type'));
+        return view('client.accessories_index', compact('items', 'type'));
     }
 
     public function showGlasses()
@@ -54,7 +54,7 @@ class AccessoriesController extends Controller
         $type  = 'glasses';
         $items = WatchGlass::where('is_hidden', false)->get();
 
-        return view('client.accessories.index', compact('items', 'type'));
+        return view('client.accessories_index', compact('items', 'type'));
     }
 
     // Quick view: /accessories/quick-view/{type}/{id}
@@ -130,7 +130,7 @@ class AccessoriesController extends Controller
             'is_hidden'   => false,
         ]);
 
-        return redirect()->route("admin.accessories_index.$type")
+        return redirect()->route("admin.accessories.$type")
                          ->with('success', 'Thêm phụ kiện thành công!');
     }
 
@@ -172,7 +172,7 @@ class AccessoriesController extends Controller
 
         $accessory->save();
 
-        return redirect()->route("admin.accessories_index.$type")
+        return redirect()->route("admin.accessories.$type")
                          ->with('success', 'Cập nhật phụ kiện thành công!');
     }
 
@@ -194,7 +194,7 @@ class AccessoriesController extends Controller
 
         $accessory->delete();
 
-        return redirect()->route("admin.accessories_index.$type")
+        return redirect()->route("admin.accessories.$type")
                          ->with('success', 'Đã xoá phụ kiện thành công!');
     }
 

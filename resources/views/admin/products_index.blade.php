@@ -8,50 +8,30 @@
     {{-- ✅ Sidebar hãng --}}
     <aside class="sidebar-brand">
     <h3>Thương hiệu</h3>
-    <ul>
-        <li>
-            <a href="{{ route('admin.products_index') }}" 
-               class="{{ !request()->has('brand') ? 'active' : '' }}">
-               Tất cả
-            </a>
-        </li>
-        @foreach($brands as $brand)
+        <ul>
             <li>
-                <a href="{{ route('admin.products_index', ['brand' => $brand->id]) }}"
-                   class="{{ request('brand') == $brand->id ? 'active' : '' }}">
-                    {{ $brand->name }}
+                <a href="{{ route('admin.products_index') }}" 
+                class="{{ !request()->has('brand') ? 'active' : '' }}">
+                Tất cả
                 </a>
             </li>
-        @endforeach
-    </ul>
+            @foreach($brands as $brand)
+                <li>
+                    <a href="{{ route('admin.products_index', ['brand' => $brand->id]) }}"
+                    class="{{ request('brand') == $brand->id ? 'active' : '' }}">
+                        {{ $brand->name }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
 
-    <h3 style="margin-top: 24px;">Phụ kiện</h3>
-    <ul>
-        <li>
-            <a href="{{ route('admin.accessories.index') }}"
-               class="{{ request()->routeIs('admin.accessories.index') ? 'active' : '' }}">
-                Tất cả phụ kiện
+    <h3>
+        <a href="{{ route('admin.accessories.straps') }}"
+            class="{{ request()->routeIs('admin.accessories.straps') ? 'active' : '' }}">
+            Phụ kiện
             </a>
-        </li>
-        <li>
-            <a href="{{ route('admin.accessories.straps') }}"
-               class="{{ request()->routeIs('admin.accessories.straps') ? 'active' : '' }}">
-                Dây đeo
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('admin.accessories.boxes') }}"
-               class="{{ request()->routeIs('admin.accessories.boxes') ? 'active' : '' }}">
-                Hộp đựng
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('admin.accessories.glasses') }}"
-               class="{{ request()->routeIs('admin.accessories.glasses') ? 'active' : '' }}">
-                Kính cường lực
-            </a>
-        </li>
-    </ul>
+        </h3>
+    
 </aside>
 
 
@@ -60,6 +40,9 @@
 
         <button id="btn-open-create-form" class="btn-create-product">
             + Thêm sản phẩm mới
+        </button>
+        <button  id="btn-filter-hidden" class="btn btn-secondary">
+            * Hiện sản phẩm ẩn
         </button>
 
         <!-- ------------------------THÊM SP------------------------ -->
@@ -154,7 +137,8 @@
         <div class="row">
             @forelse($products as $product)
                 <div class="col-3">
-                    <div class="product-card" id="product-{{ $product->id }}">
+                    <div class="product-card" id="product-{{ $product->id }}"
+                            data-hidden="{{ $product->is_hidden ? 1 : 0 }}">
                         <!-- <img src="{{ asset('storage/Watch/' . $product->image) }}" alt="{{ $product->name }}" class="product-image"> -->
                          @php
                             $folder = 'Watch/Watch_nu'; // mặc định

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('2025_07_16_110023_watch_glasses', function (Blueprint $table) {
+        Schema::table('watch_glasses', function (Blueprint $table) {
             $table->boolean('is_hidden')
                   ->default(false)
                   ->after('name');
@@ -23,7 +23,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('2025_07_16_110023_watch_glasses', function (Blueprint $table) {
+        Schema::table('watch_glasses', function (Blueprint $table) {
             $table->dropColumn('is_hidden');
         });
     }

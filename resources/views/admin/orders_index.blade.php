@@ -35,8 +35,8 @@
                 <select name="status" id="f-status" required>
                     <option value="pending">Chờ xử lý</option>
                     <option value="confirmed">Đã xác nhận</option>
-                    <option value="shipped">Đang giao</option>
-                    <option value="completed">Hoàn thành</option>
+                    <option value="shipping">Đang giao</option>
+                    <option value="delivered">Hoàn thành</option>
                     <option value="cancelled">Đã hủy</option>
                 </select>
             </div>

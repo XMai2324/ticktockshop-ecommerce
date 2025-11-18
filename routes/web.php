@@ -11,83 +11,129 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 
+/*
+|--------------------------------------------------------------------------
+| HOME + AUTH
+|--------------------------------------------------------------------------
+*/
 
+// /login
+Route::get('/login', [LoginAuthController::class, 'showLoginForm'])->name('client.login');
+Route::post('/login', [LoginAuthController::class, 'login'])->name('client.login.submit');
+Route::post('/client/register', [LoginAuthController::class, 'register'])->name('client.register');
 
+Route::get('/reset_pass', [LoginAuthController::class, 'showResetForm'])->name('client.reset_pass');
+Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->name('client.pass_update');
 
-// Route::get('/', function () {
-//     if (request()->has('checkout')) {
-//         return view('client.checkout');
-//     }
-
-//     return view('client.home');
-// });
-
-
-Route::get('/login', function () {
-    return view('client.login'); // đúng tên file chị đã có
-})->name('login');
-
-Route::get('/', function () { 
-
+// Trang /
+Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->role === 'admin'
             ? redirect()->route('admin.dashboard')
-            // ? redirect()->route('admin.products_index')
             : redirect()->route('client.home');
     }
     return view('client.home');
 })->name('home');
 
-/*
-|--------------------------------------------------------------------------
-| AUTH
-|--------------------------------------------------------------------------
-*/
-Route::get('/login', [LoginAuthController::class, 'showLoginForm'])->name('client.login');
-Route::post('/login', [LoginAuthController::class, 'login'])->name('client.login.submit');
-Route::post('/client/register', [LoginAuthController::class, 'register'])->name('client.register');
-
-
-Route::get('/reset_pass', [LoginAuthController::class, 'showResetForm'])->name('client.reset_pass');
-Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->name('client.pass_update');
-
-
-
-
-Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/products_index', function () {
-        return view('client.home');
-    })->name('client.home');
-});
-
-//Admin routes
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/products_index', function () {
-        return view('admin.products_index');
-    })->name('admin.products_index');
-});
-// Route::middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/admin/dashboard', function () {
-//         return view('admin.products_index');
-//     })->name('admin.products_index');
-// });
-
+// logout
 Route::post('/logout', function () {
     Auth::logout();
     return redirect()->route('home');
 })->name('logout');
 
+/*
+|--------------------------------------------------------------------------
+| CLIENT DASHBOARD
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', fn () => view('client.home'))->name('client.home');
 });
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN DASHBOARD
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', fn () => view('admin.dashboard'))->name('admin.dashboard');
 });
 
+
+//ADMIN PRODUCTS
+Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/',           [ProductController::class, 'index'])->name('admin.products_index');
+    Route::get('/{id}/edit',  [ProductController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/{id}',       [ProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/{id}',    [ProductController::class, 'destroy'])->name('admin.products.destroy');
+
+    // toggle ẩn/hiện
+    Route::post('/toggle/{id}', [ProductController::class, 'toggleHidden'])->name('admin.products.toggle');
+});
+
+Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
+
+
+
+
+//Admin promotion
+Route::prefix('admin')->middleware(['auth'])->group(function(){
+    Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
+    Route::post('promotions', [PromotionsController::class,'store'])->name('admin.promotions.store');
+    Route::put('promotions/{id}', [PromotionsController::class,'update'])
+         ->name('admin.promotions.update');
+    Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
+});
+
+
+
+// ACCESSORIES (Admin)
+// Route::prefix('admin/accessories')->name('admin.accessories.')->middleware(['auth', 'role:admin'])->group(function () {
+//     Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
+//     Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
+//     Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
+//     Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
+
+//     Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
+//     Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
+//     Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
+// });
+
+Route::prefix('admin/accessories')
+    ->name('admin.accessories_')
+    ->middleware(['auth', 'role:admin'])
+    ->group(function () {
+        Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
+        Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
+        Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
+        Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
+
+        Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
+        Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
+        Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
+
+        // Ẩn / hiện
+        Route::post('/toggle/{type}/{id}', [AccessoriesController::class, 'toggleHidden'])->name('toggle');
+    });
+
+
 /*
 |--------------------------------------------------------------------------
-| PRODUCTS
+| ADMIN ORDER
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('orders',          [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('orders/{id}',     [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::get('orders/{id}/edit',[OrderController::class, 'edit'])->name('admin.orders.edit');
+    Route::put('orders/{id}',     [OrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| PRODUCTS CLIENT
 |--------------------------------------------------------------------------
 */
 Route::get('/products/filter', [ProductController::class, 'filterProducts'])->name('products.filter');
@@ -108,21 +154,6 @@ Route::prefix('accessories')->group(function () {
     Route::get('/quick-view/{type}/{id}', [AccessoriesController::class, 'quickView']);
 });
 
-/*
-|--------------------------------------------------------------------------
-| ACCESSORIES (Admin)
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin/accessories')->name('admin.accessories.')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
-    Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
-    Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
-    Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
-
-    Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
-    Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
-    Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -157,10 +188,7 @@ Route::get('/cart/clear', function () {
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
 
-/* Coupons
-   Xem danh sách mã: ai cũng xem được
-   Áp dụng hoặc bỏ mã: bắt buộc đăng nhập
-*/
+/* Coupons */
 Route::get('/coupons/available', [CheckoutController::class, 'availableCoupons'])->name('checkout.availableCoupons');
 Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon'])
     ->middleware('auth')
@@ -176,32 +204,6 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 */
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN PRODUCTS
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/',        [ProductController::class, 'index'])->name('admin.products_index');
-    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/{id}',    [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-});
-Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN PROMOTIONS
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('promotions',       [PromotionsController::class, 'index'])->name('admin.promotions_index');
-    Route::post('promotions',      [PromotionsController::class, 'store'])->name('admin.promotions.store');
-    Route::put('promotions/{id}',  [PromotionsController::class, 'update'])->name('admin.promotions.update');
-    Route::delete('promotions/{id}', [PromotionsController::class, 'destroy'])->name('admin.promotions.delete');
-});
 /*
 |--------------------------------------------------------------------------
 | HISTORY ORDER
@@ -212,16 +214,3 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 });
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN ORDER
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    // Orders
-    Route::get('orders',          [OrderController::class, 'index'])->name('admin.orders.index');
-    Route::get('orders/{id}',     [OrderController::class, 'show'])->name('admin.orders.show');
-    Route::get('orders/{id}/edit',[OrderController::class, 'edit'])->name('admin.orders.edit');
-    Route::put('orders/{id}',     [OrderController::class, 'update'])->name('admin.orders.update');
-    Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
-});

@@ -12,7 +12,13 @@ class WatchGlass extends Model
         'material',
         'color',
         'price',
+        'quantity',
         'image',
         'description',
+        'is_hidden',
+    ];
+
+    protected $casts = [
+        'is_hidden' => 'boolean',
     ];
 }

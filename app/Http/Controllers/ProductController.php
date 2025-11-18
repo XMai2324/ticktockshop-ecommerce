@@ -23,7 +23,8 @@ class ProductController extends Controller
         $priceRange   = $request->input('price_range');
         $keyword      = $request->input('keyword');
 
-        $query = Product::query();
+        // CHỖ NÀY: KHỞI TẠO QUERY CÓ is_hidden = false
+        $query = Product::query()->where('is_hidden', false);
 
         $currentCategory = null;
         $currentBrand    = null;
@@ -88,6 +89,7 @@ class ProductController extends Controller
             $query->orderBy('price', 'desc');
         }
 
+        // LẤY SẢN PHẨM Ở ĐÂY
         $products = $query->paginate(8);
 
         return view('client.products', [
@@ -102,13 +104,15 @@ class ProductController extends Controller
         ]);
     }
 
+
     // ================== HIỂN THỊ THEO DANH MỤC ==================
     public function byCategory(Request $request, string $slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
         $query = Product::with(['brand', 'category'])
-            ->where('category_id', $category->id);
+            ->where('category_id', $category->id)
+            ->where('is_hidden', false);
 
         // Lọc theo khoảng giá
         $priceRange = $request->input('price_range');
@@ -151,6 +155,7 @@ class ProductController extends Controller
         // Lấy sản phẩm liên quan
         $related = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
+            ->where('is_hidden', false)
             ->latest('id')
             ->take(8)
             ->get();
@@ -185,8 +190,8 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0',
             'brand_id'    => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
-            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'description' => 'nullable|string',
+            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $category = Category::findOrFail($request->category_id);
@@ -216,6 +221,7 @@ class ProductController extends Controller
             'description' => $request->description,
             'image'       => $imageName,
             'slug'        => $productSlug,
+            'is_hidden'   => false, // hoặc 0
         ]);
 
         return redirect()->route('admin.products_index')->with('success', 'Thêm sản phẩm thành công!');
@@ -285,4 +291,21 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products_index')->with('success', 'Đã xoá sản phẩm thành công!');
     }
+
+
+    public function toggleHidden($id)
+    {
+        $product = Product::findOrFail($id);
+
+        // Đảo trạng thái
+        $product->is_hidden = ! $product->is_hidden;
+        $product->save();
+
+        return response()->json([
+            'hidden' => $product->is_hidden,
+        ]);
+    }
+
+
+    
 }

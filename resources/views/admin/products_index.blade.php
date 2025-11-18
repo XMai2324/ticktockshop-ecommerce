@@ -24,6 +24,34 @@
             </li>
         @endforeach
     </ul>
+
+    <h3 style="margin-top: 24px;">Phụ kiện</h3>
+    <ul>
+        <li>
+            <a href="{{ route('admin.accessories.index') }}"
+               class="{{ request()->routeIs('admin.accessories.index') ? 'active' : '' }}">
+                Tất cả phụ kiện
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.accessories.straps') }}"
+               class="{{ request()->routeIs('admin.accessories.straps') ? 'active' : '' }}">
+                Dây đeo
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.accessories.boxes') }}"
+               class="{{ request()->routeIs('admin.accessories.boxes') ? 'active' : '' }}">
+                Hộp đựng
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.accessories.glasses') }}"
+               class="{{ request()->routeIs('admin.accessories.glasses') ? 'active' : '' }}">
+                Kính cường lực
+            </a>
+        </li>
+    </ul>
 </aside>
 
 
@@ -126,7 +154,7 @@
         <div class="row">
             @forelse($products as $product)
                 <div class="col-3">
-                    <div class="product-card">
+                    <div class="product-card" id="product-{{ $product->id }}">
                         <!-- <img src="{{ asset('storage/Watch/' . $product->image) }}" alt="{{ $product->name }}" class="product-image"> -->
                          @php
                             $folder = 'Watch/Watch_nu'; // mặc định
@@ -154,13 +182,20 @@
                             data-category="{{ $product->category_id }}"
                             data-image="{{ $product->image }}"
                             data-folder="{{ $folder }}"> Sửa </a>
+                        
+                            <button class="btn-toggle"
+                                    data-id="{{ $product->id }}"
+                                    data-hidden="{{ $product->is_hidden ? 1 : 0 }}">
+                                {{ $product->is_hidden ? 'Hiện' : 'Ẩn' }}
+                            </button>
 
 
-                        <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc muốn xoá đồng hồ này?')">Xoá</button>
-                        </form>
+
+                            <form method="POST" action="{{ route('admin.products.destroy', $product->id) }}" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-delete" onclick="return confirm('Bạn có chắc muốn xoá đồng hồ này?')">Xoá</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -175,3 +210,4 @@
 
 <script src="{{ asset('js/admin/create.js') }}"></script>
 <script src="{{ asset('js/admin/edit.js') }}"></script>
+<script src="{{ asset('js/admin/hidden.js') }}"></script>

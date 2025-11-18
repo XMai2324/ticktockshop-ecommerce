@@ -1,93 +1,82 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const openBtn = document.getElementById("btn-open-create-form");
-    const closeBtn = document.getElementById("btn-cancel-create");
-    const formOverlay = document.getElementById("create-form");
+    // mở modal thêm
+    const btnOpenCreate = document.getElementById("btn-open-accessory-create");
+    const createModal   = document.getElementById("accessory-create-modal");
+    const editModal     = document.getElementById("accessory-edit-modal");
 
-    if (openBtn && closeBtn && formOverlay) {
-        openBtn.addEventListener("click", () => {
-            formOverlay.style.display = "flex";
-        });
-
-        closeBtn.addEventListener("click", () => {
-            formOverlay.style.display = "none";
-        });
-
-        // Đóng khi click ra ngoài form
-        formOverlay.addEventListener("click", function (e) {
-            if (e.target === formOverlay) {
-                formOverlay.style.display = "none";
-            }
+    if (btnOpenCreate && createModal) {
+        btnOpenCreate.addEventListener("click", () => {
+            createModal.style.display = "block";
         });
     }
-});
 
-document.addEventListener('DOMContentLoaded', function () {
-    const openCreateBtn = document.getElementById('btn-open-create-form');
-    const createModal = document.getElementById('create-form-modal');
-    const editModal = document.getElementById('edit-form-modal');
-    const closeBtns = document.querySelectorAll('.close-modal');
-    const cancelBtn = document.querySelector('.btn-cancel');
-
-    // Mở tạo mới
-    openCreateBtn?.addEventListener('click', () => {
-        createModal.style.display = 'flex';
-    });
-
-    // Đóng modal
-    function closeAll() {
-        createModal.style.display = 'none';
-        editModal.style.display = 'none';
-    }
-    closeBtns.forEach(b => b.addEventListener('click', closeAll));
-    cancelBtn?.addEventListener('click', closeAll);
-    window.addEventListener('click', (e) => {
-        if (e.target === createModal || e.target === editModal) closeAll();
-    });
-
-    // Preview ảnh tạo mới
-    const imageInput = document.getElementById('image-input');
-    const preview = document.getElementById('preview');
-    imageInput?.addEventListener('change', (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-    });
-
-    // Open edit modal và fill data
-    document.querySelectorAll('.open-edit').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const form = document.getElementById('edit-form');
-
-            form.action = btn.dataset.updateUrl;
-            document.getElementById('edit-name').value = btn.dataset.name || '';
-            document.getElementById('edit-price').value = btn.dataset.price || 0;
-            document.getElementById('edit-quantity').value = btn.dataset.quantity || 0;
-            const desc = document.getElementById('edit-description');
-            desc.value = btn.dataset.description || '';
-
-            // material, color nếu có
-            const mat = document.getElementById('edit-material');
-            if (mat) mat.value = btn.dataset.material || '';
-            const color = document.getElementById('edit-color');
-            if (color) color.value = btn.dataset.color || '';
-
-            // preview ảnh cũ
-            const editPreview = document.getElementById('edit-preview');
-            editPreview.src = btn.dataset.image;
-            editPreview.style.display = 'block';
-
-            editModal.style.display = 'flex';
+    // đóng modal
+    document.querySelectorAll(".close-modal").forEach(btn => {
+        btn.addEventListener("click", function () {
+            const target = this.getAttribute("data-close");
+            const modal = document.querySelector(target);
+            if (modal) modal.style.display = "none";
         });
     });
 
-    // Preview ảnh khi chọn ảnh mới trong modal edit
-    const editImageInput = document.getElementById('edit-image-input');
-    editImageInput?.addEventListener('change', (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const editPreview = document.getElementById('edit-preview');
-        editPreview.src = URL.createObjectURL(file);
-        editPreview.style.display = 'block';
+    // click ngoài modal để đóng
+    window.addEventListener("click", function (e) {
+        [createModal, editModal].forEach(m => {
+            if (m && e.target === m) m.style.display = "none";
+        });
+    });
+
+    // preview ảnh thêm mới
+    const createImgInput = document.getElementById("accessory-image-input");
+    const createPreview  = document.getElementById("accessory-preview");
+    if (createImgInput && createPreview) {
+        createImgInput.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                createPreview.src = ev.target.result;
+                createPreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // preview ảnh sửa
+    const editImgInput = document.getElementById("edit-accessory-image-input");
+    const editPreview  = document.getElementById("edit-accessory-preview");
+    if (editImgInput && editPreview) {
+        editImgInput.addEventListener("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                editPreview.src = ev.target.result;
+                editPreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // nút Sửa: mở modal + fill data
+    const editButtons = document.querySelectorAll(".btn-accessory-edit");
+    const editForm    = document.getElementById("accessory-edit-form");
+
+    editButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+            const id    = this.dataset.id;
+            const name  = this.dataset.name;
+            const price = this.dataset.price;
+            const desc  = this.dataset.description;
+
+            document.getElementById("edit-accessory-name").value = name;
+            document.getElementById("edit-accessory-price").value = price;
+            document.getElementById("edit-accessory-description").value = desc || '';
+
+            // set action cho form update: /admin/accessories/{type}/{id}
+            editForm.action = `/admin/accessories/{{ $type }}/${id}`;
+
+            editModal.style.display = "block";
+        });
     });
 });

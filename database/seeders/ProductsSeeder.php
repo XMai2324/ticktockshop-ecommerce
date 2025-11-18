@@ -66,7 +66,7 @@ class ProductsSeeder extends Seeder
                 ['Casio LTP-1183Q-7ADF', 'Casio22.avif', 1242000, 'Đồng hồ nữ Casio LTP-1183Q-7ADF có vỏ kim loại mạ vàng tinh tế bao quanh nền số màu trắng trang nhã. Sử dụng dây đeo da họa tiết vân bắt mắt thanh lịch. Kết hợp máy quartz siêu bền, độ chính xác cao.'],
                 ['Casio LTP-1274G-7ADF', 'Casio23.avif', 1689000, 'Đồng hồ nữ Casio LTP-1274G-7ADF có vỏ kim loại bằng thép không gỉ được mạ vàng sang trọng, kim chỉ và vạch số được làm thanh mảnh nhẹ nhàng.'],
                 ['Casio B640WC-5ADF', 'Casio24.avif', 2252000, 'Casio B640WC-5ADF là phiên bản dùng được cho cả nam lẫn nữ nhờ đặc trưng riêng dòng đồng hồ điện tử. Với ưu điểm máy quartz, nhiều tiện ích, phối màu vàng hồng trẻ trung đúng xu hướng đã giúp thiết kế chinh phục hàng triệu bạn trẻ đam mê thời trang – phong cách.'],
-            ]; 
+            ];
             foreach ($products as [$name, $image, $price, $description]) {
             DB::table('products')->insert([
                 'name' => $name,
@@ -81,8 +81,8 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
-   
+        }
+
 
         // -----------Rolex nữ----------
         $category = Category::where('name', 'Nữ')->first();
@@ -91,7 +91,7 @@ class ProductsSeeder extends Seeder
         if (!$category || !$brand) {
         $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Rolex"!');
         return;
-        }   
+        }
 
         $products = [
             ['Rolex Lady-Datejust 28', 'Rolex1.jpg', 265000000, 'Đồng hồ Rolex Lady-Datejust 28 thiết kế thanh lịch với viền khía và dây Jubilee sang trọng.'],
@@ -133,7 +133,7 @@ class ProductsSeeder extends Seeder
                 'updated_at' => now(),
 
             ]);
-        } 
+        }
         // -----------Citizen nữ----------
         $category = Category::where('name', 'Nữ')->first();
         $brand  = Brand::where('name', 'Citizen')->first();
@@ -141,7 +141,7 @@ class ProductsSeeder extends Seeder
         if (!$category || !$brand) {
         $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Citizen"!');
         return;
-        }   
+        }
         $products = [
             ['Citizen L EW5620-55N', 'Citizen1.avif', 15585000, 'Citizen L EW5620-55N thiết kế khung vỏ màu trắng bạc sang trọng, kết hợp cùng mặt số khảm xà cừ thiên nhiên độc bản. Thuộc bộ sưu tập Citizen L – tôn vinh vẻ đẹp sang trọng và nữ tính của phụ nữ.'],
             ['Citizen L EM1140-80D', 'Citizen2.avif', 12085000, 'Citizen L EM1140-80D gây ấn tượng với thiết kế vượt thời gian và công nghệ tiên tiến. Bộ máy năng lượng ánh sáng có thời gian sử dụng lên đến 10 năm mà không phải thay pin thường xuyên.'],
@@ -167,7 +167,7 @@ class ProductsSeeder extends Seeder
             ['Citizen Eco-Drive EM0506-77A', 'Citizen22.avif', 7585000, 'Citizen Eco-Drive EM0506-77A phiên bản dây đeo tone màu vàng demi, nền mặt số xà cừ với họa tiết Guilloche thẩm mỹ, sử dụng năng lượng mặt trời có tuổi thọ dài giúp tiết kiệm chi phí, cực kỳ trang nhã và thanh lịch.'],
             ['Citizen L EG7112-59D', 'Citizen23.avif', 14385000, 'Citizen L EG7112-59D khảm xà cừ thiên nhiên, với tone màu trắng chuyển sắc nhẹ nhàng. Độ mỏng chỉ 6,5mm, kích thước dáng tank 14,8mm x 28,3mm. Bộ máy dự trữ năng lượng ánh sáng cho thời gian sử dụng lên đến 10 năm không cần thay pin. Dây đeo và khung vỏ mạ vàng PVD cao cấp, dự trữ năng lượng lên đến 8 tháng.'],
             ['Citizen L EG7114-53D', 'Citizen24.avif', 13585000, 'Citizen L EG7114-53D khảm xà cừ thiên nhiên, với tone màu xanh nhạt dịu dàng. Độ mỏng chỉ 6,5mm, kích thước dáng tank 14,8mm x 28,3mm. Bộ máy dự trữ năng lượng ánh sáng cho thời gian sử dụng lên đến 10 năm không cần thay pin. Dây đeo demi cao cấp, dự trữ năng lượng lên đến 8 tháng.'],
-        ];      
+        ];
         foreach ($products as [$name, $image, $price, $description]) {
             DB::table('products')->insert([
                 'name' => $name,
@@ -182,7 +182,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        } 
+        }
 
         // -----------Rado nữ----------
         $category = Category::where('name', 'Nữ')->first();
@@ -241,7 +241,7 @@ class ProductsSeeder extends Seeder
         if (!$category || !$brand) {
         $this->command->error('Không tìm thấy categories "Nữ" hoặc brands "Seiko"!');
         return;
-        }       
+        }
 
         $products = [
             ['Seiko Presage Cocktail White Lady SRE010J1', 'Seiko1.avif', 18638000, 'Đồng hồ Seiko Presage Cocktail SRE010J1 dành cho quý cô thanh lịch với chất liệu đá pha lê lấp lánh, mặt số trang trí bằng những họa tiết độc đáo. Sử dụng bộ máy tự động Nhật Bản cao cấp.'],
@@ -311,7 +311,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -346,7 +346,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -379,7 +379,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -411,7 +411,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }    
+        }
 
 
 
@@ -559,7 +559,7 @@ class ProductsSeeder extends Seeder
         }
 
         $products = [
-            
+
             ['Rado Chronograph Blue Leather', 'rado-nam-1.webp', 25900000, 'Mặt xanh navy nổi bật, dây da lịch lãm, thiết kế thể thao sang trọng.'],
             ['Rado Classic Black Leather', 'rado-nam-2.webp', 23800000, 'Thiết kế cổ điển, mặt đen tối giản, dây da nâu sang trọng.'],
             ['Rado Green Stainless Steel', 'rado-nam-3.webp', 27500000, 'Mặt xanh lạ mắt, dây kim loại sáng bóng – thanh lịch và hiện đại.'],
@@ -703,7 +703,7 @@ class ProductsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-        }   
+        }
     }
 }
 

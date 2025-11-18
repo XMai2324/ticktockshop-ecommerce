@@ -37,7 +37,19 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
-    protected $casts = [
-        'is_hidden' => 'boolean',
-    ];
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function getAvgRatingAttribute()
+    {
+        return round($this->ratings()->avg('rating'), 1); // 4.5
+    }
+
+    public function getRatingCountAttribute()
+    {
+        return $this->ratings()->count(); // số lượng đánh giá
+    }
 }

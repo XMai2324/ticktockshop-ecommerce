@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Rating;
+use App\Models\Order;
 
 class ProductController extends Controller
 {
@@ -16,7 +19,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands     = Brand::all();
-
+        $query = Product::with('ratings');
         $categorySlug = $request->input('category');
         $brandSlug    = $request->input('brand');
         $sort         = $request->input('sort');

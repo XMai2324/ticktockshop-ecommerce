@@ -65,12 +65,9 @@
     display: block;
 }
 
-    </style>
-<<<<<<< HEAD
-    
-=======
+</style>
 
->>>>>>> d334142434f540eab23829b8b2d73d2f43018966
+
 </head>
 <body>
     <header>

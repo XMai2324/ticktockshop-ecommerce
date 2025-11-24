@@ -135,7 +135,7 @@
                     <td>{{ $p->code }}</td>
                     <td>{{ $p->type }}</td>
                     <td>{{ number_format($p->value) }}{{ $p->type === 'fixed' ? 'vnd' : '%' }}</td>
-                    <td>{{ $p->max_discount ?? '∞' }}</td>
+                    <td>{{ number_format($p->max_discount ?? $p->value) }}vnd</td>
                     <td>{{ number_format($p->min_order_value ?? 0) }}vnd</td>
                     <td>{{ $p->usage_limit ?? '∞' }}</td>
                     <td>{{ $p->per_user_limit ?? '∞' }}</td>

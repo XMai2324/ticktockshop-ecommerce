@@ -44,8 +44,8 @@
                     <th>Tên SP</th>
                     <th>Danh mục</th>
                     <th>Thương hiệu</th>
-                    <th>Giá nhập</th>
-                    <th>Giá bán (tự động)</th>
+                    <th>Giá nhập (vnd)</th>
+                    <th>Giá bán (vnd)</th>
                     <th>Số lượng tồn</th>
                     <th>Số lượng nhập</th>
                     <!-- <th>Ảnh</th> -->

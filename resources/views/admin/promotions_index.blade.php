@@ -94,10 +94,11 @@
             <div class="field">
                 <label>Trạng thái</label>
                 <input type="hidden" name="is_active" value="0">
-                <label style="display:inline-flex;align-items:center;gap:8px;">
+                <div class="field field-checkbox">
                     <input type="checkbox" id="f-active" name="is_active" value="1" {{ old('is_active', 1) ? 'checked' : '' }}>
-                    Đang hoạt động
-                </label>
+                    <label for="f-active">Đang hoạt động</label>
+                </div>
+
                 @error('is_active') <small class="text-error">{{ $message }}</small> @enderror
             </div>
 

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin/nhapHang.css">
+    <link rel="stylesheet" href="/css/admin/nhapHangPreview.css">
     {{-- Placeholder để child view có thể thêm CSS riêng --}}
     @yield('styles')
 </head>
@@ -25,18 +27,18 @@
         </div>
 
         <div class="header_menu">
-<<<<<<< HEAD
+<!-- <<<<<<< HEAD -->
             <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a>
         </li>
             <li><a href="{{ route('admin.orders.index') }}">ĐƠN HÀNG</a></li>
             <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li>
-            <li><a href="#">ĐÁNH GIÁ</a></li>
+            <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
-            <li><a href="#">NHẬP HÀNG</a></li>
+            <li><a href="{{ route('admin.nhapHang_index') }}">NHẬP HÀNG</a></li>
             <li><a href="#">THỐNG KÊ</a></li>
         </ul>
 
-        <ul class="header_other">
+        <!-- <ul class="header_other">
 =======
             <li><a href="">QUẢN LÝ SẢN PHẨM</a>
                 <ul class="sub_menu">
@@ -50,7 +52,7 @@
             <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
->>>>>>> d334142434f540eab23829b8b2d73d2f43018966
+>>>>>>> d334142434f540eab23829b8b2d73d2f43018966 -->
             <li class="header-user">
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>

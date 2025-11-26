@@ -12,6 +12,7 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,16 +93,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 
 // ACCESSORIES (Admin)
-// Route::prefix('admin/accessories')->name('admin.accessories.')->middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
-//     Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
-//     Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
-//     Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
-
-//     Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
-//     Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
-//     Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
-// });
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
 
@@ -145,6 +136,32 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('orders/{id}/edit',[OrderController::class, 'edit'])->name('admin.orders.edit');
     Route::put('orders/{id}',     [OrderController::class, 'update'])->name('admin.orders.update');
     Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN CUSTOMERS
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+
+    // Trang danh sách + form thêm
+    Route::get('customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+
+    // Thêm khách hàng
+    Route::post('customers', [CustomerController::class, 'store'])->name('admin.customers.store');
+
+    // Reset mật khẩu về 123456
+    Route::post('customers/{customer}/reset-password', [CustomerController::class, 'resetPassword'])
+        ->name('admin.customers.reset-password');
+
+    // Vô hiệu hóa tài khoản
+    Route::post('customers/{customer}/toggle-active', [CustomerController::class, 'toggleActive'])
+        ->name('admin.customers.toggle-active');
+
+    // Xóa tài khoản
+    Route::delete('customers/{customer}', [CustomerController::class, 'destroy'])
+        ->name('admin.customers.destroy');
 });
 
 
@@ -243,19 +260,6 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 |--------------------------------------------------------------------------
 */
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN PRODUCTS
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/',        [ProductController::class, 'index'])->name('admin.products_index');
-    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/{id}',    [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-});
-Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
 
 
 //Admin promotion

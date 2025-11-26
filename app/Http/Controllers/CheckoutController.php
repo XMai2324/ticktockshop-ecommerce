@@ -13,16 +13,13 @@ class CheckoutController extends Controller
     // GET /checkout
     public function index(Request $request)
     {
-<<<<<<< HEAD
         
-        $raw = session('cart', []); // hoặc lấy từ Cart::content() hay DB
-=======
+        // $raw = session('cart', []); // hoặc lấy từ Cart::content() hay DB
         $cartItems = $this->normalizeCart(session('cart', []));
         $subtotal  = $this->cartSubtotal($cartItems);
         $shipping  = $this->shippingFee();
         $discount  = (int) session('coupon.discount_amount', 0);
         $grandTotal= max(0, $subtotal + $shipping - $discount);
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
 
         // render sẵn danh sách mã cho modal
         $availableCoupons = $this->queryAvailableCoupons($subtotal);

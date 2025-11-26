@@ -69,10 +69,11 @@
                     >
                         <td>${r.id}</td>
                         <td>${user}</td>
-                        <td style="max-width:300px">${product}</td>
+                        <td style="max-width:280px">${product}</td>
                         <td>${r.rating} / 5 </td>
-                        <td style="max-width:300px; white-space:normal">${comment}</td>
-                        <td style="max-width:300px; white-space:normal">${response}</td>                        <td>${escapeHtml(r.created_at)}</td>
+                        <td style="max-width:300px">${comment}</td>
+                        <td style="max-width:280px">${response}</td>
+                        <td>${escapeHtml(r.created_at)}</td>
                         <td><button class="btn-delete" data-id="${r.id}">Xóa</button></td>
                     </tr>
                 `;

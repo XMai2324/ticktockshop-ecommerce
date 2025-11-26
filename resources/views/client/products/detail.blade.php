@@ -158,7 +158,7 @@
                                         {!! str_repeat('★', 1) !!}
                                     </span>
                                     <span class="rating-text" id="btn-show-reviews">
-                                        Đánh giá sản phẩm ({{ $product->ratings->count() }})  >
+                                        Đánh giá sản phẩm ({{ $product->ratings->count() }}) >
                                     </span>
                                 </div>
                             </div>
@@ -183,11 +183,29 @@
                                         }
                                     @endphp
                                     <div class="product-page-right-content-item">
-                                        <a href="{{ route('product.detail', ['product' => $r->slug ?? $r->id]) }}" class="product-card">
+                                        <a href="{{ route('product.detail', ['product' => $r->slug ?? $r->id]) }}"
+                                            class="product-card">
                                             <img src="{{ asset('storage/' . $rf . '/' . $r->image) }}"
                                                 alt="{{ $r->name }}">
                                             <h2 class="product-name">{{ $r->name }}</h2>
                                             <p>{{ number_format($r->price, 0, ',', '.') }}<sup>đ</sup></p>
+                                            {{-- Hiển thị đánh giá trung bình --}}
+                                            @php
+                                                $avg = $product->avg_rating ?? 0;
+                                                $count = $product->rating_count ?? 0;
+                                            @endphp
+
+                                            @if ($count > 0)
+                                                <div class="product-rating">
+                                                    <span class="stars">
+                                                        {!! str_repeat('★', floor($avg)) !!}
+                                                        {!! str_repeat('☆', 5 - floor($avg)) !!}
+                                                    </span>
+                                                    <span class="rating-number">{{ $avg }}/5</span>
+                                                </div>
+                                            @else
+                                                <div class="product-rating no-rating">Chưa có đánh giá</div>
+                                            @endif
                                         </a>
                                     </div>
                                 @endforeach
@@ -201,12 +219,9 @@
 @endsection
 
 @section('scripts')
+    {{-- CSS + JS khác --}}
     <link rel="stylesheet" href="{{ asset('css/client/review_rating.css') }}">
     <script src="{{ asset('js/client/review_rating.js') }}" defer></script>
-@endsection
-
-@section('scripts')
-    {{-- JS gallery + redirect legacy quickview + filters --}}
     <script src="{{ asset('js/client/quickview.js') }}" defer></script>
 
     <script>
@@ -214,11 +229,10 @@
         function updateCartBadges(n) {
             document.querySelectorAll('.js-cart-count, #cart-count').forEach(el => {
                 el.textContent = n;
-                el.setAttribute('data-count', n); // nếu CSS có rule ẩn khi = 0
+                el.setAttribute('data-count', n);
             });
         }
 
-        // Chặn submit thường -> gửi AJAX tới route('cart.add') (trả JSON)
         document.addEventListener('submit', async (e) => {
             const form = e.target.closest('.add-to-cart-form');
             if (!form) return;
@@ -229,15 +243,20 @@
                 const res = await fetch(form.action, {
                     method: 'POST',
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
                     },
                     body: new FormData(form)
                 });
+
                 const data = await res.json();
 
-                if (data!== null && data.success) {
+                if (data.success) {
                     alert('Đã thêm vào giỏ hàng!');
-                    if ('cart_count' in data) updateCartBadges(data.cart_count);
+                    if ('cart_count' in data) {
+                        updateCartBadges(data.cart_count);
+                    }
                 } else {
                     alert(data.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
                 }
@@ -248,4 +267,5 @@
         });
     </script>
 @endsection
+
 @include('client.products.review_rating')

@@ -12,6 +12,7 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
+use App\Http\Controllers\StatisticalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,16 +93,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 
 // ACCESSORIES (Admin)
-// Route::prefix('admin/accessories')->name('admin.accessories.')->middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
-//     Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
-//     Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
-//     Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
-
-//     Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
-//     Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
-//     Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
-// });
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
 
@@ -244,19 +235,6 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 */
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN PRODUCTS
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/',        [ProductController::class, 'index'])->name('admin.products_index');
-    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/{id}',    [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-});
-Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
-
 
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -266,7 +244,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
          ->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
 
-    
+
 // Ratings management (admin)
     Route::get('ratings', [RatingController::class, 'adminIndex'])
         ->middleware(['role:admin'])
@@ -294,4 +272,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 });
+
+//VNpayment
+Route::post('/vnpay/payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
+Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.return');
+
+Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
+Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
+
+// Thống kê
+
+Route::get('/statistical', [StatisticalController::class, 'index'])
+    ->name('admin.statistical');
 

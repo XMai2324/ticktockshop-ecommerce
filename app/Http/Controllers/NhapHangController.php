@@ -129,7 +129,7 @@ class NhapHangController extends Controller
     }
 
     // Xác nhận và lưu vào DB
-    public function confirmPreview(Request $request)
+public function confirmPreview(Request $request)
     {
         $changed = Session::get('nhap_hang_preview', []);
 
@@ -200,7 +200,7 @@ class NhapHangController extends Controller
 
         $callback = function () use ($changed) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['Tên SP', 'Danh mục', 'Thương hiệu', 'Giá nhập', 'Giá bán', 'Số lượng thêm']);
+            fputcsv($file, ['Ten SP', 'Danh muc', 'Thuong hieu', 'Gia nhap', 'Gia ban', 'So luong them']);
 
             foreach ($changed as $p) {
                 fputcsv($file, [

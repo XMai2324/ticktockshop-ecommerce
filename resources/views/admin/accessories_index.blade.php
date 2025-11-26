@@ -44,10 +44,9 @@
             {{-- Header + nút thêm --}}
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2>
-                    Quản lý phụ kiện 
-                    @if($type === 'straps') - Dây đeo
-                    @elseif($type === 'boxes') - Hộp đựng
-                    @elseif($type === 'glasses') - Kính cường lực
+                    @if($type === 'straps') Dây đeo
+                    @elseif($type === 'boxes') Hộp đựng
+                    @elseif($type === 'glasses') Kính cường lực
                     @endif
                 </h2>
 

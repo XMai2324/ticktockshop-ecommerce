@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 // Cập nhật lại dataset để lần sau dùng
                 btn.setAttribute("data-hidden", isHidden ? "1" : "0");
-                card.dataset.hidden = isHidden ? "1" : "0"; // 🔥 THÊM DÒNG NÀY
+                card.dataset.hidden = isHidden ? "1" : "0"; // 
 
                 // Đổi text nút + cập nhật giao diện
                 if (isHidden) {
@@ -87,8 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
             // Cập nhật giao diện nút
             btnFilterHidden.classList.toggle('active', filterOn);
             btnFilterHidden.textContent = filterOn
-                ? 'Chỉ hiển thị sản phẩm ẩn'
-                : 'Hiện sản phẩm ẩn';
+                ? 'Tất cả sản phẩm'
+                : 'Các sản phẩm ẩn';
 
             // Lọc từng card sản phẩm
             document.querySelectorAll('.product-card').forEach(function (card) {

@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin/product_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
+    <link rel="stylesheet" href="/css/admin/nhapHang.css">
+    <link rel="stylesheet" href="/css/admin/nhapHangPreview.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {{-- Placeholder để child view có thể thêm CSS riêng --}}
     @yield('styles')
@@ -25,10 +27,9 @@
         </div>
 
         <div class="header_menu">
-            <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a>
-        </li>
+            <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a></li>
             <li><a href="{{ route('admin.orders.index') }}">ĐƠN HÀNG</a></li>
-            <li><a href="#">NHẬP HÀNG</a></li>
+            <li><a href="{{ route('admin.nhapHang_index') }}">NHẬP HÀNG</a></li>
             <li><a href="#">KHÁCH HÀNG</a></li>
             <!-- <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li> -->
             <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>

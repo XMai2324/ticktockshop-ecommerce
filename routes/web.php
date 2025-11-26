@@ -12,6 +12,7 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
+use App\Http\Controllers\NhapHangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -277,3 +278,16 @@ Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.ret
 
 Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
 Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
+
+//Nhập HÀNG (admin)    
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('nhap-hang', [NhapHangController::class, 'index'])->name('nhapHang_index');
+    Route::post('nhap-hang/save-preview', [NhapHangController::class, 'savePreview'])->name('nhapHang_savePreview');
+    Route::get('nhap-hang/preview', [NhapHangController::class, 'preview'])->name('nhapHang_preview');
+    Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
+    Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
+});
+
+
+
+

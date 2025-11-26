@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             WatchGlassesSeeder::class,
             OrdersSeeder::class,
             OrderItemsSeeder::class,
-            RatingsSeeder::class,
+            RatingSeeder::class,
             WarrantiesSeeder::class,
             PromotionSeeder::class,
         ]);

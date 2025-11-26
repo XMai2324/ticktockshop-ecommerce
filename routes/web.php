@@ -295,3 +295,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 });
 
+//VNpayment
+Route::post('/vnpay/payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
+Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.return');
+
+Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
+Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');

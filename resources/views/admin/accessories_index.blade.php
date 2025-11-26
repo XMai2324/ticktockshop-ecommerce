@@ -134,7 +134,7 @@
                     <div class="product-card {{ $strap->is_hidden ? 'accessory-hidden' : '' }}"
                             id="accessory-{{ $strap->id }}"
                             data-hidden="{{ $strap->is_hidden ? 1 : 0 }}">
-                        <span class="hidden-badge" style="{{ $product->is_hidden ? '' : 'display:none;' }}">
+                        <span class="hidden-badge" style="{{ $strap->is_hidden ? '' : 'display:none;' }}">
                             ĐANG ẨN
                         </span>
 

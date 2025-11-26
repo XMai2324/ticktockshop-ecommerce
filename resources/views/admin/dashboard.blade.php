@@ -25,7 +25,6 @@
         </div>
 
         <div class="header_menu">
-<<<<<<< HEAD
             <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a>
         </li>
             <li><a href="{{ route('admin.orders.index') }}">ĐƠN HÀNG</a></li>
@@ -37,20 +36,7 @@
         </ul>
 
         <ul class="header_other">
-=======
-            <li><a href="">QUẢN LÝ SẢN PHẨM</a>
-                <ul class="sub_menu">
-                    <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
-                    <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
-                    <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
-                    <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
-                </ul>
-            </li>
-            <li><a href="{{ route('admin.orders.index') }}">XỬ LÝ ĐƠN HÀNG</a></li>
-            <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
-            <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
-            <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
->>>>>>> d334142434f540eab23829b8b2d73d2f43018966
+
             <li class="header-user">
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>

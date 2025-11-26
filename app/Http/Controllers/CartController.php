@@ -106,17 +106,10 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Đã xoá sản phẩm khỏi giỏ hàng');
     }
-<<<<<<< HEAD
-     public function update(Request $request)
-=======
 
-<<<<<<< HEAD
+
     // CẬP NHẬT SL – hỗ trợ cả quantity & qty, trả JSON số thuần
-=======
-
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
     public function update(Request $request)
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
     {
         $rowId    = $request->input('row_id');
         $quantity = (int) ($request->input('quantity', $request->input('qty')));
@@ -152,10 +145,8 @@ class CartController extends Controller
             'ok'          => true,
         ]);
     }
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
+
     // ===== Helpers =====
     private function totals(array $cart): array
     {
@@ -170,7 +161,4 @@ class CartController extends Controller
 
         return ['total_qty' => $totalQty, 'cart_total' => $cartTotal];
     }
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
 }
-=======
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928

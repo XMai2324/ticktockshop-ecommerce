@@ -1,149 +1,98 @@
 // public/js/quickview.js
 
+
 (function () {
-  function initQuickView() {
-    // ====== Event delegation ======
-    document.addEventListener('click', async (event) => {
-      const modal     = document.getElementById('quickViewModal');
-      const modalBody = document.getElementById('quick-view-body');
-      if (!modal || !modalBody) return;
-
-      // Config từ <meta>
-      const csrf        = document.querySelector('meta[name="csrf-token"]')?.content || '';
-      const slugPattern = document.querySelector('meta[name="quickview-slug-pattern"]')?.content || '/quick-view/{slug}';
-      const accPattern  = document.querySelector('meta[name="quickview-acc-pattern"]')?.content  || '/accessories/quick-view/{type}/{id}';
-      const cartAddUrl  = document.querySelector('meta[name="cart-add-url"]')?.content || '/add-to-cart';
-
-      // ===== UI helpers =====
-      function openModal(html) {
-        modalBody.innerHTML = html;
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-        modal.querySelector('.close-modal')?.focus();
-      }
-      function closeModal() {
-        modal.style.display = 'none';
-        modalBody.innerHTML = '';
-        document.body.style.overflow = '';
-      }
-
-      function updateCartIcon(quantity) {
-        const cartIcon = document.querySelector('.cart-icon');
-        if (!cartIcon) return;
-        let cartCount = document.querySelector('.cart-count');
-        const qty = Number(quantity) || 0;
-        if (qty > 0) {
-          if (!cartCount) {
-            cartCount = document.createElement('span');
-            cartCount.className = 'cart-count';
-            cartIcon.appendChild(cartCount);
-          }
-          cartCount.textContent = qty;
-        } else {
-          cartCount?.remove();
-        }
-      }
-
-      async function fetchQuickView({ slug, id, type }) {
-        let url = '';
-        if (slug) {
-          url = slugPattern.replace('{slug}', encodeURIComponent(slug));
-        } else if (id && type) {
-          url = accPattern
-            .replace('{type}', encodeURIComponent(type))
-            .replace('{id}', encodeURIComponent(id));
-        }
-        if (!url) return null;
-
-        const res = await fetch(url, { headers: { Accept: 'text/html' }, credentials: 'same-origin' });
-        if (!res.ok) throw new Error(`Fetch quick view failed (${res.status})`);
-        return res.text();
-      }
-
-      async function addToCart({ id, type, quantity }) {
-        const res = await fetch(cartAddUrl, {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            'X-CSRF-TOKEN': csrf
-          },
-          body: JSON.stringify({ id, type, quantity })
-        });
-
-        let data = null;
-        try { data = await res.json(); } catch {}
-        if (!res.ok || !data) throw new Error('Add to cart failed');
-        return data;
-      }
-
-      // --- 1. Mở quick view ---
+  // ====== 1) Redirect old quickview triggers to the new detail page ======
+  function initRedirectFromLegacyQuickView() {
+    document.addEventListener('click', (event) => {
       const trigger = event.target.closest('.product-quick-view, .accessory-quick-view');
-      if (trigger) {
+      if (!trigger) return;
+
+      // Nếu link có href thật → cho trình duyệt xử lý bình thường
+      if (trigger.tagName === 'A' && trigger.getAttribute('href') && trigger.getAttribute('href') !== 'javascript:void(0);') {
+        return;
+      }
+
+      const productPattern = (document.querySelector('meta[name="product-detail-pattern"]')?.content || '/product/{slug}').trim();
+      const slug = trigger.dataset.slug;
+      if (slug) {
         event.preventDefault();
-        try {
-          const html = await fetchQuickView({
-            slug: trigger.dataset.slug,
-            id: trigger.dataset.id,
-            type: trigger.dataset.type
-          });
-          if (html) openModal(html);
-        } catch (e) {
-          console.error(e);
-          alert('Không tải được chi tiết sản phẩm!');
-        }
-        return;
-      }
-
-      // --- 2. Đóng modal ---
-      if (event.target.classList.contains('close-modal') || event.target === modal) {
-        closeModal();
-        return;
-      }
-
-      // --- 3. Thêm vào giỏ hàng ---
-      const addBtn = event.target.closest('.btn-add-to-cart');
-      if (addBtn) {
-        const quantityInput = modal.querySelector('#quantity');
-        const quantity = Math.max(1, parseInt(quantityInput?.value || '1', 10));
-        try {
-          const data = await addToCart({
-            id: addBtn.dataset.id,
-            type: addBtn.dataset.type,
-            quantity
-          });
-          if (data?.success) {
-            updateCartIcon(data.cart_count);
-            alert('Đã thêm vào giỏ hàng!');
-            closeModal();
-          } else {
-            alert(data?.message || 'Thêm vào giỏ hàng thất bại!');
-          }
-        } catch (e) {
-          console.error(e);
-          alert('Lỗi khi thêm vào giỏ hàng!');
-        }
-        return;
-      }
-    });
-
-    // ====== ESC để đóng ======
-    document.addEventListener('keydown', (e) => {
-      const modal = document.getElementById('quickViewModal');
-      const modalBody = document.getElementById('quick-view-body');
-      if (e.key === 'Escape' && modal?.style.display === 'block') {
-        modal.style.display = 'none';
-        modalBody.innerHTML = '';
-        document.body.style.overflow = '';
+        const href = productPattern.replace('{slug}', encodeURIComponent(slug));
+        window.location.href = href;
       }
     });
   }
 
-  // ====== Gắn init cho nhiều tình huống load trang ======
-  document.addEventListener('DOMContentLoaded', initQuickView);
-  document.addEventListener('pageshow', initQuickView);        // back/forward cache
-  document.addEventListener('turbo:load', initQuickView);      // Hotwire Turbo
-  document.addEventListener('turbolinks:load', initQuickView); // Turbolinks
-  document.addEventListener('pjax:complete', initQuickView);   // PJAX
+  // ====== 2) Product detail gallery: thumbnails + prev/next ======
+function initProductDetailGallery() {
+  const gallery   = document.getElementById('gallery');
+  const mainImage = document.getElementById('mainImage');
+  if (!gallery || !mainImage) return;
+
+  const thumbs = Array.from(gallery.querySelectorAll('.thumb img'));
+  if (!thumbs.length) return;
+
+  const prevBtn = gallery.querySelector('.gallery-prev');
+  const nextBtn = gallery.querySelector('.gallery-next');
+
+  // vị trí hiện tại (ưu tiên thumb đang .active)
+  let current = Math.max(
+    0,
+    thumbs.findIndex(img => img.closest('.thumb')?.classList.contains('active'))
+  );
+
+  const setImage = (index) => {
+    if (index < 0) index = thumbs.length - 1;
+    if (index >= thumbs.length) index = 0;
+    current = index;
+
+    const target = thumbs[index];
+    const nextSrc = target.dataset.large || target.src;
+
+    mainImage.src = nextSrc;
+
+    thumbs.forEach(t => t.closest('.thumb')?.classList.remove('active'));
+    target.closest('.thumb')?.classList.add('active');
+  };
+
+  // click thumbnail
+  thumbs.forEach((img, i) => img.addEventListener('click', () => setImage(i)));
+
+  // nút trái/phải
+  if (prevBtn) prevBtn.addEventListener('click', (e) => { e.preventDefault(); setImage(current - 1); });
+  if (nextBtn) nextBtn.addEventListener('click', (e) => { e.preventDefault(); setImage(current + 1); });
+
+  // khởi tạo
+  setImage(current < 0 ? 0 : current);
+}
+
+  // ====== 3) Filters & sorting ======
+  function initFiltersAndSort() {
+    const priceSelect = document.querySelector('select[name="price_range"]');
+    const sortSelect  = document.querySelector('select[name="sort"]');
+
+    function updateQuery(param, value) {
+      const url = new URL(window.location.href);
+      if (value) url.searchParams.set(param, value);
+      else url.searchParams.delete(param);
+      url.searchParams.delete('page');
+      window.location.href = url.toString();
+    }
+
+    if (priceSelect) {
+      priceSelect.addEventListener('change', (e) => updateQuery('price_range', e.target.value));
+    }
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => updateQuery('sort', e.target.value));
+    }
+  }
+
+  // ====== Boot ======
+  function boot() {
+    initRedirectFromLegacyQuickView();
+    initProductDetailGallery();
+    initFiltersAndSort();
+  }
+
+  document.addEventListener('DOMContentLoaded', boot);
 })();

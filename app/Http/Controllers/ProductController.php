@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Rating;
+use App\Models\Order;
 
 class ProductController extends Controller
 {
@@ -16,39 +19,36 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands     = Brand::all();
-
+        $query = Product::with('ratings');
         $categorySlug = $request->input('category');
         $brandSlug    = $request->input('brand');
         $sort         = $request->input('sort');
         $priceRange   = $request->input('price_range');
         $keyword      = $request->input('keyword');
 
-        $query = Product::query();
+        // CHỖ NÀY: KHỞI TẠO QUERY CÓ is_hidden = false
+        $query = Product::query()->where('is_hidden', false);
 
         $currentCategory = null;
         $currentBrand    = null;
 
-        // Nếu có category slug
+        // ===== Lọc theo Category =====
         if ($categorySlug) {
-            $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
-                return Str::slug($cat->name) === $categorySlug;
-            });
+            $currentCategory = $categories->first(fn($cat) => Str::slug($cat->name) === $categorySlug);
             if ($currentCategory) {
                 $query->where('category_id', $currentCategory->id);
             }
         }
 
-        // Nếu có brand slug
+        // ===== Lọc theo Brand =====
         if ($brandSlug) {
-            $currentBrand = $brands->first(function ($br) use ($brandSlug) {
-                return Str::slug($br->name) === $brandSlug;
-            });
+            $currentBrand = $brands->first(fn($br) => Str::slug($br->name) === $brandSlug);
             if ($currentBrand) {
                 $query->where('brand_id', $currentBrand->id);
             }
         }
 
-        // Lọc theo từ khóa
+        // ===== Lọc theo từ khóa =====
         if ($keyword) {
             $slugKeyword = Str::slug(Str::ascii(mb_strtolower($keyword)));
 
@@ -78,49 +78,21 @@ class ProductController extends Controller
                 $query->where('name', 'like', '%' . $keyword . '%');
             }
         }
-<<<<<<< HEAD
 
-        // Lọc theo category từ URL (giữ nguyên theo code gốc)
-<<<<<<< HEAD
-=======
-        // Lọc theo category từ URL
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
-=======
-
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
-        if ($categorySlug) {
-            $currentCategory = $categories->first(function ($cat) use ($categorySlug) {
-                return Str::slug($cat->name) === $categorySlug;
-            });
-
-            if ($currentCategory) {
-                $query->where('category_id', $currentCategory->id);
-            }
-        }
-
-        // Lọc theo brand từ URL
-        if ($brandSlug) {
-            $currentBrand = $brands->first(function ($br) use ($brandSlug) {
-                return Str::slug($br->name) === $brandSlug;
-            });
-
-            if ($currentBrand) {
-                $query->where('brand_id', $currentBrand->id);
-            }
-        }
-        // Lọc theo khoảng giá
+        // ===== Lọc theo khoảng giá =====
         if ($priceRange && str_contains($priceRange, '-')) {
             [$min, $max] = explode('-', $priceRange, 2);
             $query->whereBetween('price', [(int) $min, (int) $max]);
         }
 
-        // Sắp xếp
+        // ===== Sắp xếp =====
         if ($sort === 'asc') {
             $query->orderBy('price', 'asc');
         } elseif ($sort === 'desc') {
             $query->orderBy('price', 'desc');
         }
 
+        // LẤY SẢN PHẨM Ở ĐÂY
         $products = $query->paginate(8);
 
         return view('client.products', [
@@ -135,15 +107,17 @@ class ProductController extends Controller
         ]);
     }
 
-    // ================== HIỂN THỊ TOÀN BỘ THEO CATEGORY ==================
+
+    // ================== HIỂN THỊ THEO DANH MỤC ==================
     public function byCategory(Request $request, string $slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        $query = Product::with(['brand','category'])
-            ->where('category_id', $category->id);
+        $query = Product::with(['brand', 'category'])
+            ->where('category_id', $category->id)
+            ->where('is_hidden', false);
 
-        // Lọc theo khoảng giá (an toàn hơn với regex + intval)
+        // Lọc theo khoảng giá
         $priceRange = $request->input('price_range');
         if ($priceRange && preg_match('/^\d+\-\d+$/', $priceRange)) {
             [$min, $max] = array_map('intval', explode('-', $priceRange, 2));
@@ -159,7 +133,6 @@ class ProductController extends Controller
         } elseif ($sort === 'desc') {
             $query->orderBy('price', 'desc');
         } else {
-            // mặc định mới nhất (nếu muốn)
             $query->latest('id');
         }
 
@@ -177,12 +150,20 @@ class ProductController extends Controller
         ]);
     }
 
-
-    // ================== QUICK VIEW ==================
-    public function quickView($slug)
+    // ================== TRANG CHI TIẾT SẢN PHẨM ==================
+    public function showDetail(Product $product)
     {
-        $product = Product::where('slug', $slug)->with('category', 'brand')->firstOrFail();
-        return view('client.products.quick_view', compact('product'));
+        $product->load(['brand', 'category']);
+
+        // Lấy sản phẩm liên quan
+        $related = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_hidden', false)
+            ->latest('id')
+            ->take(8)
+            ->get();
+
+        return view('client.products.detail', compact('product', 'related'));
     }
 
     // ================== ADMIN INDEX ==================
@@ -212,14 +193,14 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0',
             'brand_id'    => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
-            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'description' => 'nullable|string',
+            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $category = Category::findOrFail($request->category_id);
-        $slug = Str::slug($category->name);
+        $slugCat  = Str::slug($category->name);
 
-        $folder = match($slug) {
+        $folder = match ($slugCat) {
             'nam'     => 'Watch/Watch_nam',
             'nu'      => 'Watch/Watch_nu',
             'cap-doi' => 'Watch/Watch_cap',
@@ -229,26 +210,24 @@ class ProductController extends Controller
         $originalName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
         $extension    = $request->file('image')->getClientOriginalExtension();
         $imageName    = Str::slug($originalName) . '.' . $extension;
+
         $request->file('image')->storeAs('public/' . $folder, $imageName);
 
-        $productName = $request->name;
-        $slug = Str::slug($productName);
-        if (empty($slug)) {
-            $slug = 'dong-ho-' . time();
-        }
+        $productSlug = Str::slug($request->name) ?: 'san-pham-' . time();
 
         Product::create([
-            'name'        => $productName,
+            'name'        => $request->name,
             'price'       => $request->price,
             'quantity'    => 100,
             'brand_id'    => $request->brand_id,
             'category_id' => $request->category_id,
             'description' => $request->description,
             'image'       => $imageName,
-            'slug'        => $slug,
+            'slug'        => $productSlug,
+            'is_hidden'   => false, // hoặc 0
         ]);
 
-        return redirect()->route('admin.products_index')->with('success', 'Thêm đồng hồ thành công!');
+        return redirect()->route('admin.products_index')->with('success', 'Thêm sản phẩm thành công!');
     }
 
     // ================== UPDATE ==================
@@ -265,18 +244,20 @@ class ProductController extends Controller
             'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        $product->name        = $request->name;
-        $product->price       = $request->price;
-        $product->brand_id    = $request->brand_id;
-        $product->category_id = $request->category_id;
-        $product->description = $request->description;
-        $product->slug        = Str::slug($request->name);
+        $product->fill([
+            'name'        => $request->name,
+            'price'       => $request->price,
+            'brand_id'    => $request->brand_id,
+            'category_id' => $request->category_id,
+            'description' => $request->description,
+            'slug'        => Str::slug($request->name),
+        ]);
 
         if ($request->hasFile('image')) {
             $category = Category::findOrFail($request->category_id);
-            $slug     = Str::slug($category->name);
+            $slugCat  = Str::slug($category->name);
 
-            $folder = match ($slug) {
+            $folder = match ($slugCat) {
                 'nam'     => 'Watch/Watch_nam',
                 'cap-doi' => 'Watch/Watch_cap',
                 default   => 'Watch/Watch_nu',
@@ -284,7 +265,6 @@ class ProductController extends Controller
 
             $imageName = $request->file('image')->getClientOriginalName();
             $request->file('image')->storeAs('public/' . $folder, $imageName);
-
             $product->image = $imageName;
         }
 
@@ -314,4 +294,21 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products_index')->with('success', 'Đã xoá sản phẩm thành công!');
     }
+
+
+    public function toggleHidden($id)
+    {
+        $product = Product::findOrFail($id);
+
+        // Đảo trạng thái
+        $product->is_hidden = ! $product->is_hidden;
+        $product->save();
+
+        return response()->json([
+            'hidden' => $product->is_hidden,
+        ]);
+    }
+
+
+    
 }

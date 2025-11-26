@@ -51,7 +51,7 @@
                             <th>Mã đơn</th>
                             <th>Ngày đặt</th>
                             <th>Tổng tiền</th>
-                            <th>Trạng thái</th>
+                            <th>Phương thức thanh toán</th>
                             <th>Chi tiết</th>
                         </tr>
                     </thead>
@@ -62,18 +62,15 @@
                                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                                 <td class="text-danger fw-bold">{{ number_format($order->total_price, 0, ',', '.') }} đ</td>
                                 <td>
-                                    @if($order->status === 'pending')
-                                        <span class="badge bg-warning text-dark">Chờ xử lý</span>
-                                    @elseif($order->status === 'confirmed')
-                                        <span class="badge bg-success">Đã xác nhận</span>
-                                    @elseif($order->status === 'cancelled')
-                                        <span class="badge bg-danger">Đã hủy</span>
-                                    @elseif($order->status === 'completed')
-                                        <span class="badge bg-primary">Hoàn thành</span>
+                                    @if(optional($order->payment)->method === 'cash')
+                                        <span class="badge bg-warning text-dark">💵 Thanh toán khi nhận hàng</span>
+                                    @elseif(optional($order->payment)->method === 'bank')
+                                        <span class="badge bg-info text-dark">💳 Chuyển khoản ngân hàng</span>
                                     @else
-                                        <span class="badge bg-secondary">{{ ucfirst($order->status) }}</span>
+                                        <span class="badge bg-secondary">Chưa tạo giao dịch</span>
                                     @endif
                                 </td>
+
                                 <td>
                                     <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
                                         Xem

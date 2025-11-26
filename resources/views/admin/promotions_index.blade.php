@@ -166,4 +166,3 @@
 @endsection
 
 <script src="{{ asset('js/admin/promotions.js') }}"></script>
-

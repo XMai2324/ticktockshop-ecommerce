@@ -143,3 +143,9 @@
     display: flex;
     justify-content: center;
 }
+/* Tắt hoàn toàn list-style của pagination */
+.pagination,
+.pagination ul,
+.pagination li {
+    list-style: none !important;
+}

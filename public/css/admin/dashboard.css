@@ -6,7 +6,7 @@ header{
   right:0;
   z-index:999;
   height:120px; 
-  padding:12px 50px;
+  padding:12px 10px;
   display:flex;
   align-items:center;
   gap:24px;
@@ -18,7 +18,7 @@ header.sticky{
 }
 
 .logo img{
-    height:95px;
+    height:90px;
     display:block;
 }
 
@@ -42,22 +42,6 @@ header.sticky{
     display:block; padding:8px 10px; }
 
 
-/* USER + LOGOUT bên phải (giữ nguyên HTML của Anh) */
-.header_other{
-  margin-left:auto;               /* đẩy sát phải */
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-/* Đẩy cụm sang phải và canh giữa theo chiều dọc */
-.header_other {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* khoảng cách giữa user và logout */
-}
 
 .header-user {
     display: flex;
@@ -92,7 +76,7 @@ header.sticky{
   cursor: pointer;
   font-size: 18px;
   color: #555;
-  padding: 4px 6px;
+  padding: 4px 3px;
   transition: color .2s, transform .2s;
 }
 .logout-btn:hover{ color:#e74c3c; transform:scale(1.05); }

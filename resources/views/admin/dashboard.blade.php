@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="{{ asset('css/admin/product_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="/css/admin/nhapHang.css">
     <link rel="stylesheet" href="/css/admin/nhapHangPreview.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {{-- Placeholder để child view có thể thêm CSS riêng --}}
     @yield('styles')
 </head>
@@ -27,44 +27,30 @@
         </div>
 
         <div class="header_menu">
-<!-- <<<<<<< HEAD -->
-            <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a>
-        </li>
+            <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a></li>
             <li><a href="{{ route('admin.orders.index') }}">ĐƠN HÀNG</a></li>
-            <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li>
+            <li><a href="{{ route('admin.nhapHang_index') }}">NHẬP HÀNG</a></li>
+            <li><a href="#">KHÁCH HÀNG</a></li>
+            <!-- <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li> -->
             <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
-            <li><a href="{{ route('admin.nhapHang_index') }}">NHẬP HÀNG</a></li>
             <li><a href="#">THỐNG KÊ</a></li>
         </ul>
 
-        <!-- <ul class="header_other">
-=======
-            <li><a href="">QUẢN LÝ SẢN PHẨM</a>
-                <ul class="sub_menu">
-                    <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
-                    <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
-                    <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
-                    <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
-                </ul>
-            </li>
-            <li><a href="{{ route('admin.orders.index') }}">XỬ LÝ ĐƠN HÀNG</a></li>
-            <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
-            <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
-            <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
->>>>>>> d334142434f540eab23829b8b2d73d2f43018966 -->
-            <li class="header-user">
+        <li class="header-user">
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>
-            </li>
-            <li class="logout-item">
+        </li>
+        <li class="logout-item">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="logout-btn" title="Đăng xuất">
                         <i class="fa fa-sign-out-alt"></i>
                     </button>
                 </form>
-            </li>
+        </li>
+
+            
 
     </header>
 

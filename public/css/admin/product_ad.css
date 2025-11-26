@@ -229,7 +229,7 @@
 .hidden-badge {
     position: absolute;
     top: 8px;
-    left: 8px;
+
     background: #d6336c;
     color: #fff;
     padding: 3px 8px;
@@ -242,3 +242,42 @@
     opacity: 0.4;
     filter: grayscale(60%);
 }
+
+.product-card {
+    position: relative;
+}
+
+.badge-new {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: #ff0000;
+    color: #fff;
+    padding: 3px 8px;
+    font-size: 11px;
+    border-radius: 5px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.product-card.product-hidden {
+    opacity: 0.4;
+    position: relative;
+}
+
+.product-card.product-hidden::after {
+    content: "ĐANG ẨN";
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 6px;
+    font-size: 15px;
+    background: #d63220;
+    color: #ffffff;
+    border-radius: 4px;
+}
+.accessory-hidden {
+    opacity: 0.4;
+    filter: grayscale(60%);
+}
+

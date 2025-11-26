@@ -38,9 +38,9 @@
     {{-- ✅ Danh sách sản phẩm --}}
     <div style="flex: 1;">
 
-        <button id="btn-open-create-form" class="btn-create-product">
+        <!-- <button id="btn-open-create-form" class="btn-create-product">
             + Thêm sản phẩm mới
-        </button>
+        </button> -->
         <button  id="btn-filter-hidden" class="btn btn-secondary">
             * Hiện sản phẩm ẩn
         </button>
@@ -139,6 +139,10 @@
                 <div class="col-3">
                     <div class="product-card" id="product-{{ $product->id }}"
                             data-hidden="{{ $product->is_hidden ? 1 : 0 }}">
+
+                            @if($product->is_new)
+                                <span class="badge-new">NEW</span>
+                            @endif
                         <!-- <img src="{{ asset('storage/Watch/' . $product->image) }}" alt="{{ $product->name }}" class="product-image"> -->
                          @php
                             $folder = 'Watch/Watch_nu'; // mặc định

@@ -2,7 +2,7 @@
 @extends('client.home')
 
 @section('title')
-    {{ $product->name }} - TickTock Shop
+  {{ $product->name }} - TickTock Shop
 @endsection
 
 @php
@@ -201,12 +201,9 @@
 @endsection
 
 @section('scripts')
+    {{-- CSS + JS khác --}}
     <link rel="stylesheet" href="{{ asset('css/client/review_rating.css') }}">
     <script src="{{ asset('js/client/review_rating.js') }}" defer></script>
-@endsection
-
-@section('scripts')
-    {{-- JS gallery + redirect legacy quickview + filters --}}
     <script src="{{ asset('js/client/quickview.js') }}" defer></script>
 
     <script>
@@ -214,11 +211,10 @@
         function updateCartBadges(n) {
             document.querySelectorAll('.js-cart-count, #cart-count').forEach(el => {
                 el.textContent = n;
-                el.setAttribute('data-count', n); // nếu CSS có rule ẩn khi = 0
+                el.setAttribute('data-count', n);
             });
         }
 
-        // Chặn submit thường -> gửi AJAX tới route('cart.add') (trả JSON)
         document.addEventListener('submit', async (e) => {
             const form = e.target.closest('.add-to-cart-form');
             if (!form) return;
@@ -229,16 +225,20 @@
                 const res = await fetch(form.action, {
                     method: 'POST',
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
                     },
                     body: new FormData(form)
                 });
+
                 const data = await res.json();
 
                 if (data.success) {
-                    // Thông báo đơn giản (bạn có thể thay bằng toast)
                     alert('Đã thêm vào giỏ hàng!');
-                    if ('cart_count' in data) updateCartBadges(data.cart_count);
+                    if ('cart_count' in data) {
+                        updateCartBadges(data.cart_count);
+                    }
                 } else {
                     alert(data.message || 'Có lỗi xảy ra. Vui lòng thử lại!');
                 }
@@ -249,4 +249,5 @@
         });
     </script>
 @endsection
+
 @include('client.products.review_rating')

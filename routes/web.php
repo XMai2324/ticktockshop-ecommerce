@@ -16,7 +16,6 @@ use App\Http\Controllers\NhapHangController;
 
 /*
 |--------------------------------------------------------------------------
-<<<<<<< HEAD
 | HOME + AUTH
 |--------------------------------------------------------------------------
 */
@@ -93,16 +92,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 
 
 // ACCESSORIES (Admin)
-// Route::prefix('admin/accessories')->name('admin.accessories.')->middleware(['auth', 'role:admin'])->group(function () {
-//     Route::get('/',        [AccessoriesController::class, 'index'])->name('index');
-//     Route::get('/straps',  [AccessoriesController::class, 'adminStraps'])->name('straps');
-//     Route::get('/boxes',   [AccessoriesController::class, 'adminBoxes'])->name('boxes');
-//     Route::get('/glasses', [AccessoriesController::class, 'adminGlasses'])->name('glasses');
-
-//     Route::post('/{type}/store',  [AccessoriesController::class, 'store'])->name('store');
-//     Route::put('/{type}/{id}',    [AccessoriesController::class, 'update'])->name('update');
-//     Route::delete('/{type}/{id}', [AccessoriesController::class, 'delete'])->name('delete');
-// });
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
 
@@ -245,19 +234,6 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 */
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN PRODUCTS
-|--------------------------------------------------------------------------
-*/
-Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/',        [ProductController::class, 'index'])->name('admin.products_index');
-    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/{id}',    [ProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-});
-Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
-
 
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -296,7 +272,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
 });
 
-//Nhập HÀNG     
+//VNpayment
+Route::post('/vnpay/payment', [VNPayController::class, 'createPayment'])->name('vnpay.payment');
+Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.return');
+
+Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
+Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
+
+//Nhập HÀNG (admin)    
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('nhap-hang', [NhapHangController::class, 'index'])->name('nhapHang_index');
     Route::post('nhap-hang/save-preview', [NhapHangController::class, 'savePreview'])->name('nhapHang_savePreview');
@@ -304,6 +287,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
     Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
 });
+
 
 
 

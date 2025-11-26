@@ -129,7 +129,63 @@ class NhapHangController extends Controller
     }
 
     // Xác nhận và lưu vào DB
-public function confirmPreview(Request $request)
+    // public function confirmPreview(Request $request)
+    // {
+    //     $changed = Session::get('nhap_hang_preview', []);
+
+    //     if (empty($changed)) {
+    //         return redirect()->route('admin.nhapHang_index')->with('warning', 'Không có dữ liệu để lưu.');
+    //     }
+
+    //     foreach ($changed as $id => $p) {
+    //         try {
+    //             $product = Str::startsWith($id, 'new') ? new Product() : Product::find($id);
+    //             if (!$product) continue;
+
+    //             // Tên, danh mục, thương hiệu
+    //             $product->name        = $p['name'] ?? $product->name;
+    //             $product->category_id = $p['category_id'] ?? $product->category_id;
+    //             $product->brand_id    = $p['brand_id'] ?? $product->brand_id;
+
+    //             // Tạo slug tự động từ tên
+    //             $baseSlug = Str::slug($product->name ?: 'product');
+    //             $slug = $baseSlug;
+    //             $i = 1;
+    //             while (Product::where('slug', $slug)->where('id', '<>', $product->id ?? 0)->exists()) {
+    //                 $slug = $baseSlug . '-' . $i++;
+    //             }
+    //             $product->slug = $slug;
+
+    //             // Giá nhập / giá bán
+    //             $product->cost_price  = max(0, floatval($p['cost_price'] ?? 0));
+    //             $product->price = round($product->cost_price * 1.2 / 1000) * 1000; // làm tròn lên nghìn gần nhất
+
+    //             // Số lượng
+    //             $quantityAdd = intval($p['quantity_add'] ?? 0);
+    //             $product->quantity = ($product->quantity ?? 0) + $quantityAdd;
+
+    //             // Ảnh
+    //             // if ($request->hasFile("products.$id.image")) {
+    //             //     $file = $request->file("products.$id.image");
+    //             //     if ($file->isValid()) {
+    //             //         $product->image = $file->store('products', 'public');
+    //             //     }
+    //             // }
+
+    //             $product->save();
+    //         } catch (\Throwable $e) {
+    //             Log::error("Lỗi lưu sản phẩm id={$id}: " . $e->getMessage());
+    //         }
+    //     }
+
+    //     // Xóa session sau khi lưu
+    //     Session::forget('nhap_hang_preview');
+
+    //     return redirect()->route('admin.nhapHang_index')->with('success', 'Đã lưu nhập hàng!');
+    // }
+
+
+    public function confirmPreview(Request $request)
     {
         $changed = Session::get('nhap_hang_preview', []);
 
@@ -139,7 +195,12 @@ public function confirmPreview(Request $request)
 
         foreach ($changed as $id => $p) {
             try {
-                $product = Str::startsWith($id, 'new') ? new Product() : Product::find($id);
+
+                // ✅ Xác định đây có phải là sản phẩm mới (id dạng "new_xxx")
+                $isNew = Str::startsWith($id, 'new');
+
+                // ✅ Nếu là sp mới -> new Product(), nếu không -> find theo id
+                $product = $isNew ? new Product() : Product::find($id);
                 if (!$product) continue;
 
                 // Tên, danh mục, thương hiệu
@@ -147,32 +208,32 @@ public function confirmPreview(Request $request)
                 $product->category_id = $p['category_id'] ?? $product->category_id;
                 $product->brand_id    = $p['brand_id'] ?? $product->brand_id;
 
-                // Tạo slug tự động từ tên
+                // Tạo slug tự động từ tên, đảm bảo không trùng
                 $baseSlug = Str::slug($product->name ?: 'product');
                 $slug = $baseSlug;
                 $i = 1;
-                while (Product::where('slug', $slug)->where('id', '<>', $product->id ?? 0)->exists()) {
+                while (Product::where('slug', $slug)
+                            ->when(!$isNew, fn($q) => $q->where('id', '<>', $product->id))
+                            ->exists()) {
                     $slug = $baseSlug . '-' . $i++;
                 }
                 $product->slug = $slug;
 
                 // Giá nhập / giá bán
                 $product->cost_price  = max(0, floatval($p['cost_price'] ?? 0));
-                $product->price = round($product->cost_price * 1.2 / 1000) * 1000; // làm tròn lên nghìn gần nhất
+                $product->price       = round($product->cost_price * 1.2 / 1000) * 1000; // làm tròn lên nghìn gần nhất
 
-                // Số lượng
+                // Số lượng (nếu sp mới thì quantity cũ là null -> coi như 0)
                 $quantityAdd = intval($p['quantity_add'] ?? 0);
                 $product->quantity = ($product->quantity ?? 0) + $quantityAdd;
 
-                // Ảnh
-                // if ($request->hasFile("products.$id.image")) {
-                //     $file = $request->file("products.$id.image");
-                //     if ($file->isValid()) {
-                //         $product->image = $file->store('products', 'public');
-                //     }
-                // }
+                // ✅ Nếu là sản phẩm mới -> mặc định ẨN
+                if ($isNew) {
+                    $product->is_hidden = true;
+                }
 
                 $product->save();
+
             } catch (\Throwable $e) {
                 Log::error("Lỗi lưu sản phẩm id={$id}: " . $e->getMessage());
             }

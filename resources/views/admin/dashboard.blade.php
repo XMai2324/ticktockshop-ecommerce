@@ -28,14 +28,14 @@
             <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a>
         </li>
             <li><a href="{{ route('admin.orders.index') }}">ĐƠN HÀNG</a></li>
-            <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li>
+            <!-- <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li> -->
             <li><a href="#">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
             <li><a href="#">NHẬP HÀNG</a></li>
             <li><a href="#">THỐNG KÊ</a></li>
         </ul>
 
-        <ul class="header_other">
+       
 
             <li class="header-user">
                 <i class="fa fa-user"></i>

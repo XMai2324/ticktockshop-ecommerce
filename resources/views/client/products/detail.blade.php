@@ -183,7 +183,7 @@
                                         }
                                     @endphp
                                     <div class="product-page-right-content-item">
-                                        <a href="{{ route('product.detail', ['product' => $r->slug]) }}" class="product-card">
+                                        <a href="{{ route('product.detail', ['product' => $r->slug ?? $r->id]) }}" class="product-card">
                                             <img src="{{ asset('storage/' . $rf . '/' . $r->image) }}"
                                                 alt="{{ $r->name }}">
                                             <h2 class="product-name">{{ $r->name }}</h2>
@@ -235,8 +235,7 @@
                 });
                 const data = await res.json();
 
-                if (data.success) {
-                    // Thông báo đơn giản (bạn có thể thay bằng toast)
+                if (data!== null && data.success) {
                     alert('Đã thêm vào giỏ hàng!');
                     if ('cart_count' in data) updateCartBadges(data.cart_count);
                 } else {

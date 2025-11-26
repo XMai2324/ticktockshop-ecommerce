@@ -17,18 +17,16 @@
             <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
         </div>
 
-        <!-- Đổi div -> ul và đóng </ul> đúng chuẩn -->
-        <ul class="header_menu">
-            <li>
-            <a href="">QUẢN LÝ SẢN PHẨM</a>
-            <ul class="sub_menu">
-                <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
-                <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
-                <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
-                <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
-            </ul>
-            </li>
-            <li><a href="#">XỬ LÝ ĐƠN HÀNG</a></li>
+        <div class="header_menu">
+            <li><a href="">QUẢN LÝ SẢN PHẨM</a>
+                <ul class="sub_menu">
+                    <li><a href="{{ route('admin.products_index') }}">Đồng hồ</a></li>
+                    <li><a href="{{ route('admin.accessories.straps') }}">Dây đeo</a></li>
+                    <li><a href="{{ route('admin.accessories.boxes') }}">Hộp đựng</a></li>
+                    <li><a href="{{ route('admin.accessories.glasses') }}">Kính cường lực</a></li>
+                </ul>
+        </li>
+            <li><a href="{{ route('admin.orders.index') }}">XỬ LÝ ĐƠN HÀNG</a></li>
             <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
             <li><a href="#">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>

@@ -9,35 +9,15 @@ use App\Http\Controllers\WarrantyController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\PromotionsController;
+use App\Http\Controllers\OrderController;
 
-<<<<<<< HEAD
 
-
-// Route::get('/', function () {
-//     if (request()->has('checkout')) {
-//         return view('client.checkout');
-//     }
-
-//     return view('client.home');
-// });
-
-<<<<<<< HEAD
-=======
-
-Route::get('/login', function () {
-    return view('client.login'); // đúng tên file chị đã có
-})->name('login');
-
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
-Route::get('/', function () { 
-=======
 /*
 |--------------------------------------------------------------------------
 | HOME
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
     if (auth()->check()) {
         return auth()->user()->role === 'admin'
             ? redirect()->route('admin.dashboard')
@@ -131,17 +111,15 @@ Route::get('/cart/clear', function () {
     session()->forget('cart');
     return 'Đã xoá giỏ hàng';
 });
-<<<<<<< HEAD
 //update giỏ hàng
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-=======
+
 
 /*
 |--------------------------------------------------------------------------
 | CHECKOUT
 |--------------------------------------------------------------------------
 */
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
 
@@ -164,18 +142,10 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 */
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 //thanh toan
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
-=======
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
 
-//Admin product
-Route::prefix('admin/products')->middleware('auth')->group(function () {
-    Route::get('/', [ProductController::class, 'index'])->name('admin.products_index');
-=======
 /*
 |--------------------------------------------------------------------------
 | ADMIN PRODUCTS
@@ -183,14 +153,12 @@ Route::prefix('admin/products')->middleware('auth')->group(function () {
 */
 Route::prefix('admin/products')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/',        [ProductController::class, 'index'])->name('admin.products_index');
->>>>>>> 3366b25ca99a902aa845f5804fc5ec5e7ab4a42d
     Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
     Route::put('/{id}',    [ProductController::class, 'update'])->name('admin.products.update');
     Route::delete('/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
 });
 Route::post('/admin/create', [ProductController::class, 'store'])->name('admin.store');
 
-<<<<<<< HEAD
 /*
 |--------------------------------------------------------------------------
 | ADMIN PROMOTIONS
@@ -202,7 +170,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::put('promotions/{id}',  [PromotionsController::class, 'update'])->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class, 'destroy'])->name('admin.promotions.delete');
 });
-=======
 
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
@@ -217,4 +184,26 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
 //thanh toan
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'placeOrder'])->name('checkout.placeOrder');
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
+/*
+|--------------------------------------------------------------------------
+| HISTORY ORDER
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth')->group(function () {
+    Route::get('/orders/history', [OrderController::class, 'history'])->name('orders.history');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN ORDER
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    // Orders
+    Route::get('orders',          [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('orders/{id}',     [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::get('orders/{id}/edit',[OrderController::class, 'edit'])->name('admin.orders.edit');
+    Route::put('orders/{id}',     [OrderController::class, 'update'])->name('admin.orders.update');
+    Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
+});

@@ -100,7 +100,11 @@
                 document.getElementById('detail-rating').value = row.dataset.rating;
                 document.getElementById('detail-comment').value = row.dataset.comment;
                 document.getElementById('detail-time').value = row.dataset.time;
-                document.getElementById('detail-response').value = row.dataset.response;
+                if(row.dataset.response === 'Chưa phản hồi') {
+                    document.getElementById('detail-response').value = '';
+                } else {
+                    document.getElementById('detail-response').value = row.dataset.response;
+                }
                 console.log('Clicked row for rating ID ' + row.dataset);s
             });
         });

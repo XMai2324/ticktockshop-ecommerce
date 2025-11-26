@@ -194,9 +194,9 @@ class ProductsSeeder extends Seeder
         }
 
         $products = [
-            ['Rado Centrix Open Heart R30248012', 'Rado1.avif', 63030000, 'Đồng hồ nữ Rado Centrix Open Heart R30248012 tông màu vàng hồng quý phái, mặt số lộ cơ táo bạo. Bộ máy tự động Thụy Sỹ trữ cót 80 giờ.'],
-            ['Rado R48871714', 'Rado2.avif', 33750000, 'Mẫu Rado R48871714 mặt số size 28mm phối tone màu đen tạo điểm nhấn nổi bật cho thiết kế sang trọng 4 viên kim cương được đính tại 4 vị trí 3,6,9 và vị trí múi 12 giờ.'],
-            ['Rado Florence R48873734', 'Rado3.avif', 33750000, 'Mẫu Rado R48873734 phiên bản vàng hồng thời trang cho phái đẹp, mặt số size 28mm tạo nên điểm nhấn nổi bật đính 4 kim cương nổi bật trước mặt kính Sapphire.'],
+            ['Rado Centrix Open Heart R30248012', 'Rado1.jpg', 63030000, 'Đồng hồ nữ Rado Centrix Open Heart R30248012 tông màu vàng hồng quý phái, mặt số lộ cơ táo bạo. Bộ máy tự động Thụy Sỹ trữ cót 80 giờ.'],
+            ['Rado R48871714', 'Rado2.jpg', 33750000, 'Mẫu Rado R48871714 mặt số size 28mm phối tone màu đen tạo điểm nhấn nổi bật cho thiết kế sang trọng 4 viên kim cương được đính tại 4 vị trí 3,6,9 và vị trí múi 12 giờ.'],
+            ['Rado Florence R48873734', 'Rado3.jpg', 33750000, 'Mẫu Rado R48873734 phiên bản vàng hồng thời trang cho phái đẹp, mặt số size 28mm tạo nên điểm nhấn nổi bật đính 4 kim cương nổi bật trước mặt kính Sapphire.'],
             ['Rado DiaStar Original Automatic', 'Rado4.jpg', 33700000, 'Dây lưới bạc nhẹ tay, thiết kế thoáng khí, hiện đại.'],
             ['Rado DiaStar Original 60-Year Edition', 'Rado5.jpg', 11700000, 'Thiết kế kỷ niệm 60 năm, mặt số xám, 2 dây đeo cao cấp.'],
             ['Rado Centrix Automatic', 'Rado6.jpg', 46300000, 'Thiết kế lộ cơ lớn, đính kim cương, dây thép và ceramic sang trọng.'],

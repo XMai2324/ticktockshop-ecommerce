@@ -12,37 +12,115 @@ use Carbon\Carbon;
 
 class StatisticalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dataRaw = Order::select(
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('SUM(total_price) as total')
-        )
-        ->where('status', 'completed') // QUAN TRỌNG: Chỉ tính đơn đã thành công (tùy status bên bạn)
-        ->whereYear('created_at', date('Y')) // Lọc theo năm hiện tại (tránh cộng dồn tháng 1 năm ngoái với tháng 1 năm nay)
-        ->groupBy('month')
-        ->orderBy('month', 'asc')
-        ->get();
-
-        // 2. Tách thành 2 mảng để gửi sang View (Chart.js cần dạng này)
-        // pluck('month') sẽ lấy ra mảng [1, 2, 3...]
-        // pluck('total') sẽ lấy ra mảng [100000, 200000, ...]
-        $months = $dataRaw->pluck('month')->toArray();
-        $revenues = $dataRaw->pluck('total')->toArray();
-
-        // 3. Các chỉ số khác (giữ nguyên như cũ)
+        // 1. DỮ LIỆU TỔNG QUAN
         $total_products = Product::count();
-        $total_users = User::count();
         $total_orders = Order::count();
-        $total_revenue = Order::where('status', 'completed')->sum('total_price');
+        $total_revenue = Order::where('status', 'confirmed')->sum('total_price');
+        $total_ratings = Rating::count();
+        $avg_rating = round(Rating::avg('rating'), 1);
+
+        // 2. THỐNG KÊ DOANH THU
+        $filter = request('filter', 'month');
+        $query = Order::where('status', 'confirmed');
+
+        // Xử lý theo từng loại filter
+        if ($filter == 'day') {
+            // Theo ngày (Lấy 30 ngày gần nhất)
+            $dataRaw = $query->select(
+                    DB::raw('DATE_FORMAT(created_at, "%d/%m") as label'),
+                    DB::raw('SUM(total_price) as total')
+                )
+                ->where('created_at', '>=', Carbon::now()->subDays(30))
+                ->groupBy('label')
+                ->orderBy('created_at')
+                ->get();
+
+        } elseif ($filter == 'year') {
+            // Theo năm (Lấy 5 năm gần nhất)
+            $dataRaw = $query->select(
+                    DB::raw('YEAR(created_at) as label'),
+                    DB::raw('SUM(total_price) as total')
+                )
+                ->where('created_at', '>=', Carbon::now()->subYears(5))
+                ->groupBy('label')
+                ->orderBy('label')
+                ->get();
+
+        } else {
+            $dataRaw = $query->select(
+                    DB::raw('MONTH(created_at) as label'),
+                    DB::raw('SUM(total_price) as total')
+                )
+                ->whereYear('created_at', date('Y'))
+                ->groupBy('label')
+                ->orderBy('label')
+                ->get();
+
+            $dataRaw->transform(function($item) {
+                $item->label = "Tháng " . $item->label;
+                return $item;
+            });
+        }
+        $chart_labels = $dataRaw->pluck('label')->toArray();
+        $chart_data   = $dataRaw->pluck('total')->toArray();
+
+        // 3. DỮ LIỆU CHI TIẾT SẢN PHẨM (Top 5 bán chạy - Ví dụ)
+        //$top_products = Product::orderBy('view_count', 'desc')->take(5)->get();
+
+        // --- PHẦN 3: THỐNG KÊ ĐÁNH GIÁ  ---
+
+        //Dữ liệu Biểu đồ Tròn (Số lượng từng loại sao: 1, 2, 3, 4, 5)
+        $star_counts = Rating::select('rating', DB::raw('count(*) as total'))
+            ->groupBy('rating')
+            ->pluck('total', 'rating')
+            ->toArray();
+
+        $pie_data = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $pie_data[] = $star_counts[$i] ?? 0;
+        }
+
+        $top_reviewed_products = Product::withCount('ratings')
+            ->orderBy('ratings_count', 'desc')
+            ->take(5)
+            ->get();
+        // Tách mảng tên và số lượng để vẽ chart
+        $bar_labels = $top_reviewed_products->pluck('name')->toArray();
+        $bar_data   = $top_reviewed_products->pluck('ratings_count')->toArray();
+
+        // Dữ liệu Bảng bên phải (Có bộ lọc)
+        $filter_star = $request->input('rating_star', 'all'); // Mặc định lấy tất cả sao
+        $filter_sort = $request->input('rating_sort', 'desc'); // Mặc định giảm dần
+
+        // Query sản phẩm kèm theo đếm số lượng rating (có điều kiện lọc)
+        $table_products = Product::withCount(['ratings' => function ($query) use ($filter_star) {
+                if ($filter_star != 'all') {
+                    $query->where('rating', $filter_star);
+                }
+            }])
+            // Chỉ lấy những sản phẩm có rating > 0 theo tiêu chí lọc
+            ->having('ratings_count', '>', 0)
+            ->orderBy('ratings_count', $filter_sort)
+            ->take(10)
+            ->get();
 
         return view('admin.statistical', compact(
-            'months',
-            'revenues',
             'total_products',
-            'total_users',
             'total_orders',
-            'total_revenue'
+            'total_revenue',
+            'total_ratings',
+            'avg_rating',
+            'chart_labels',
+            'chart_data',
+            'filter',
+            'pie_data',
+            'bar_labels',
+            'bar_data',
+            'table_products',
+            'filter_star',
+            'filter_sort'
         ));
     }
 }

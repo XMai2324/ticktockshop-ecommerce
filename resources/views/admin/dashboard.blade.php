@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin/product_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/statistical.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {{-- Placeholder để child view có thể thêm CSS riêng --}}
     @yield('styles')
@@ -35,15 +36,17 @@
             <li class="header-user">
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>
-            </li>
-            <li class="logout-item">
+        </li>
+        <li class="logout-item">
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="logout-btn" title="Đăng xuất">
                         <i class="fa fa-sign-out-alt"></i>
                     </button>
                 </form>
-            </li>
+        </li>
+
+
 
     </header>
 

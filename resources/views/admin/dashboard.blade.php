@@ -34,10 +34,11 @@
             <!-- <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li> -->
             <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
-            <li><a href="#">THỐNG KÊ</a></li>
+            <li><a href="{{ route('admin.statistical')}}">THỐNG KÊ</a></li>
         </ul>
 
         <li class="header-user">
+
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>
         </li>
@@ -54,7 +55,7 @@
 
     </header>
 
-    
+
 
 
 

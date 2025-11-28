@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\NhapHangController;
+use App\Http\Controllers\StatisticalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -289,5 +290,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
 });
 
 
+
+
+
+// Thống kê
+
+Route::get('/statistical', [StatisticalController::class, 'index'])
+    ->name('admin.statistical');
 
 

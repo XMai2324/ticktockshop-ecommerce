@@ -14,6 +14,7 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\NhapHangController;
 use App\Http\Controllers\StatisticalController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,6 +137,32 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('orders/{id}/edit',[OrderController::class, 'edit'])->name('admin.orders.edit');
     Route::put('orders/{id}',     [OrderController::class, 'update'])->name('admin.orders.update');
     Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
+});
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN CUSTOMERS
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+
+    // Trang danh sách + form thêm
+    Route::get('customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+
+    // Thêm khách hàng
+    Route::post('customers', [CustomerController::class, 'store'])->name('admin.customers.store');
+
+    // Reset mật khẩu về 123456
+    Route::post('customers/{customer}/reset-password', [CustomerController::class, 'resetPassword'])
+        ->name('admin.customers.reset-password');
+
+    // Vô hiệu hóa tài khoản
+    Route::post('customers/{customer}/toggle-active', [CustomerController::class, 'toggleActive'])
+        ->name('admin.customers.toggle-active');
+
+    // Xóa tài khoản
+    Route::delete('customers/{customer}', [CustomerController::class, 'destroy'])
+        ->name('admin.customers.destroy');
 });
 
 
@@ -293,8 +320,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
     Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
 });
-
-
 
 
 

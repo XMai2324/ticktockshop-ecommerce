@@ -1,6 +1,6 @@
 
 <div class="login-form" id="login-form">
-    <form action="{{ route('client.login') }}" method="POST">
+    <form action="{{ route('client.login.submit') }}" method="POST">
         @csrf
         <h3>Đăng nhập</h3>
         {{-- HIỂN THỊ LỖI TRONG FORM ĐĂNG NHẬP --}}
@@ -25,7 +25,9 @@
             Vui lòng đăng nhập để tra cứu bảo hành.
         </div>
         <input type="text" name="email" placeholder="Email đăng nhập" required>
+
         <input type="password" name="password" placeholder="Mật khẩu" required>
+
         <button class="btn-login" type="submit" id="to-login">Đăng nhập</button>
 
         <div class="register-link">
@@ -34,11 +36,5 @@
         </div>
 
         <a class="forgot_pass" href="#" id="to-forgot">Quên mật khẩu ?</a>
-
-
-
-        
-
     </form>
-
 </div>

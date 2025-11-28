@@ -13,6 +13,8 @@ class CheckoutController extends Controller
     // GET /checkout
     public function index(Request $request)
     {
+        
+        // $raw = session('cart', []); // hoặc lấy từ Cart::content() hay DB
         $cartItems = $this->normalizeCart(session('cart', []));
         $subtotal  = $this->cartSubtotal($cartItems);
         $shipping  = $this->shippingFee();

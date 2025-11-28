@@ -236,6 +236,11 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
 
+Route::get('/profile', [LoginAuthController::class, 'profile'])->name('profile');
+Route::post('/profile/update', [LoginAuthController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/change-password', [LoginAuthController::class, 'changePassword'])->name('profile.changePassword');
+
+
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
@@ -297,5 +302,4 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
 Route::get('/statistical', [StatisticalController::class, 'index'])
     ->name('admin.statistical');
-
 

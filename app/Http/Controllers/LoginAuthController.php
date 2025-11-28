@@ -19,6 +19,7 @@ class LoginAuthController extends Controller
 
     public function login(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|regex:/@gmail\.com$/i',
             'password' => 'required'
@@ -110,6 +111,46 @@ class LoginAuthController extends Controller
         return redirect()->route('client.home');
     }
 
+    public function profile()
+    {
+        $user = Auth::user(); // nhớ đã đăng nhập thì mới có
+
+        return view('client.profile', compact('user'));
+    }
+
+
+    public function updateProfile(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $user = auth()->user();
+        $user->name = $request->name;
+        $user->save();
+
+        return back()->with('success', 'Cập nhật thành công!');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        if (!\Hash::check($request->current_password, auth()->user()->password)) {
+            return back()->with('error', 'Mật khẩu hiện tại không đúng!');
+        }
+
+        $user = auth()->user();
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        return back()->with('success', 'Đổi mật khẩu thành công!');
+    }
+
+
+
 
 }
-

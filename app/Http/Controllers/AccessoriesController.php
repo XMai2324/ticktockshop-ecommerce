@@ -109,12 +109,34 @@ class AccessoriesController extends Controller
         $modelClass = $this->getModelByType($type);
         $folder     = $this->getFolderByType($type);
 
-        $request->validate([
+        // $request->validate([
+        //     'name'        => 'required|string|max:255',
+        //     'price'       => 'required|numeric|min:0',
+        //     'description' => 'nullable|string',
+        //     'image'       => 'required|image|mimes:jpg,jpeg,png,webp,avif|max:4096',
+        // ]);
+        $rules = [
             'name'        => 'required|string|max:255',
             'price'       => 'required|numeric|min:0',
-            'description' => 'nullable|string',
+            'quantity'    => 'nullable|integer|min:0',
             'image'       => 'required|image|mimes:jpg,jpeg,png,webp,avif|max:4096',
-        ]);
+        ];
+
+        switch ($type) {
+            case 'straps':
+                $rules['material'] = 'required|string|max:255';
+                $rules['color']    = 'required|string|max:255';
+                break;
+            case 'glasses':
+                $rules['material'] = 'required|string|max:255';
+                $rules['color']    = 'required|string|max:255';
+                $rules['description'] = 'nullable|string';
+                break;
+            case 'boxes':
+                $rules['description'] = 'nullable|string';
+                break;
+        }
+        $validatedData = $request->validate($rules);
 
         $originalName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
         $extension    = $request->file('image')->getClientOriginalExtension();
@@ -122,13 +144,39 @@ class AccessoriesController extends Controller
 
         $request->file('image')->storeAs('public/' . $folder, $imageName);
 
-        $modelClass::create([
-            'name'        => $request->name,
-            'price'       => $request->price,
-            'description' => $request->description,
-            'image'       => $imageName,
-            'is_hidden'   => false,
-        ]);
+        // $modelClass::create([
+        //     'name'        => $request->name,
+        //     'price'       => $request->price,
+        //     'description' => $request->description,
+        //     'image'       => $imageName,
+        //     'is_hidden'   => false,
+        // ]);
+        $data = [
+            'name'      => $validatedData['name'],
+            'price'     => $validatedData['price'],
+            'image'     => $imageName,
+            'is_hidden' => false,
+        ];
+
+
+        //gắn thêm fiels tương ứng theo loại phụ kiện
+        switch ($type) {
+            case 'straps':
+                $data['material'] = $validatedData['material'];
+                $data['color']    = $validatedData['color'];
+                break;
+            case 'glasses':
+                $data['material']    = $validatedData['material'];
+                $data['color']       = $validatedData['color'];
+                $data['description'] = $validatedData['description'] ?? null;
+                $data['quantity']    = $validatedData['quantity'] ?? 0;
+                break;
+            case 'boxes':
+                $data['description'] = $validatedData['description'] ?? null;
+                break;  
+        }
+        $modelClass::create($data);
+
 
         return redirect()->route("admin.accessories.$type")
                          ->with('success', 'Thêm phụ kiện thành công!');

@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             btnFilterHidden.classList.toggle('active', filterOn);
             btnFilterHidden.textContent = filterOn
                 ? 'Tất cả sản phẩm'
-                : 'Các sản phẩm ẩn';
+                : 'Các sản phẩm ẩn/mới';
 
             // Lọc từng card sản phẩm
             document.querySelectorAll('.product-card').forEach(function (card) {

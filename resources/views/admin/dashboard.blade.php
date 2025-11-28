@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
     <link rel="stylesheet" href="/css/admin/nhapHang.css">
     <link rel="stylesheet" href="/css/admin/nhapHangPreview.css">
+    <link rel="stylesheet" href="{{ asset('css/admin/statistical.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {{-- Placeholder để child view có thể thêm CSS riêng --}}
     @yield('styles')
@@ -38,7 +39,6 @@
         </ul>
 
         <li class="header-user">
-
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>
         </li>
@@ -51,7 +51,7 @@
                 </form>
         </li>
 
-            
+
 
     </header>
 

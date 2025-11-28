@@ -1,0 +1,186 @@
+ /* 1. KHUNG BAO NGOÀI: Cố định chiều cao bằng màn hình trừ đi thanh menu trên */
+.dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    /* Giả sử thanh menu trên cao 70px. Bạn chỉnh số này cho vừa màn hình thực tế */
+    height: calc(100vh - 80px);
+    overflow: hidden; /* Không cho cuộn cả trang web */
+}
+
+/* 2. HEADER: Luôn đứng yên */
+.stats-header-fixed {
+    flex-shrink: 0; /* Không bị co lại */
+    background-color: #f8f9fc;
+    padding: 15px 20px;
+    z-index: 10;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Đổ bóng nhẹ ngăn cách với nội dung */
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+/* 3. NỘI DUNG BÊN DƯỚI: Tự động cuộn */
+.stats-content-scroll {
+    flex-grow: 1; /* Chiếm hết phần còn lại */
+    overflow-y: auto; /* Chỉ hiện thanh cuộn ở khu vực này */
+    padding: 20px;
+    scroll-behavior: smooth; /* Hiệu ứng trượt mượt */
+    background-color: #f1f3f9;
+}
+
+/* --- GIAO DIỆN THẺ CARD (Như cũ) --- */
+.stat-card-link { text-decoration: none; color: inherit; display: block; transition: 0.2s; }
+.stat-card-link:hover { transform: translateY(-3px); text-decoration: none; }
+
+.stat-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4e73df;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.stat-card h3 { font-size: 13px; color: #888; text-transform: uppercase; margin: 0; }
+.stat-card p { font-size: 18px; font-weight: bold; color: #333; margin: 2px 0 0 0; }
+.stat-icon { font-size: 24px; color: #d1d3e2; }
+
+/* Màu sắc */
+.border-blue { border-left-color: #4e73df; }
+.border-green { border-left-color: #1cc88a; }
+.border-cyan { border-left-color: #36b9cc; }
+.border-yellow { border-left-color: #f6c23e; }
+
+/* Section chi tiết */
+.detail-section {
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    min-height: 300px; /* Chiều cao tối thiểu để demo cuộn */
+}
+.section-title {
+    font-size: 18px; font-weight: bold; color: #4e73df;
+    border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;
+}
+
+/* --- CSS CHO PHẦN THỐNG KÊ ĐÁNH GIÁ (#sec-ratings) --- */
+
+/* 1. Thiết kế Card đẹp hơn (Shadow mềm & Bo góc) */
+#sec-ratings .card {
+    border: none;
+    border-radius: 12px; /* Bo góc mềm mại */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ */
+    transition: transform 0.2s;
+}
+
+#sec-ratings h6 {
+   font-size: 18px;
+   font-weight: 600;
+   color: #4e73df;
+}
+
+#sec-ratings .card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #f0f2f5;
+    padding: 15px 20px;
+    border-radius: 12px 12px 0 0; /* Chỉ bo 2 góc trên */
+}
+
+/* 2. Tùy chỉnh vùng chứa bảng (Scrollable Area) */
+.rating-table-container {
+    width: 100%;
+    max-height: 450px;
+    overflow-y: auto;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+}
+
+.rating-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+.rating-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+.rating-table-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+.rating-table-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* 3. Sticky Header (Cố định tiêu đề bảng khi cuộn) */
+.table-sticky-header th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fc; /* Màu nền xám nhạt trùng với theme */
+    color: #4e73df;
+    z-index: 10;
+    border-top: none;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* Bóng nhỏ dưới header để tách biệt */
+}
+
+/* 4. Cắt gọn tên sản phẩm (Text Truncate) */
+.product-name-truncate {
+    display: block;
+    max-width: 220px; /* Độ rộng tối đa của tên */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Hiện dấu ... nếu dài quá */
+    color: #5a5c69;
+    font-weight: 500;
+}
+
+/* 5. Hiệu ứng hover cho hàng trong bảng */
+#sec-ratings table tbody tr:hover {
+    background-color: #f8f9fc;
+}
+
+/* 6. Form điều khiển nhỏ gọn */
+.filter-label {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* --- CSS CHO BẢNG XẾP HẠNG --- */
+
+/* 1. Badge hiển thị số thứ tự (Rank) */
+.rank-badge {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #f1f3f9; /* Màu mặc định cho top 4 trở đi */
+    color: #858796;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* Màu riêng cho Top 3 */
+.rank-1 { background-color: #FFD700; color: #fff; box-shadow: 0 2px 4px rgba(255, 215, 0, 0.4); } /* Vàng */
+.rank-2 { background-color: #C0C0C0; color: #fff; } /* Bạc */
+.rank-3 { background-color: #CD7F32; color: #fff; } /* Đồng */
+
+/* 2. Badge hiển thị số lượng (Count Pill) */
+.count-pill {
+    background-color: #e8f0fe; /* Nền xanh rất nhạt */
+    color: #2c58c2; /* Chữ xanh đậm */
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* 3. Tinh chỉnh lại ô Select của form */
+.custom-select-sm {
+    height: calc(1.5em + 0.5rem + 2px);
+    font-size: 0.85rem;
+    border-color: #e3e6f0;
+}

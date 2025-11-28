@@ -14,7 +14,6 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\NhapHangController;
 use App\Http\Controllers\StatisticalController;
-use App\Http\Controllers\ImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +138,32 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
 });
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN CUSTOMERS
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+
+    // Trang danh sách + form thêm
+    Route::get('customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+
+    // Thêm khách hàng
+    Route::post('customers', [CustomerController::class, 'store'])->name('admin.customers.store');
+
+    // Reset mật khẩu về 123456
+    Route::post('customers/{customer}/reset-password', [CustomerController::class, 'resetPassword'])
+        ->name('admin.customers.reset-password');
+
+    // Vô hiệu hóa tài khoản
+    Route::post('customers/{customer}/toggle-active', [CustomerController::class, 'toggleActive'])
+        ->name('admin.customers.toggle-active');
+
+    // Xóa tài khoản
+    Route::delete('customers/{customer}', [CustomerController::class, 'destroy'])
+        ->name('admin.customers.destroy');
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -237,6 +262,11 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
 
+Route::get('/profile', [LoginAuthController::class, 'profile'])->name('profile');
+Route::post('/profile/update', [LoginAuthController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/change-password', [LoginAuthController::class, 'changePassword'])->name('profile.changePassword');
+
+
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
@@ -291,13 +321,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/nhap-hang/history', [ImportController::class, 'history']) ->name('import_history');
 });
 
+
+
+
+
 // Thống kê
 
 Route::get('/statistical', [StatisticalController::class, 'index'])
     ->name('admin.statistical');
-
-
-
-
 
 

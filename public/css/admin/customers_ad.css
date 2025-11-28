@@ -1,0 +1,214 @@
+/* ===================== KHUNG TRANG ===================== */
+
+.customer-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 60px 60px;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+}
+
+.customer-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    color: #2c3e50;
+}
+
+/* ===================== CARD GIỐNG PRODUCT ===================== */
+
+.card-customer,
+.customer-table-wrapper {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 18px 22px;
+    margin-bottom: 24px;
+}
+
+.card-header,
+.customer-table-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #2c3e50;
+}
+
+/* ===================== FORM THÊM KHÁCH HÀNG ===================== */
+
+.customer-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+}
+
+.customer-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1 1 220px;
+    min-width: 200px;
+}
+
+.customer-form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+.customer-form-group input,
+.customer-form-group select {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    outline: none;
+    box-sizing: border-box;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.customer-form-group input:focus,
+.customer-form-group select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 1px rgba(52,152,219,0.25);
+}
+
+/* ===================== BUTTON STYLE (THEO PALETTE ADMIN) ===================== */
+
+.btn {
+    display: inline-block;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease, opacity 0.15s;
+    text-decoration: none;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background-color: #8092a4;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+
+.btn-warning {
+    background-color: #f1c40f;
+}
+
+.btn-warning:hover {
+    background-color: #d4ac0d;
+}
+
+.btn-danger {
+    background-color: #c0392b;
+}
+
+.btn-danger:hover {
+    background-color: #e74c3c;
+}
+
+.btn-dark {
+    background-color: #2c3e50;
+}
+
+.btn-dark:hover {
+    background-color: #1f2d3a;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin: 0 2px;
+}
+
+.btn:hover {
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+.btn-success {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #27ae60;
+}
+
+/* ===================== BẢNG KHÁCH HÀNG ===================== */
+
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.customer-table thead {
+    background: #f5f6fa;
+}
+
+.customer-table th,
+.customer-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ececec;
+    text-align: left;
+}
+
+.customer-table th {
+    font-weight: 600;
+    color: #555;
+}
+
+.customer-table tbody tr:hover {
+    background: #fafafa;
+}
+
+/* ===================== BADGE & ALERT ===================== */
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.badge-success {
+    background: #e5f8ec;
+    color: #27ae60;
+}
+
+.badge-muted {
+    background: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.alert {
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.alert-success {
+    background: #eafaf1;
+    color: #1e824c;
+    border: 1px solid #b9e6c5;
+}
+
+.alert-danger {
+    background: #fdecea;
+    color: #c0392b;
+    border: 1px solid #f5b7b1;
+}

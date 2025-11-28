@@ -13,9 +13,10 @@
     <link rel="stylesheet" href="{{ asset('css/client/warranty.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/cart.css') }}">
 
-    @if (session('error'))
-        <meta name="login-error" content="1">
+    @if (session('login_error') || session('error') || $errors->any())
+    <meta name="login-error" content="1">
     @endif
+
     @if (session('register_error'))
     <meta name="register-error" content="1">
     @endif
@@ -156,7 +157,7 @@
                     <span class="user-name">{{ Auth::user()->name }}</span>
 
                     <ul class="dropdown-menu-user">
-                        <li><a href="#">Hồ sơ</a></li>
+                        <li><a href="{{ route('profile') }}">Hồ sơ</a></li>
                         <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
 
                     </ul>
@@ -237,7 +238,17 @@
                 sản phẩm 100% chính hãng, bảo hành chính hãng toàn quốc, dịch vụ giao hàng nhanh chóng
                 và đội ngũ tư vấn nhiệt tình để mang đến trải nghiệm mua sắm hoàn hảo nhất cho khách hàng.
             </p>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <h4 >Kết nối với chúng tôi</h4>
+                <div class="social-links" >
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
         </div>
+        
         <div class="right_footer">
             <h4>Liên hệ</h4>
             <p><i class="fa-solid fa-location-dot"></i> 123 Nguyễn Trãi, Thanh Xuân, Hà Nội</p>
@@ -248,13 +259,7 @@
             <p>Thứ 2 - Thứ 7: 8:00 - 21:30</p>
             <p>Chủ nhật & ngày lễ: 9:00 - 18:00</p>
 
-            <h4>Kết nối với chúng tôi</h4>
-            <div class="social-links">
-                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-                <a href="#"><i class="fa-brands fa-youtube"></i></a>
-            </div>
+            
         </div>
     </section>
 

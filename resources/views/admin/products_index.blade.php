@@ -42,7 +42,7 @@
             + Thêm sản phẩm mới
         </button> -->
         <button  id="btn-filter-hidden" class="btn btn-secondary">
-            * Hiện sản phẩm ẩn
+            Các sản phẩm ẩn/mới
         </button>
 
         <!-- ------------------------THÊM SP------------------------ -->

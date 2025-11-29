@@ -70,7 +70,7 @@ class LoginAuthController extends Controller
     }
 
     public function register(Request $request)
-    {
+p    {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|regex:/@gmail\.com$/i|unique:users,email',

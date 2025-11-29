@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin/product_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
-    <link rel="stylesheet" href="/css/admin/nhapHang.css">
-    <link rel="stylesheet" href="/css/admin/nhapHangPreview.css">
+    <link rel="stylesheet" href="{{ asset('css/admin/nhapHang.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/nhapHangPreview.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/statistical.css') }}">
     <link rel="stylesheet" href="/css/admin/importHistory.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">

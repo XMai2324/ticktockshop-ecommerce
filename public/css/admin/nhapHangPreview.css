@@ -76,8 +76,8 @@
 }
 
 .table-preview th {
-    background-color: #007bff;
-    color: white;
+    background-color: #007bff !important;
+    color: white !important;
     font-weight: 500;
 }
 

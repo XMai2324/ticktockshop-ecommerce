@@ -9,6 +9,8 @@
         <input type="date" name="to" value="{{ request('to') }}" class="form-control">
         <button type="submit" class="btn btn-primary">Lọc</button>
         <a href="{{ route('admin.import_history') }}" class="btn btn-primary">Reset</a>
+        <a href="{{ route('admin.nhapHang_index') }}" class="btn btn-secondary">Quay lại</a>
+
     </form>
 
     <table class="table table-bordered">

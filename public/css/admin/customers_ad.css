@@ -146,6 +146,21 @@
     background-color: #27ae60;
 }
 
+/* Ẩn mũi tên của select */
+#roleSelect {
+    appearance: none;          
+    -webkit-appearance: none;
+    -moz-appearance: none;     
+    background-image: none !important;
+    pointer-events: none;      
+    
+    /* THÊM CÁC DÒNG SAU ĐỂ CHỮ ĐẬM VÀ RÕ */
+    color: #333 !important;           /* Màu chữ đen đậm (hoặc #000) */
+    background-color: #fff !important;/* Nền trắng */
+    opacity: 1 !important;            /* Không cho làm mờ (quan trọng) */
+    -webkit-text-fill-color: #333;    /* Fix lỗi mờ trên Chrome/Safari */
+    border: 1px solid #ccc;           /* Giữ viền giống các ô khác */
+}
 /* ===================== BẢNG KHÁCH HÀNG ===================== */
 
 .customer-table {

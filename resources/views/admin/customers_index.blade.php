@@ -58,10 +58,10 @@
 
                 <div class="customer-form-group">
                     <label>Role</label>
-                    <select name="role">
-                        <option value="user">Khách hàng</option>
-                        <option value="admin">Admin</option>
+                    <select name="role" id="roleSelect" disabled>
+                        <option value="user" selected>Khách hàng</option>
                     </select>
+                    <input type="hidden" name="role" value="user">
                 </div>
             </div>
 
@@ -108,41 +108,48 @@
                             <span class="badge badge-muted">Vô hiệu</span>
                         @endif
                     </td>
+
+                    {{-- PHẦN ACTIONS ĐÃ SỬA Ở ĐÂY --}}
                     <td>
-                        <form action="{{ route('admin.customers.reset-password', $c->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            <button class="btn btn-warning btn-sm"
-                                onclick="return confirm('Reset mật khẩu về 123456?')">
-                                Reset
-                            </button>
-                        </form>
-
-                        {{-- Khóa / Mở tài khoản --}}
-                        <form action="{{ route('admin.customers.toggle-active', $c->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @if($c->is_active)
-                                {{-- Đang hoạt động -> hiện nút Khóa --}}
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Khóa tài khoản này?')">
-                                    Khóa
+                        @if($c->role !== 'admin')
+                            <form action="{{ route('admin.customers.reset-password', $c->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                <button class="btn btn-warning btn-sm"
+                                    onclick="return confirm('Reset mật khẩu về 123456?')">
+                                    Reset
                                 </button>
-                            @else
-                                {{-- Đang vô hiệu -> hiện nút Mở --}}
-                                <button class="btn btn-success btn-sm"
-                                    onclick="return confirm('Mở khóa (kích hoạt lại) tài khoản này?')">
-                                    Mở
-                                </button>
-                            @endif
-                        </form>
+                            </form>
 
-                        <form action="{{ route('admin.customers.destroy', $c->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-dark btn-sm"
-                                onclick="return confirm('Bạn chắc chắn muốn xóa khách hàng này?')">
-                                Xóa
-                            </button>
-                        </form>
+                            {{-- Khóa / Mở tài khoản --}}
+                            <form action="{{ route('admin.customers.toggle-active', $c->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @if($c->is_active)
+                                    {{-- Đang hoạt động -> hiện nút Khóa --}}
+                                    <button class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Khóa tài khoản này?')">
+                                        Khóa
+                                    </button>
+                                @else
+                                    {{-- Đang vô hiệu -> hiện nút Mở --}}
+                                    <button class="btn btn-success btn-sm"
+                                        onclick="return confirm('Mở khóa (kích hoạt lại) tài khoản này?')">
+                                        Mở
+                                    </button>
+                                @endif
+                            </form>
+
+                            <form action="{{ route('admin.customers.destroy', $c->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-dark btn-sm"
+                                    onclick="return confirm('Bạn chắc chắn muốn xóa khách hàng này?')">
+                                    Xóa
+                                </button>
+                            </form>
+                        @else
+                            {{-- Tài khoản admin: không cho thao tác, chỉ hiển thị nhãn --}}
+                            <span class="badge badge-muted">Tài khoản admin</span>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

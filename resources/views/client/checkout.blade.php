@@ -356,6 +356,7 @@
 
                     <div class="delivery-content-left-button" style="justify-content:flex-end; margin-top:20px;">
                         <a href="{{ url('/cart') }}" style="margin-right:auto;"><span>&#171;</span> Quay lại giỏ hàng</a>
+                        
                         <button type="submit" class="qr-payment"><span style="font-weight:bold;">THANH TOÁN</span></button>
                     </div>
 

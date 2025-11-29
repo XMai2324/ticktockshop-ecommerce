@@ -113,15 +113,24 @@ class VNPayController extends Controller
             ]);
             
     
-            // Lưu chi tiết sản phẩm
             foreach ($cartItems as $item) {
                 \App\Models\OrderItem::create([
                     'order_id'   => $order->id,
-                    'product_id' => $item['id'] ?? 0,
-                    'quantity'   => $item['qty'] ?? 0,
-                    'price'      => ($item['qty'] ?? 0) * ($item['price'] ?? 0),
+                    'product_id' => $item['id'],
+                    'quantity'   => $item['quantity'] ?? $item['qty'], // GIỎ HÀNG DÙNG KEY NÀO?
+                    'price'      => $item['price'], // đơn giá
                 ]);
             }
+             // Trừ tồn kho
+    $product = \App\Models\Product::find($item['id']);
+    if ($product) {
+        $product->decrement('quantity', $item['qty']);
+
+        if ($product->quantity < 0) {
+            $product->quantity = 0;
+            $product->save();
+        }
+    }
     
             // Lưu thanh toán
             \App\Models\Payment::create([

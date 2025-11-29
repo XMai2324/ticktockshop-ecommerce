@@ -21,9 +21,9 @@
                 <th>Tồn kho trước</th>
                 <th>Số lượng nhập</th>
                 <th>Tồn kho sau</th>
-                <th>Giá nhập trước</th>
-                <th>Giá nhập sau</th>
-                <th>Giá bán</th>
+                <th>Giá nhập trước (vnd)</th>
+                <th>Giá nhập sau (vnd)</th>
+                <th>Giá bán (vnd)</th>
             </tr>
         </thead>
         <tbody>

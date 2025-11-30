@@ -12,10 +12,11 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
+use App\Http\Controllers\StatisticalController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
-<<<<<<< HEAD
 | HOME + AUTH
 |--------------------------------------------------------------------------
 */
@@ -30,13 +31,28 @@ Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->n
 
 // Trang /
 
+// Trang /
 Route::get('/', function () {
-    if (auth()->check()) {
-        return auth()->user()->role === 'admin'
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('client.home');
+
+    // Nếu là admin thì vẫn về trang admin
+    if (auth()->check() && auth()->user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
     }
-    return view('client.home');
+
+    // Lấy sản phẩm bán chạy & sản phẩm mới (có cả ratings)
+    $bestSellers = Product::with('ratings')
+        ->where('is_hidden', 0)
+        ->orderByDesc('created_at')   // bạn thay logic bán chạy tại đây nếu muốn
+        ->take(8)
+        ->get();
+
+    $newProducts = Product::with('ratings')
+        ->where('is_hidden', 0)
+        ->orderByDesc('created_at')
+        ->take(8)
+        ->get();
+
+    return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');
 
 // logout
@@ -51,7 +67,21 @@ Route::post('/logout', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/dashboard', fn () => view('client.home'))->name('client.home');
+    Route::get('/dashboard', function () {
+
+        $bestSellers = Product::withCount('ratings')
+            ->where('is_hidden', 0)
+            ->orderByDesc('ratings_count')
+            ->take(8)
+            ->get();
+
+        $newProducts = Product::where('is_hidden', 0)
+            ->orderByDesc('created_at')
+            ->take(8)
+            ->get();
+
+        return view('client.home', compact('bestSellers', 'newProducts'));
+    })->name('client.home');
 });
 
 /*
@@ -243,7 +273,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
          ->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
 
-    
+
 // Ratings management (admin)
     Route::get('ratings', [RatingController::class, 'adminIndex'])
         ->middleware(['role:admin'])
@@ -278,3 +308,9 @@ Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.ret
 
 Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
 Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
+
+// Thống kê
+
+Route::get('/statistical', [StatisticalController::class, 'index'])
+    ->name('admin.statistical');
+

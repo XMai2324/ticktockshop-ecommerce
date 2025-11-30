@@ -38,7 +38,7 @@ class AccessoriesController extends Controller
         $type  = 'straps';
         $items = WatchStrap::where('is_hidden', false)->get();
 
-        return view('client.accessories_index', compact('items', 'type'));
+        return view('client.accessories', compact('items', 'type'));
     }
 
     public function showBoxes()
@@ -46,7 +46,7 @@ class AccessoriesController extends Controller
         $type  = 'boxes';
         $items = WatchBox::where('is_hidden', false)->get();
 
-        return view('client.accessories_index', compact('items', 'type'));
+        return view('client.accessories', compact('items', 'type'));
     }
 
     public function showGlasses()
@@ -54,7 +54,7 @@ class AccessoriesController extends Controller
         $type  = 'glasses';
         $items = WatchGlass::where('is_hidden', false)->get();
 
-        return view('client.accessories_index', compact('items', 'type'));
+        return view('client.accessories', compact('items', 'type'));
     }
 
     // Quick view: /accessories/quick-view/{type}/{id}

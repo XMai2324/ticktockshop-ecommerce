@@ -2,7 +2,7 @@
 @extends('client.home')
 
 @section('title')
-  {{ $product->name }} - TickTock Shop
+    {{ $product->name }} - TickTock Shop
 @endsection
 
 @php
@@ -208,7 +208,7 @@
                                         {!! str_repeat('★', 1) !!}
                                     </span>
                                     <span class="rating-text" id="btn-show-reviews">
-                                        Đánh giá sản phẩm ({{ $product->ratings->count() }})  >
+                                        Đánh giá sản phẩm ({{ $product->ratings->count() }}) >
                                     </span>
                                 </div>
                             </div>
@@ -233,11 +233,29 @@
                                         }
                                     @endphp
                                     <div class="product-page-right-content-item">
-                                        <a href="{{ route('product.detail', ['product' => $r->slug]) }}" class="product-card">
+                                        <a href="{{ route('product.detail', ['product' => $r->slug ?? $r->id]) }}"
+                                            class="product-card">
                                             <img src="{{ asset('storage/' . $rf . '/' . $r->image) }}"
                                                 alt="{{ $r->name }}">
                                             <h2 class="product-name">{{ $r->name }}</h2>
                                             <p>{{ number_format($r->price, 0, ',', '.') }}<sup>đ</sup></p>
+                                            {{-- Hiển thị đánh giá trung bình --}}
+                                            @php
+                                                $avg = $product->avg_rating ?? 0;
+                                                $count = $product->rating_count ?? 0;
+                                            @endphp
+
+                                            @if ($count > 0)
+                                                <div class="product-rating">
+                                                    <span class="stars">
+                                                        {!! str_repeat('★', floor($avg)) !!}
+                                                        {!! str_repeat('☆', 5 - floor($avg)) !!}
+                                                    </span>
+                                                    <span class="rating-number">{{ $avg }}/5</span>
+                                                </div>
+                                            @else
+                                                <div class="product-rating no-rating">Chưa có đánh giá</div>
+                                            @endif
                                         </a>
                                     </div>
                                 @endforeach

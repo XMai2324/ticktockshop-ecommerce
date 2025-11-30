@@ -77,7 +77,7 @@
 
     <div class="header_menu">
             <li>
-                <a href="">THƯƠNG HIỆU</a>
+                <a href="{{ route('home') }}">THƯƠNG HIỆU</a>
                 <ul class="sub_TH">
                     <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
                     <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
@@ -156,6 +156,7 @@
                     <span class="user-name">{{ Auth::user()->name }}</span>
 
                     <ul class="dropdown-menu-user">
+                        <li><a href="#">Hồ sơ</a></li>
                         <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
 
                     </ul>
@@ -218,8 +219,181 @@
     </section>
 
 
-    <main style="margin-top: 100px">
-        @yield('content')
+   <main style="margin-top: 100px">
+    {{-- Chỉ home (hoặc những trang truyền biến này) mới hiện 2 section --}}
+    @isset($bestSellers)
+        <!-- SẢN PHẨM BÁN CHẠY -->
+        <section class="home-section">
+            <h2 class="home-section-title title-premium">SẢN PHẨM BÁN CHẠY</h2>
+            <div class="slider-container">
+                {{-- Mũi tên bên trái --}}
+                <button class="slide-arrow left" data-target="bestseller-slider">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <div class="slider-wrapper">
+                    <div class="product-slider" id="bestseller-slider">
+                        @forelse ($bestSellers as $product)
+                            <div class="product-card">
+                                <a href="{{ route('product.detail', $product->slug) }}" class="product-image-wrap">
+                                    @php
+                                        $folder = 'Watch/';
+
+                                        if ($product->category->name === 'Nữ') {
+                                            $folder .= 'Watch_nu/';
+                                        } elseif ($product->category->name === 'Nam') {
+                                            $folder .= 'Watch_nam/';
+                                        } elseif ($product->category->name === 'Cặp đôi') {
+                                            $folder .= 'Watch_cap/';
+                                        }
+                                    @endphp
+                                    <img src="{{ asset('storage/' . $folder . $product->image) }}"
+                                        alt="{{ $product->name }}">
+                                </a>
+                                <div class="product-info">
+                                    <h3 class="product-name">
+                                        <a href="{{ route('product.detail', $product->slug) }}">
+                                            {{ $product->name }}
+                                        </a>
+                                    </h3>
+
+                                    <p class="product-price">
+                                        {{ number_format($product->price, 0, ',', '.') }}₫
+                                    </p>
+
+                                    {{-- RATING: dùng dữ liệu giống popup --}}
+                                    @php
+                                        $avgRating = round($product->ratings->avg('rating') ?? 0, 1);
+                                        $fullStars = floor($avgRating);
+                                        $hasHalf   = ($avgRating - $fullStars) >= 0.5;
+                                    @endphp
+
+                                    <div class="product-rating">
+                                        {{-- sao đầy --}}
+                                        @for ($i = 1; $i <= $fullStars; $i++)
+                                            <i class="fa-solid fa-star star-full"></i>
+                                        @endfor
+
+                                        {{-- nửa sao --}}
+                                        @if ($hasHalf)
+                                            <i class="fa-solid fa-star-half-stroke star-full"></i>
+                                        @endif
+
+                                        {{-- sao trống còn lại --}}
+                                        @for ($i = 1; $i <= (5 - $fullStars - ($hasHalf ? 1 : 0)); $i++)
+                                            <i class="fa-regular fa-star star-empty"></i>
+                                        @endfor
+
+                                        <span class="rating-text">{{ $avgRating }}/5</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <a href="{{ route('product.detail', $product->slug) }}" class="btn-primary btn-view-product">
+                                            Xem sản phẩm
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <p>Hiện chưa có sản phẩm bán chạy.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Mũi tên bên phải --}}
+                <button class="slide-arrow right" data-target="bestseller-slider">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SẢN PHẨM MỚI -->
+        <section class="home-section">
+            <h2 class="home-section-title title-premium">SẢN PHẨM MỚI</h2>
+            <div class="slider-container">
+                {{-- Mũi tên bên trái --}}
+                <button class="slide-arrow left" data-target="new-slider">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+
+                <div class="slider-wrapper">
+                    <div class="product-slider" id="new-slider">
+                        @forelse ($newProducts as $product)
+                            <div class="product-card">
+                                <a href="{{ route('product.detail', $product->slug) }}" class="product-image-wrap">
+                                    @php
+                                        $folder = 'Watch/';
+
+                                        if ($product->category->name === 'Nữ') {
+                                            $folder .= 'Watch_nu/';
+                                        } elseif ($product->category->name === 'Nam') {
+                                            $folder .= 'Watch_nam/';
+                                        } elseif ($product->category->name === 'Cặp đôi') {
+                                            $folder .= 'Watch_cap/';
+                                        }
+                                    @endphp
+
+                                    <img src="{{ asset('storage/' . $folder . $product->image) }}"
+                                        alt="{{ $product->name }}">
+                                </a>
+                                <div class="product-info">
+                                    <h3 class="product-name">
+                                        <a href="{{ route('product.detail', $product->slug) }}">
+                                            {{ $product->name }}
+                                        </a>
+                                    </h3>
+
+                                    <p class="product-price">
+                                        {{ number_format($product->price, 0, ',', '.') }}₫
+                                    </p>
+
+                                    {{-- RATING: dùng dữ liệu giống popup --}}
+                                    @php
+                                        $avgRating = round($product->ratings->avg('rating') ?? 0, 1);
+                                        $fullStars = floor($avgRating);
+                                        $hasHalf   = ($avgRating - $fullStars) >= 0.5;
+                                    @endphp
+
+                                    <div class="product-rating">
+                                        {{-- sao đầy --}}
+                                        @for ($i = 1; $i <= $fullStars; $i++)
+                                            <i class="fa-solid fa-star star-full"></i>
+                                        @endfor
+
+                                        {{-- nửa sao --}}
+                                        @if ($hasHalf)
+                                            <i class="fa-solid fa-star-half-stroke star-full"></i>
+                                        @endif
+
+                                        {{-- sao trống còn lại --}}
+                                        @for ($i = 1; $i <= (5 - $fullStars - ($hasHalf ? 1 : 0)); $i++)
+                                            <i class="fa-regular fa-star star-empty"></i>
+                                        @endfor
+
+                                        <span class="rating-text">{{ $avgRating }}/5</span>
+                                    </div>
+                                    <div class="product-actions">
+                                        <a href="{{ route('product.detail', $product->slug) }}" class="btn-primary btn-view-product">
+                                            Xem sản phẩm
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <p>Hiện chưa có sản phẩm mới.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                {{-- Mũi tên bên phải --}}
+                <button class="slide-arrow right" data-target="new-slider">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+    @endisset
+
+    {{-- Nội dung các page khác vẫn dùng layout này --}}
+    @yield('content')
     </main>
 
     <section class="footer">

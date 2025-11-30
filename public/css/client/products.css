@@ -316,6 +316,57 @@ details[open] summary::after {
   line-height: 1.6;
 }
 
+/* rating*/
+.review-details summary {
+    cursor: pointer;
+    font-size: 1epx;
+    font-weight: 600;
+    padding: 10px 0;
+}
+
+.review-panel {
+    margin-top: 10px;
+}
+
+.review-list-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.review-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.review-header .stars {
+    color: #f5b301;
+    font-size: 18px;
+}
+
+.admin-response {
+    background: #eef6ff;
+    padding: 10px;
+    border-left: 4px solid #0d6efd;
+    margin-top: 8px;
+    border-radius: 4px;
+}
+
+.review-time {
+    font-size: 13px;
+    color: #777;
+}
+
+
 /* Related product section */
 .related-products {
   margin-top: 50px;
@@ -455,3 +506,65 @@ details[open] summary::after {
     font-size: 22px;
   }
 }
+
+/* Rating on product*/
+.product-rating {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+}
+
+.product-rating .stars {
+    color: #ffb400;
+    font-size: 1.1rem;
+}
+
+.product-rating .rating-number {
+    font-weight: bold;
+    color: #333;
+}
+
+.product-rating .rating-count {
+    color: #666;
+    font-size: 12px;
+}
+
+.product-rating.no-rating {
+    margin-top: 4px;
+    color: #aaa;
+    font-size: 12px;
+}
+
+/* Product rating summary on product detail page */
+ .product-rating-summary {
+    margin: 15px 0;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.product-rating-summary:hover {
+    cursor: pointer;
+}
+.product-rating-summary .avg-rating {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000000;
+    margin-right: 3px;
+}
+
+.product-rating-summary .stars {
+    color:  #ffb400;
+    font-size: 28px;
+    letter-spacing: 1px;
+    margin-right: 5px;
+}
+
+.product-rating-summary .rating-text {
+    color: #000000;
+    font-size: 16px;
+    font-weight: 500;
+}
+

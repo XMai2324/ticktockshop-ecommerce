@@ -13,5 +13,9 @@ class WatchBox extends Model
         'image',
         'description',
         'price',
+        'is_hidden',
+    ];
+    protected $casts = [
+        'is_hidden' => 'boolean',
     ];
 }

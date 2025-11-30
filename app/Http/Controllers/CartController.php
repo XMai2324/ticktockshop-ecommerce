@@ -107,6 +107,7 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Đã xoá sản phẩm khỏi giỏ hàng');
     }
 
+
     // CẬP NHẬT SL – hỗ trợ cả quantity & qty, trả JSON số thuần
     public function update(Request $request)
     {
@@ -144,6 +145,7 @@ class CartController extends Controller
             'ok'          => true,
         ]);
     }
+
 
     // ===== Helpers =====
     private function totals(array $cart): array

@@ -9,16 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            // Tăng lên 12,2 → tối đa 9,999,999,999.99
-            $table->decimal('price', 12, 2)->change();
+            $table->json('images')->nullable()->after('image');
         });
     }
 
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            // Quay lại 10,2 nếu rollback
-            $table->decimal('price', 10, 2)->change();
+            $table->dropColumn('images');
         });
     }
 };

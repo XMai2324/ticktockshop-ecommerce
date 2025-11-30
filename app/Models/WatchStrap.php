@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class WatchStrap extends Model
 {
-    protected $fillable = ['name', 'material', 'color', 'price'];
-
+    protected $table = 'watch_straps';
+    protected $fillable = ['name', 'material', 'color','image', 'price', 'is_hidden'];
+    protected $casts = [
+        'is_hidden' => 'boolean',
+    ];
 }

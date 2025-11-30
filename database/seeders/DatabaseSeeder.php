@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Promotion;
+use App\Models\Rating;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,8 +35,10 @@ class DatabaseSeeder extends Seeder
             WatchGlassesSeeder::class,
             OrdersSeeder::class,
             OrderItemsSeeder::class,
+            RatingsSeeder::class,
             WarrantiesSeeder::class,
             PromotionSeeder::class,
         ]);
     }
 }
+?>

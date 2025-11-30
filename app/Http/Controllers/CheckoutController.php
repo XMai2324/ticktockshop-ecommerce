@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use App\Models\Promotion;
+use App\Models\Promotion;;
+use App\Models\Payment;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -24,23 +27,70 @@ class CheckoutController extends Controller
         ));
     }
 
-    // POST /checkout
-    public function placeOrder(Request $request)
-    {
-        $data = $request->validate([
-            'fullname'       => ['required','string','max:255'],
-            'phone'          => ['required','string','max:20'],
-            'email'          => ['required','email'],
-            'province'       => ['required','string','max:255'],
-            'district'       => ['required','string','max:255'],
-            'address'        => ['required','string','max:500'],
-            'payment_method' => ['required','in:cash,bank'],
-        ]);
 
-        // TODO: lưu đơn hàng tại đây
+   // POST /checkout
+   public function placeOrder(Request $request)
+   {
 
-        return redirect()->route('checkout')->with('success', 'Đặt hàng thành công!');
-    }
+
+       $data = $request->validate([
+           'fullname'       => ['required','string','max:255'],
+           'phone'          => ['required','string','max:20'],
+           'email'          => ['required','email'],
+           'province'       => ['required','string','max:255'],
+           'district'       => ['required','string','max:255'],
+           'address'        => ['required','string','max:500'],
+           'payment_method' => ['required','in:cash,bank'],
+       ]);
+       session(['checkout_info' => $request->only(['fullname','phone','email','address','district','province'])]);
+       // 1. Lấy thông tin giỏ hàng từ session
+       $cartItems = $this->normalizeCart(session('cart', []));
+
+
+       // 2. Tính tổng tiền (dựa trên cartItems)
+       $grandTotal = 0;
+       foreach ($cartItems as $item) {
+           $grandTotal += $item['qty'] * $item['price'];
+       }
+
+       // 3. Lưu đơn hàng (theo cấu trúc bảng orders hiện tại)
+       $order = Order::create([
+           'user_id'       => auth()->id() ?? null,
+           'customer_name' => $data['fullname'],
+           'phone'         => $data['phone'],
+           'address'       => $data['address'],
+           'total_price'   => $grandTotal,
+           'status'        => 'pending',
+       ]);
+
+       // 4. Lưu chi tiết sản phẩm vào order_items
+       foreach ($cartItems as $item) {
+           OrderItem::create([
+               'order_id'   => $order->id,
+               'product_id' => $item['id'],   // id sản phẩm
+               'quantity'   => $item['qty'],
+               'price'      => $item['qty'] * $item['price'], // tổng tiền item
+           ]);
+       }
+   // ✅ 5. Lưu thông tin thanh toán
+Payment::create([
+    'order_id'        => $order->id,
+    'method'          => $data['payment_method'], // cash or bank
+    'status' => ($data['payment_method'] === 'cash') ? 'paid' : 'pending',
+
+    'transaction_code' => ($data['payment_method'] == 'bank')
+    ? 'PAY' . strtoupper(Str::random(10))
+    : null,
+
+    'payment_date'    => now(),
+]);
+       // 5. Xóa giỏ hàng & coupon trong session
+       session()->forget(['cart','coupon']);
+
+       return redirect()->route('checkout')->with('success', 'Đặt hàng thành công!');
+   }
+
+
 
     // GET /coupons/available - ai cũng xem được
     public function availableCoupons(Request $request)
@@ -135,25 +185,46 @@ class CheckoutController extends Controller
         $shipping = $this->shippingFee();
         $grand    = max(0, $subtotal + $shipping);
 
+        $order = Order::create([
+            ...$data,
+            'subtotal'    => $subtotal,
+            'shipping'    => $shipping,
+            'discount'    => $discount,
+            'grand_total' => $grand,
+        ]);
+        // 2. Lưu chi tiết sản phẩm
+    foreach ($cartItems as $item) {
+        OrderItem::create([
+            'order_id'     => $order->id,
+            'product_name' => $item['name'],
+            'quantity'     => $item['qty'],
+            'price'        => $item['price'],
+            'line_total'   => $item['qty'] * $item['price'],
+        ]);
+    }
+    session()->forget(['cart','coupon']);
         return response()->json(['grand_total' => (int) $grand]);
     }
 
     /* ================= Helpers ================= */
-
     private function normalizeCart(array $raw): array
     {
         return collect($raw)->map(function ($row) {
+            $id    = is_array($row) ? ($row['id'] ?? null) : ($row->id ?? null);
             $name  = is_array($row) ? ($row['name'] ?? '') : ($row->name ?? '');
             $qty   = is_array($row) ? ($row['qty'] ?? ($row['quantity'] ?? 1))
                                     : ($row->qty ?? ($row->quantity ?? 1));
             $price = is_array($row) ? ($row['price'] ?? 0) : ($row->price ?? 0);
+
             return [
+                'id'    => (int) $id,              // 👈 bổ sung id
                 'name'  => (string) $name,
                 'qty'   => (int) $qty,
                 'price' => (int) $price,
             ];
         })->values()->all();
     }
+
 
     private function cartSubtotal(array $items): int
     {
@@ -186,4 +257,5 @@ class CheckoutController extends Controller
             ->orderBy('end_at')
             ->get(['id','code','name','type','value','max_discount','min_order_value','start_at','end_at']);
     }
+
 }

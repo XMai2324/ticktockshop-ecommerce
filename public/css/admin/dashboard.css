@@ -1,141 +1,105 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+/* HEADER layout */
+header{
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:999;
+  height:120px; 
+  padding:12px 50px;
+  display:flex;
+  align-items:center;
+  gap:24px;
+  background:#afbbc5;
 }
 
-a {
-    text-decoration: none;
-    color: black;
-}
-header {
-    display: flex;
-    justify-content: space-between;
-    list-style: none;
-    padding: 12px 50px ;
-    height: 95px;
-    width: 100%;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    background-color: #afbbc5;
-}
 header.sticky{
-    background-color: white;
+  background:#fff;
 }
 
-
-.logo {
-    flex: 1;
-    
+.logo img{
+    height:95px;
+    display:block;
 }
 
-.header_menu {
-    flex: 3;
-    display: flex;
+/* MENU giữa */
+.header_menu{
+  flex:1 1 auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.header_menu > li{
+    position:relative; }
 
-}
-.header_menu > li {
-    padding: 0 12px;
-    position: relative;
-}
-.header_menu > li:hover .sub_menu {
-    visibility: visible;
-    top: 30px;
-}
-
-.header_menu > li a {
-    font-weight: bold;
-    display: block;
-    line-height: 25px;
-}
-
-.sub_menu {
-    position: absolute;
-    list-style: none;
-    padding: 10px 12px;
-    min-width: max-content; /* Chiều rộng tự động theo độ dài chữ */
-    border-radius: 8px; /* Bo góc */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Đổ bóng */
-    visibility: hidden;
-    top: 50px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    transition: all 0.3s ease;
-    z-index: 999;
-}
-.sub_menu > li a{
-    font-size: 15px;
-    font-weight: 600;
-    color: #333;
-    padding: 8px 12px;
-    display: block;
-    white-space: nowrap;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-
-}
-.sub_menu > li a:hover{
-    background-color: #ededed;
-}
+.header_menu > li > a{
+    font-weight:700;
+    line-height:25px;
+    display:block; padding:8px 10px; }
 
 
+/* USER + LOGOUT bên phải (giữ nguyên HTML của Anh) */
+.header_other{
+  margin-left:auto;               /* đẩy sát phải */
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+/* Đẩy cụm sang phải và canh giữa theo chiều dọc */
 .header_other {
-    flex: 1;
     display: flex;
+    align-items: center;
+    gap: 20px; /* khoảng cách giữa user và logout */
 }
-.header_other > li {
-    padding: 0 12px;
 
+.header-user {
+    display: flex;
+    align-items: center;   /* căn icon + text cùng hàng */
+    gap: 6px;              /* khoảng cách icon – text */
 }
-.header_other > li input {
-    width: 100%;
+
+.header-user i {
+    font-size: 18px;
+    color: #333;
+}
+
+.user-name {
+    font-size: 16px;
+    color: #333;
+}
+
+.logout-item .logout-btn {
+    background: none;
     border: none;
-    border-bottom: 1px solid #333;
-    position: relative;
-    background-color: transparent;
-    outline: none;
+    cursor: pointer;
+}
 
+.logout-item i {
+    font-size: 18px;
 }
-.header_other > li input:focus ~ .search-history
-{
-    display: block;
-}
-.header_other > li:first-child  {
-    position: relative;
-}
-.header_other > li:first-child i {
-    position: absolute;
-    right: 10px;
-}
-.header_other .search-history {
-    position:absolute;
-    top: 22px;    
-    background-color: whitesmoke;
-    border-radius: 3px;
-    box-shadow: 0 0 3px;
-    z-index: 999;
-    display: none;
 
+
+.logout-btn{
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #555;
+  padding: 4px 6px;
+  transition: color .2s, transform .2s;
 }
-.search-history .search-heading {
-    margin: 6px 6px;
-    font-size: 14px;
-    font-weight: lighter;
-    
-}
-.search-history-list {
-    list-style: none;
-    padding-left:0 ;
-    padding: 0 12px 10px 12px;
-    line-height: 25px;
-}
-.item:hover {
-    background-color: #dcdcdc;
-}
+.logout-btn:hover{ color:#e74c3c; transform:scale(1.05); }
+
+/* Khoảng trống nội dung vì header fixed */
+main{ margin-top:100px; }
+
 
 .aspect-ratio-169 {
     display: block;
@@ -233,7 +197,7 @@ header.sticky{
 
 .register-link span {
     /* chữ nằm cùng 1 dòng */
-  white-space: nowrap;       
+  white-space: nowrap;
 }
 
 .register-link .dk {
@@ -297,7 +261,7 @@ header.sticky{
     background-color: #f7f7f7;
 
 } */
-.sidebar-brand {
+.sidebar-brand, .sidebar_acc {
     width: 220px;
     padding: 20px;
     background-color: #f7f7f7;
@@ -310,24 +274,25 @@ header.sticky{
     background-clip: padding-box;
 }
 
-.sidebar-brand h3 {
+
+.sidebar-brand h3, .sidebar_acc h3 {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 15px;
     color: #333;
 }
 
-.sidebar-brand ul {
+.sidebar-brand ul, .sidebar_acc ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.sidebar-brand li {
+.sidebar-brand li, .sidebar_acc li {
     margin-bottom: 12px;
 }
 
-.sidebar-brand a {
+.sidebar-brand a, .sidebar_acc a {
     display: block;
     padding: 8px 12px;
     border-radius: 6px;
@@ -336,12 +301,12 @@ header.sticky{
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.sidebar-brand a:hover {
+.sidebar-brand a:hover, .sidebar_acc a:hover {
     background-color: #e2e2e2;
     color: #000;
 }
 
-.sidebar-brand a.active {
+.sidebar-brand a.active, .sidebar_acc a.active {
     background-color: #8092a4;
     color: #fff;
     font-weight: bold;
@@ -361,6 +326,19 @@ header.sticky{
 
 .btn-create-product:hover {
     background-color: #218838;
+}
+
+.btn-accessory-edit {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    color: #ffffff;
+    background-color: #42b65b;
 }
 
 
@@ -550,4 +528,37 @@ footer{
 }
 .footer-bottom{
     margin: 20px 0;
+}
+
+.product-card.product-hidden {
+    opacity: 0.4;
+    position: relative;
+}
+
+.product-card.product-hidden::after {
+    content: "ĐANG ẨN";
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 2px 6px;
+    font-size: 15px;
+    background: #d63220;
+    color: #ffffff;
+    border-radius: 4px;
+}
+.accessory-hidden {
+    opacity: 0.4;
+    filter: grayscale(60%);
+}
+.hidden-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #d6336c;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
 }

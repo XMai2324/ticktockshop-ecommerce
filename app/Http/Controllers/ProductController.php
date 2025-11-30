@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Rating;
+use App\Models\Order;
 
 class ProductController extends Controller
 {
@@ -16,14 +19,15 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands     = Brand::all();
-
         $categorySlug = $request->input('category');
         $brandSlug    = $request->input('brand');
         $sort         = $request->input('sort');
         $priceRange   = $request->input('price_range');
         $keyword      = $request->input('keyword');
 
-        $query = Product::query();
+
+        $query = Product::with(['ratings', 'brand', 'category'])
+        ->where('is_hidden', false);
 
         $currentCategory = null;
         $currentBrand    = null;
@@ -44,37 +48,82 @@ class ProductController extends Controller
             }
         }
 
-        // ===== Lọc theo từ khóa =====
+        // ===== Lọc theo từ khóa (brand + category + tên SP) =====
         if ($keyword) {
-            $slugKeyword = Str::slug(Str::ascii(mb_strtolower($keyword)));
+            $kw          = trim($keyword);
+            $slugKeyword = Str::slug(Str::ascii(mb_strtolower($kw))); // "rolex-cap"
+            $tokens      = array_filter(explode('-', $slugKeyword));  // ["rolex","cap"]
 
-            $allBrands = $brands->keyBy(fn($b) => Str::slug(Str::ascii(mb_strtolower($b->name))));
-            $allCategories = $categories->keyBy(fn($c) => Str::slug(Str::ascii(mb_strtolower($c->name))));
+            $brandIdsFromKeyword    = [];
+            $categoryIdsFromKeyword = [];
+            $leftoverTokens         = [];
 
-            foreach ($allBrands as $slug => $brand) {
-                if (Str::contains($slugKeyword, $slug)) {
-                    $currentBrand = $brand;
-                    $query->where('brand_id', $brand->id);
-                    break;
-                }
-            }
+            foreach ($tokens as $token) {
+                $matched = false;
 
-            foreach ($allCategories as $slug => $category) {
-                $slugWords = explode('-', $slug);
-                foreach ($slugWords as $word) {
-                    if (Str::contains($slugKeyword, $word)) {
-                        $currentCategory = $category;
-                        $query->where('category_id', $category->id);
-                        break 2;
+                // --- Thử khớp BRAND ---
+                foreach ($brands as $brand) {
+                    $brandSlug = Str::slug(Str::ascii(mb_strtolower($brand->name))); // "rolex"
+
+                    // token xuất hiện trong slug brand (vd: "role" cũng được, nhưng trường hợp bạn là "rolex")
+                    if (Str::contains($brandSlug, $token)) {
+                        $brandIdsFromKeyword[] = $brand->id;
+                        if (!$currentBrand) {
+                            $currentBrand = $brand;
+                        }
+                        $matched = true;
+                        break;
                     }
                 }
+
+                if ($matched) {
+                    continue;
+                }
+
+                // --- Thử khớp CATEGORY ---
+                foreach ($categories as $category) {
+                    $catSlug  = Str::slug(Str::ascii(mb_strtolower($category->name))); // "cap-doi"
+                    $catWords = explode('-', $catSlug);                                 // ["cap","doi"]
+
+                    // token khớp 1 từ trong slug, vd "cap" khớp "cap-doi"
+                    if (in_array($token, $catWords, true) || Str::contains($catSlug, $token)) {
+                        $categoryIdsFromKeyword[] = $category->id;
+                        if (!$currentCategory) {
+                            $currentCategory = $category;
+                        }
+                        $matched = true;
+                        break;
+                    }
+                }
+
+                // Không phải brand / category -> dùng để search theo tên sản phẩm
+                if (!$matched) {
+                    $leftoverTokens[] = $token;
+                }
             }
 
-            if (!$currentBrand && !$currentCategory) {
-                $query->where('name', 'like', '%' . $keyword . '%');
-            }
-        }
+            $brandIdsFromKeyword    = array_unique($brandIdsFromKeyword);
+            $categoryIdsFromKeyword = array_unique($categoryIdsFromKeyword);
 
+            // ❗ LUÔN siết brand nếu keyword có brand (bất kể URL có ?brand hay không)
+            if (!empty($brandIdsFromKeyword)) {
+                $query->whereIn('brand_id', $brandIdsFromKeyword);
+            }
+
+            // ❗ LUÔN siết category nếu keyword có category
+            if (!empty($categoryIdsFromKeyword)) {
+                $query->whereIn('category_id', $categoryIdsFromKeyword);
+            }
+
+            // Phần còn lại của keyword -> tìm trong tên sản phẩm
+            if (!empty($leftoverTokens)) {
+                $query->where(function ($q) use ($leftoverTokens) {
+                    foreach ($leftoverTokens as $tk) {
+                        $q->where('name', 'like', '%' . $tk . '%');
+                    }
+                });
+            }
+        }   
         // ===== Lọc theo khoảng giá =====
         if ($priceRange && str_contains($priceRange, '-')) {
             [$min, $max] = explode('-', $priceRange, 2);
@@ -88,6 +137,7 @@ class ProductController extends Controller
             $query->orderBy('price', 'desc');
         }
 
+        // LẤY SẢN PHẨM Ở ĐÂY
         $products = $query->paginate(8);
 
         return view('client.products', [
@@ -102,13 +152,15 @@ class ProductController extends Controller
         ]);
     }
 
+
     // ================== HIỂN THỊ THEO DANH MỤC ==================
     public function byCategory(Request $request, string $slug)
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
         $query = Product::with(['brand', 'category'])
-            ->where('category_id', $category->id);
+            ->where('category_id', $category->id)
+            ->where('is_hidden', false);
 
         // Lọc theo khoảng giá
         $priceRange = $request->input('price_range');
@@ -151,6 +203,7 @@ class ProductController extends Controller
         // Lấy sản phẩm liên quan
         $related = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
+            ->where('is_hidden', false)
             ->latest('id')
             ->take(8)
             ->get();
@@ -185,8 +238,14 @@ class ProductController extends Controller
             'price'       => 'required|numeric|min:0',
             'brand_id'    => 'required|exists:brands,id',
             'category_id' => 'required|exists:categories,id',
-            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'description' => 'nullable|string',
+            'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'movement'         => 'nullable|string|max:255',
+            'case_material'    => 'nullable|string|max:255',
+            'strap_material'   => 'nullable|string|max:255',
+            'glass_material'   => 'nullable|string|max:255',
+            'diameter'         => 'nullable|string|max:255',
+            'water_resistance' => 'nullable|string|max:255',
         ]);
 
         $category = Category::findOrFail($request->category_id);
@@ -216,6 +275,13 @@ class ProductController extends Controller
             'description' => $request->description,
             'image'       => $imageName,
             'slug'        => $productSlug,
+            'is_hidden'   => false, // hoặc 0
+            'movement'         => $request->movement,
+            'case_material'    => $request->case_material,
+            'strap_material'   => $request->strap_material,
+            'glass_material'   => $request->glass_material,
+            'diameter'         => $request->diameter,
+            'water_resistance' => $request->water_resistance,
         ]);
 
         return redirect()->route('admin.products_index')->with('success', 'Thêm sản phẩm thành công!');
@@ -233,6 +299,12 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'movement'         => $request->movement,
+            'case_material'    => $request->case_material,
+            'strap_material'   => $request->strap_material,
+            'glass_material'   => $request->glass_material,
+            'diameter'         => $request->diameter,
+            'water_resistance' => $request->water_resistance,
         ]);
 
         $product->fill([
@@ -242,6 +314,12 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
             'description' => $request->description,
             'slug'        => Str::slug($request->name),
+            'movement'         => $request->movement,
+            'case_material'    => $request->case_material,
+            'strap_material'   => $request->strap_material,
+            'glass_material'   => $request->glass_material,
+            'diameter'         => $request->diameter,
+            'water_resistance' => $request->water_resistance,
         ]);
 
         if ($request->hasFile('image')) {
@@ -285,4 +363,21 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products_index')->with('success', 'Đã xoá sản phẩm thành công!');
     }
+
+
+    public function toggleHidden($id)
+    {
+        $product = Product::findOrFail($id);
+
+        // Đảo trạng thái
+        $product->is_hidden = ! $product->is_hidden;
+        $product->save();
+
+        return response()->json([
+            'hidden' => $product->is_hidden,
+        ]);
+    }
+
+
+    
 }

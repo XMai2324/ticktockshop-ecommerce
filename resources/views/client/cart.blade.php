@@ -262,36 +262,39 @@
 </section>
 
 <section class="footer">
-    <div class="footer-container">
-        <p>Tải ứng dụng TickTock</p>
-        <div class="app-google">
-            <a href=""><img src="{{ asset('storage/appstore.jpg')}}" alt=""></a>
-            <a href=""><img src="{{ asset('storage/googleplay.jpg')}}" alt=""></a>
+        <div class="left_footer">
+            <div class="footer-logo">
+                <img src="{{ asset('storage/logo2.png')}}" alt="footer-logo">
+            </div>
+            <p><strong>TickTock Shop</strong> là hệ thống cửa hàng đồng hồ chính hãng tại Việt Nam, 
+                chuyên cung cấp các thương hiệu nổi tiếng thế giới như Casio, Seiko, Citizen, 
+                Rolex, Rado cùng nhiều phụ kiện đi kèm (dây đeo, hộp đựng, kính cường lực).
+            </p>
+            <p>
+                Với phương châm <em>“Uy tín tạo niềm tin”</em>, TickTock Shop luôn cam kết 
+                sản phẩm 100% chính hãng, bảo hành chính hãng toàn quốc, dịch vụ giao hàng nhanh chóng 
+                và đội ngũ tư vấn nhiệt tình để mang đến trải nghiệm mua sắm hoàn hảo nhất cho khách hàng.
+            </p>
         </div>
-        <p>Nhận bản tin TickTock</p>
-        <div class="input-email">
-            <input type="text" placeholder="Nhập email của bạn">
-            <i class="fas fa-arrow-left"></i>
+        <div class="right_footer">
+            <h4>Liên hệ</h4>
+            <p><i class="fa-solid fa-location-dot"></i> 123 Nguyễn Trãi, Thanh Xuân, Hà Nội</p>
+            <p><i class="fa-solid fa-phone"></i> 0123 456 789</p>
+            <p><i class="fa-regular fa-envelope"></i> support@ticktockshop.com</p>
+            
+            <h4>Giờ làm việc</h4>
+            <p>Thứ 2 - Thứ 7: 8:00 - 21:30</p>
+            <p>Chủ nhật & ngày lễ: 9:00 - 18:00</p>
+
+            <h4>Kết nối với chúng tôi</h4>
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
         </div>
-        <div class="footer-items">
-            <li><a href=""><img src="{{ asset('storage/dathongbao.jpg')}}" alt=""></a></li>
-            <li><a href="#">Liên hệ</a></li>
-            <li><a href="#">Tuyển dụng</a></li>
-            <li><a href="#">Giới thiệu</a></li>
-            <li>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-            </li>
-        </div>
-        <div class="footer-text">
-            Công ty Cổ phần Dự Kim với số đăng ký kinh doanh: 0105777650 <br>
-            Địa chỉ đăng ký: Tổ dân phố Tháp, P.Đại Mỗ, Q.Nam Từ Liêm, TP.Hà Nội, Việt Nam - 0243 205 2222 <br>
-            Đặt hàng online: <b>0246 662 3434</b>
-        </div>
-        <div class="footer-bottom">@Ivymoda All rights reserved</div>
-    </div>
-</section>
+    </section>
 
 {{-- JS --}}
 <script src="{{ asset('js/client/home.js') }}"></script>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'TickTock Shop')</title>
     <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -24,7 +25,7 @@
                     <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
                     <li><a href="{{ route('products.filter', ['brand' => 'citizen']) }}">Citizen</a></li>
                     <li><a href="{{ route('products.filter', ['brand' => 'rado']) }}">Rado</a></li>
-                    <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>       
+                    <li><a href="{{ route('products.filter', ['brand' => 'seiko']) }}">Seiko</a></li>
                 </ul>
             </li>
             <li><a href="#">NỮ</a>
@@ -36,7 +37,7 @@
                     <li><a href="{{ route('products.filter', ['category' => 'cap-doi', 'brand' => 'seiko']) }}">Seiko cặp</a></li>
                 </ul>
             </li>
-            <li> <a href="#">NAM</a> 
+            <li> <a href="#">NAM</a>
                 <ul class="sub_Nam">
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'casio']) }}">Casio nam</a></li>
                     <li><a href="{{ route('products.filter', ['category' => 'nam', 'brand' => 'rolex']) }}">Rolex nam</a></li>
@@ -65,8 +66,8 @@
         </div>
 
         <div class="header_other">
-            <li> 
-                <input placeholder="Tìm kiếm" type="text"> 
+            <li>
+                <input placeholder="Tìm kiếm" type="text">
                 <i class="fas fa-search"></i>
                 <div class="search-history">
                     <h3 class="search-heading">Lịch sử tìm kiếm</h3>

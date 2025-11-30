@@ -1,93 +1,255 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const openBtn = document.getElementById("btn-open-create-form");
-    const closeBtn = document.getElementById("btn-cancel-create");
-    const formOverlay = document.getElementById("create-form");
-
-    if (openBtn && closeBtn && formOverlay) {
-        openBtn.addEventListener("click", () => {
-            formOverlay.style.display = "flex";
-        });
-
-        closeBtn.addEventListener("click", () => {
-            formOverlay.style.display = "none";
-        });
-
-        // Đóng khi click ra ngoài form
-        formOverlay.addEventListener("click", function (e) {
-            if (e.target === formOverlay) {
-                formOverlay.style.display = "none";
-            }
-        });
-    }
-});
+// public/js/admin/accessories.js
 
 document.addEventListener('DOMContentLoaded', function () {
-    const openCreateBtn = document.getElementById('btn-open-create-form');
-    const createModal = document.getElementById('create-form-modal');
-    const editModal = document.getElementById('edit-form-modal');
-    const closeBtns = document.querySelectorAll('.close-modal');
-    const cancelBtn = document.querySelector('.btn-cancel');
+    const csrfTokenTag = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = csrfTokenTag ? csrfTokenTag.getAttribute('content') : '';
 
-    // Mở tạo mới
-    openCreateBtn?.addEventListener('click', () => {
-        createModal.style.display = 'flex';
-    });
+    const createModal   = document.getElementById('accessory-create-modal');
+    const editModal     = document.getElementById('accessory-edit-modal');
+    const btnOpenCreate = document.getElementById('btn-open-accessory-create');
 
-    // Đóng modal
-    function closeAll() {
-        createModal.style.display = 'none';
-        editModal.style.display = 'none';
+    // ====== Helper mở / đóng modal ======
+    function openModal(modal) {
+        if (!modal) return;
+        modal.style.display = 'block';
+        document.body.classList.add('modal-open');
     }
-    closeBtns.forEach(b => b.addEventListener('click', closeAll));
-    cancelBtn?.addEventListener('click', closeAll);
-    window.addEventListener('click', (e) => {
-        if (e.target === createModal || e.target === editModal) closeAll();
-    });
 
-    // Preview ảnh tạo mới
-    const imageInput = document.getElementById('image-input');
-    const preview = document.getElementById('preview');
-    imageInput?.addEventListener('change', (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-    });
+    function closeModal(modal) {
+        if (!modal) return;
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+    }
 
-    // Open edit modal và fill data
-    document.querySelectorAll('.open-edit').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const form = document.getElementById('edit-form');
+    // Mở modal THÊM
+    if (btnOpenCreate && createModal) {
+        btnOpenCreate.addEventListener('click', function () {
+            const form = createModal.querySelector('form');
+            if (form) form.reset();
 
-            form.action = btn.dataset.updateUrl;
-            document.getElementById('edit-name').value = btn.dataset.name || '';
-            document.getElementById('edit-price').value = btn.dataset.price || 0;
-            document.getElementById('edit-quantity').value = btn.dataset.quantity || 0;
-            const desc = document.getElementById('edit-description');
-            desc.value = btn.dataset.description || '';
+            const preview = document.getElementById('accessory-preview');
+            if (preview) {
+                preview.style.display = 'none';
+                preview.src = '';
+            }
 
-            // material, color nếu có
-            const mat = document.getElementById('edit-material');
-            if (mat) mat.value = btn.dataset.material || '';
-            const color = document.getElementById('edit-color');
-            if (color) color.value = btn.dataset.color || '';
+            openModal(createModal);
+        });
+    }
 
-            // preview ảnh cũ
-            const editPreview = document.getElementById('edit-preview');
-            editPreview.src = btn.dataset.image;
-            editPreview.style.display = 'block';
-
-            editModal.style.display = 'flex';
+    // Đóng modal khi bấm nút X
+    document.querySelectorAll('.close-modal').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const targetSelector = btn.getAttribute('data-close');
+            if (!targetSelector) return;
+            const modal = document.querySelector(targetSelector);
+            closeModal(modal);
         });
     });
 
-    // Preview ảnh khi chọn ảnh mới trong modal edit
-    const editImageInput = document.getElementById('edit-image-input');
-    editImageInput?.addEventListener('change', (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const editPreview = document.getElementById('edit-preview');
-        editPreview.src = URL.createObjectURL(file);
-        editPreview.style.display = 'block';
+    // Đóng modal khi click ra ngoài .modal-content
+    document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) {
+                closeModal(overlay);
+            }
+        });
     });
+
+    // ====== Preview ảnh khi THÊM ======
+    const createImageInput = document.getElementById('accessory-image-input');
+    const createPreview    = document.getElementById('accessory-preview');
+
+    if (createImageInput && createPreview) {
+        createImageInput.addEventListener('change', function () {
+            const file = this.files && this.files[0];
+            if (!file) {
+                createPreview.style.display = 'none';
+                createPreview.src = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                createPreview.src = e.target.result;
+                createPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ====== Preview ảnh khi SỬA ======
+    const editImageInput = document.getElementById('edit-accessory-image-input');
+    const editPreview    = document.getElementById('edit-accessory-preview');
+
+    if (editImageInput && editPreview) {
+        editImageInput.addEventListener('change', function () {
+            const file = this.files && this.files[0];
+            if (!file) {
+                editPreview.style.display = 'none';
+                editPreview.src = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                editPreview.src = e.target.result;
+                editPreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ====== Mở modal SỬA, fill dữ liệu từ data-* ======
+    const editNameInput        = document.getElementById('edit-accessory-name');
+    const editPriceInput       = document.getElementById('edit-accessory-price');
+    const editDescriptionInput = document.getElementById('edit-accessory-description');
+    const editMaterialInput    = document.getElementById('edit-accessory-material');
+    const editColorInput       = document.getElementById('edit-accessory-color');
+    const editQuantityInput    = document.getElementById('edit-accessory-quantity');
+    const editForm             = document.getElementById('accessory-edit-form');
+
+    document.querySelectorAll('.btn-accessory-edit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const id          = this.dataset.id;
+            const type        = this.dataset.type;            // 'straps' | 'boxes' | 'glasses'
+            const name        = this.dataset.name || '';
+            const price       = this.dataset.price || 0;
+            const description = this.dataset.description || '';
+            const material    = this.dataset.material || '';
+            const color       = this.dataset.color || '';
+            const quantity    = this.dataset.quantity || '';
+
+            if (editNameInput)        editNameInput.value        = name;
+            if (editPriceInput)       editPriceInput.value       = price;
+            if (editDescriptionInput) editDescriptionInput.value = description;
+            if (editMaterialInput)    editMaterialInput.value    = material;
+            if (editColorInput)       editColorInput.value       = color;
+            if (editQuantityInput)    editQuantityInput.value    = quantity;
+
+            // Reset preview ảnh mới
+            if (editPreview) {
+                editPreview.style.display = 'none';
+                editPreview.src = '';
+            }
+            if (editImageInput) {
+                editImageInput.value = '';
+            }
+
+            // Route::put('/accessories/{type}/{id}')
+            if (editForm && id && type) {
+                editForm.action = `/admin/accessories/${type}/${id}`;
+            }
+
+            openModal(editModal);
+        });
+    });
+
+    // ====== ẨN / HIỆN phụ kiện (AJAX + badge "ĐANG ẨN") ======
+    const toggleButtons = document.querySelectorAll('.btn-toggle-accessory');
+
+    toggleButtons.forEach(btn => {
+        const id   = btn.dataset.id;
+        const type = btn.dataset.type; // straps / boxes / glasses
+        const card = document.getElementById('accessory-' + id);
+        if (!card) return;
+
+        const badge = card.querySelector('.hidden-badge');
+
+        function applyState(isHidden) {
+            // cập nhật nút
+            btn.textContent = isHidden ? 'Hiện' : 'Ẩn';
+            btn.dataset.hidden = isHidden ? '1' : '0';
+
+            // cập nhật card
+            card.classList.toggle('accessory-hidden', isHidden);
+            card.dataset.hidden = isHidden ? '1' : '0';
+
+            // badge "ĐANG ẨN"
+            if (badge) {
+                badge.style.display = isHidden ? 'inline-block' : 'none';
+            }
+        }
+
+        // Khởi tạo giao diện theo data-hidden ban đầu
+        const initialHidden = btn.dataset.hidden === '1';
+        applyState(initialHidden);
+
+        // Click toggle
+        btn.addEventListener('click', async function () {
+            if (!csrfToken) {
+                alert('Thiếu CSRF token!');
+                return;
+            }
+
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`/admin/accessories/toggle/${type}/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({}),
+                });
+
+                if (!res.ok) {
+                    throw new Error('Lỗi server: ' + res.status);
+                }
+
+                const data = await res.json();
+                const isHidden = !!data.hidden;
+                applyState(isHidden);
+
+            } catch (e) {
+                console.error(e);
+                alert('Có lỗi khi đổi trạng thái ẩn/hiện phụ kiện!');
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    });
+
+    // ====== XÓA phụ kiện (confirm JS) ======
+    document.querySelectorAll('form.form-delete-accessory').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            if (!confirm('Bạn có chắc muốn xoá phụ kiện này?')) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // ========== FILTER ẨN / HIỆN ==========
+    const btnFilterHidden = document.getElementById('btn-filter-hidden');
+
+    if (btnFilterHidden) {
+        let filterOn = false; // mặc định: tắt bộ lọc
+
+        btnFilterHidden.addEventListener('click', function () {
+            filterOn = !filterOn;
+
+            // Cập nhật giao diện nút
+            btnFilterHidden.classList.toggle('active', filterOn);
+            btnFilterHidden.textContent = filterOn
+                ? 'Chỉ hiển thị sản phẩm ẩn'
+                : 'Hiện sản phẩm ẩn';
+
+            // Lọc từng card sản phẩm
+            document.querySelectorAll('.product-card').forEach(function (card) {
+                const hidden = card.dataset.hidden === '1';
+
+                if (filterOn) {
+                    // Bật lọc → chỉ hiện sản phẩm ẩn
+                    card.style.display = hidden ? 'block' : 'none';
+                } else {
+                    // Tắt lọc → hiện tất cả (ẩn thì vẫn bị làm mờ bằng CSS)
+                    card.style.display = 'block';
+                }
+            });
+        });
+    }
 });
+
+    

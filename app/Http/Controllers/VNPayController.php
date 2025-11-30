@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Payment;
+use App\Models\Product;
 
 class VNPayController extends Controller
 {
@@ -11,13 +15,15 @@ class VNPayController extends Controller
         session(['checkout_info' => $request->only([
             'fullname', 'phone', 'email', 'address', 'district', 'province'
         ])]);
+        
         $vnp_Url = config('vnpay.vnp_Url');
         $vnp_Returnurl = config('vnpay.vnp_Returnurl');
         $vnp_TmnCode = config('vnpay.vnp_TmnCode');
         $vnp_HashSecret = config('vnpay.vnp_HashSecret');
 
         // Lấy tổng tiền từ giỏ hàng (VD: đã tính ở controller khác)
-        $amount = (int) $request->input('amount', 10000); // test tạm 10.000đ
+        // Lưu ý: Nên tính lại từ session cart để bảo mật, tránh user sửa html input
+        $amount = (int) $request->input('amount', 10000); 
 
         $vnp_TxnRef = time(); // Mã đơn hàng
         $vnp_OrderInfo = 'Thanh toán đơn hàng #' . $vnp_TxnRef;
@@ -67,13 +73,12 @@ class VNPayController extends Controller
     public function return(Request $request)
     {
         $vnp_HashSecret = config('vnpay.vnp_HashSecret');
-    
        
         $inputData = $request->only(array_filter(array_keys($request->all()), fn($k) => str_starts_with($k, 'vnp_')));
         $vnp_SecureHash = $inputData['vnp_SecureHash'] ?? '';
         unset($inputData['vnp_SecureHash'], $inputData['vnp_SecureHashType']);
         ksort($inputData);
-    
+       
         $hashData = "";
         $i = 0;
         foreach ($inputData as $key => $value) {
@@ -85,79 +90,87 @@ class VNPayController extends Controller
             }
         }
         $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
-    
-     
+       
         $success = false;
         $message = 'Thanh toán thất bại hoặc bị hủy!';
+
         if ($secureHash === $vnp_SecureHash && $request->vnp_ResponseCode === '00') {
             $success = true;
             $message = 'Thanh toán VNPay thành công!';
-    
-          
+       
             $checkout = session('checkout_info', []);
-    
             $cartItems = session('cart', []);
-            $grandTotal = 0;
-            foreach ($cartItems as $item) {
-                $grandTotal += ($item['qty'] ?? 0) * ($item['price'] ?? 0);
-            }
-    
-            $order = \App\Models\Order::create([
-                'user_id'       => auth()->id() ?? null,
+            
+            // Tính lại tổng tiền để lưu vào DB (nếu cần)
+            // $grandTotal = 0;
+            // foreach ($cartItems as $item) {
+            //     // Sửa lỗi: kiểm tra key quantity hoặc qty
+            //     $qty = $item['quantity'] ?? $item['qty'] ?? 0;
+            //     $price = $item['price'] ?? 0;
+            //     $grandTotal += $qty * $price;
+            // }
+       
+            $order = Order::create([
+                'user_id'       => auth()->id(),
                 'customer_name' => $checkout['fullname'] ?? 'Khách hàng VNPay',
                 'phone'         => $checkout['phone'] ?? '',
                 'address'       => $checkout['address'] ?? '',
-               
                 'total_price'   => $request->vnp_Amount / 100, 
-                'status'        => 'pending',
+                'status'        => 'pending', // Có thể đổi thành 'processing' hoặc 'paid' vì đã thanh toán xong
             ]);
             
-    
             foreach ($cartItems as $item) {
-                \App\Models\OrderItem::create([
+                // --- SỬA LỖI Ở ĐÂY ---
+                // Lấy số lượng an toàn, ưu tiên 'quantity', nếu không có thì lấy 'qty', không có nữa thì mặc định 1
+                $buyQty = $item['quantity'] ?? $item['qty'] ?? 1; 
+                $price = $item['price'] ?? 0;
+
+                OrderItem::create([
                     'order_id'   => $order->id,
                     'product_id' => $item['id'],
-                    'quantity'   => $item['quantity'] ?? $item['qty'], // GIỎ HÀNG DÙNG KEY NÀO?
-                    'price'      => $item['price'], // đơn giá
+                    'quantity'   => $buyQty, 
+                    'price'      => $price,
                 ]);
-                        // Trừ tồn kho
-    $product = \App\Models\Product::find($item['id']);
-    if ($product) {
-        $product->decrement('quantity', $item['qty']);
 
-        if ($product->quantity < 0) {
-            $product->quantity = 0;
-            $product->save();
-        }
-    }
+                // Trừ tồn kho
+                $product = Product::find($item['id']);
+                if ($product) {
+                    // Sử dụng biến $buyQty đã lấy ở trên, không gọi $item['qty'] trực tiếp nữa
+                    $product->decrement('quantity', $buyQty);
+
+                    // Kiểm tra nếu âm kho thì set về 0 (tùy logic shop)
+                    if ($product->quantity < 0) {
+                        $product->quantity = 0;
+                        $product->save();
+                    }
+                }
             }
      
-    
-            // Lưu thanh toán
-            \App\Models\Payment::create([
-                'order_id'        => $order->id,
-                'method'          => 'bank',
-                'status'          => 'pending',
-                'transaction_code'=> $request->vnp_TxnRef,
-                'payment_date'    => now(),
+            // Lưu lịch sử thanh toán
+            Payment::create([
+                'order_id'         => $order->id,
+                'method'           => 'vnpay', // Nên ghi rõ là vnpay
+                // SỬA LỖI TRUNCATED: Đổi 'completed' thành 'paid' để khớp với ENUM hoặc độ dài database
+                'status'           => 'paid', 
+                'transaction_code' => $request->vnp_TxnRef,
+                'payment_date'     => now(),
             ]);
-    
+       
             // Xóa session
-            session()->forget(['cart','checkout_info']);
+            session()->forget(['cart', 'checkout_info']);
+
         } else if ($secureHash === $vnp_SecureHash) {
             $message = 'Thanh toán VNPay thất bại!';
         } else {
             $message = 'Dữ liệu không hợp lệ (chữ ký không khớp)!';
         }
-    
+       
         return view('client.vnpay_return', [
             'success' => $success,
             'message' => $message,
-            'vnp_TxnRef' => $request->vnp_TxnRef,
-            'vnp_Amount' => $request->vnp_Amount / 100,
-            'vnp_ResponseCode' => $request->vnp_ResponseCode
+            'vnp_TxnRef' => $request->vnp_TxnRef ?? null,
+            'vnp_Amount' => ($request->vnp_Amount ?? 0) / 100,
+            'vnp_ResponseCode' => $request->vnp_ResponseCode ?? null
         ]);
     }
-    
-
 }

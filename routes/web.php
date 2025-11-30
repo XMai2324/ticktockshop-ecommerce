@@ -14,7 +14,10 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\NhapHangController;
 use App\Http\Controllers\StatisticalController;
+use App\Http\Controllers\ImportController;
+use App\Http\Controllers\CustomerController;
 use App\Models\Product;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -348,12 +351,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('nhap-hang/preview', [NhapHangController::class, 'preview'])->name('nhapHang_preview');
     Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
     Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
+    Route::get('/nhap-hang/history', [ImportController::class, 'history']) ->name('import_history');
 });
-
-
 
 // Thống kê
 
 Route::get('/statistical', [StatisticalController::class, 'index'])
     ->name('admin.statistical');
+
 

@@ -38,11 +38,11 @@
     {{-- ✅ Danh sách sản phẩm --}}
     <div style="flex: 1;">
 
-        <button id="btn-open-create-form" class="btn-create-product">
+        <!-- <button id="btn-open-create-form" class="btn-create-product">
             + Thêm sản phẩm mới
-        </button>
+        </button> -->
         <button  id="btn-filter-hidden" class="btn btn-secondary">
-            * Hiện sản phẩm ẩn
+            Các sản phẩm ẩn/mới
         </button>
 
         <!-- ------------------------THÊM SP------------------------ -->
@@ -99,24 +99,24 @@
                     <h3>Sửa sản phẩm</h3>
 
                     <label>Tên sản phẩm:</label>
-                    <input type="text" name="name" id="edit-name" required>
+                    <input type="text" name="name" id="edit-name" required disabled>
 
                     <label>Thương hiệu:</label>
-                    <select name="brand_id" id="edit-brand">
+                    <select name="brand_id" id="edit-brand" disabled>
                         @foreach($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
                     </select>
 
                     <label>Danh mục:</label>
-                    <select name="category_id" id="edit-category">
+                    <select name="category_id" id="edit-category" disabled>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
 
                     <label>Giá:</label>
-                    <input type="number" name="price" id="edit-price" required>
+                    <input type="number" name="price" id="edit-price" required disabled>
 
                     <label>Ảnh mới (nếu thay):</label>
                     <input type="file" name="image" id="edit-image-input">
@@ -139,6 +139,10 @@
                 <div class="col-3">
                     <div class="product-card" id="product-{{ $product->id }}"
                             data-hidden="{{ $product->is_hidden ? 1 : 0 }}">
+
+                            @if($product->is_new)
+                                <span class="badge-new">NEW</span>
+                            @endif
                         <!-- <img src="{{ asset('storage/Watch/' . $product->image) }}" alt="{{ $product->name }}" class="product-image"> -->
                          @php
                             $folder = 'Watch/Watch_nu'; // mặc định

@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('css/admin/product_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/promotion_ad.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/ratings.css') }}">
+    <link rel="stylesheet" href="/css/admin/nhapHang.css">
+    <link rel="stylesheet" href="/css/admin/nhapHangPreview.css">
     <link rel="stylesheet" href="{{ asset('css/admin/statistical.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     {{-- Placeholder để child view có thể thêm CSS riêng --}}
@@ -26,14 +28,17 @@
         </div>
 
         <div class="header_menu">
-            <li><a href="{{ route('admin.statistical')}}">THỐNG KÊ</a></li>
             <li><a href="{{ route('admin.products_index') }}">SẢN PHẨM</a></li>
-            <li><a href="{{ route('admin.orders.index') }}">XỬ LÝ ĐƠN HÀNG</a></li>
-            <li><a href="{{ route('admin.warranty') }}">THÔNG TIN BẢO HÀNH</a></li>
+            <li><a href="{{ route('admin.orders.index') }}">ĐƠN HÀNG</a></li>
+            <li><a href="{{ route('admin.nhapHang_index') }}">NHẬP HÀNG</a></li>
+            <li><a href="{{ route('admin.customers.index') }}">KHÁCH HÀNG</a></li>
+            <!-- <li><a href="{{ route('admin.warranty') }}">BẢO HÀNH</a></li> -->
             <li><a href="{{ route('admin.ratings.index') }}">ĐÁNH GIÁ</a></li>
             <li><a href="{{ route('admin.promotions_index') }}">KHUYẾN MÃI</a></li>
-        </div>
-            <li class="header-user">
+            <li><a href="{{ route('admin.statistical')}}">THỐNG KÊ</a></li>
+        </ul>
+
+        <li class="header-user">
                 <i class="fa fa-user"></i>
                 <span class="user-name">{{ Auth::user()->name }}</span>
         </li>
@@ -50,18 +55,9 @@
 
     </header>
 
-
-
-
-
     <main style="margin-top: 100px">
         @yield('content')
     </main>
-
-
-
-
-
 
     <script>
         const IS_AUTHENTICATED = {{ auth()->check() ? 'true' : 'false' }};

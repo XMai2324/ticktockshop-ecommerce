@@ -334,12 +334,12 @@ main{ margin-top:100px; }
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
-    justify-content: center;
-    align-items: center;
+    
 }
 
 .modal-overlay.active {
     display: flex;
+   
 }
 
 .modal-content {
@@ -512,37 +512,4 @@ footer{
 }
 .footer-bottom{
     margin: 20px 0;
-}
-
-.product-card.product-hidden {
-    opacity: 0.4;
-    position: relative;
-}
-
-.product-card.product-hidden::after {
-    content: "ĐANG ẨN";
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    padding: 2px 6px;
-    font-size: 15px;
-    background: #d63220;
-    color: #ffffff;
-    border-radius: 4px;
-}
-.accessory-hidden {
-    opacity: 0.4;
-    filter: grayscale(60%);
-}
-.hidden-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: #d6336c;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 10;
 }

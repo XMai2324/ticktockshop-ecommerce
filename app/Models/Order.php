@@ -41,4 +41,10 @@ class Order extends Model
         return $this->belongsTo(Promotion::class);
     }
 
+    public function orderItems()
+    {
+        // Một Order có nhiều OrderItem
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
+
 }

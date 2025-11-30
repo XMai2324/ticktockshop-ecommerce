@@ -2049,7 +2049,8 @@ foreach ($products as [
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+        }  
         }
     }
-}
-
+        

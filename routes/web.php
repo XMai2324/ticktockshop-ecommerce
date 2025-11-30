@@ -12,7 +12,9 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
+use App\Http\Controllers\NhapHangController;
 use App\Http\Controllers\StatisticalController;
+use App\Http\Controllers\CustomerController;
 use App\Models\Product;
 
 /*
@@ -31,7 +33,6 @@ Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->n
 
 // Trang /
 
-// Trang /
 Route::get('/', function () {
 
     // Nếu là admin thì vẫn về trang admin
@@ -39,13 +40,10 @@ Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     }
 
-    // Lấy sản phẩm bán chạy & sản phẩm mới (có cả ratings)
-    $bestSellers = Product::with('ratings')
-        ->where('is_hidden', 0)
-        ->orderByDesc('created_at')   // bạn thay logic bán chạy tại đây nếu muốn
-        ->take(8)
-        ->get();
+    // LẤY SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin)
+    $bestSellers = Product::bestSellerByRevenue(8)->get();
 
+    // SẢN PHẨM MỚI (giữ nguyên logic cũ)
     $newProducts = Product::with('ratings')
         ->where('is_hidden', 0)
         ->orderByDesc('created_at')
@@ -54,6 +52,7 @@ Route::get('/', function () {
 
     return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');
+
 
 // logout
 Route::post('/logout', function () {
@@ -167,6 +166,32 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::delete('orders/{id}',  [OrderController::class, 'destroy'])->name('admin.orders.delete');
 });
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN CUSTOMERS
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+
+    // Trang danh sách + form thêm
+    Route::get('customers', [CustomerController::class, 'index'])->name('admin.customers.index');
+
+    // Thêm khách hàng
+    Route::post('customers', [CustomerController::class, 'store'])->name('admin.customers.store');
+
+    // Reset mật khẩu về 123456
+    Route::post('customers/{customer}/reset-password', [CustomerController::class, 'resetPassword'])
+        ->name('admin.customers.reset-password');
+
+    // Vô hiệu hóa tài khoản
+    Route::post('customers/{customer}/toggle-active', [CustomerController::class, 'toggleActive'])
+        ->name('admin.customers.toggle-active');
+
+    // Xóa tài khoản
+    Route::delete('customers/{customer}', [CustomerController::class, 'destroy'])
+        ->name('admin.customers.destroy');
+});
+
 
 /*
 |--------------------------------------------------------------------------
@@ -265,6 +290,11 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
 
+Route::get('/profile', [LoginAuthController::class, 'profile'])->name('profile');
+Route::post('/profile/update', [LoginAuthController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/change-password', [LoginAuthController::class, 'changePassword'])->name('profile.changePassword');
+
+
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
@@ -273,7 +303,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
          ->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
 
-
+    
 // Ratings management (admin)
     Route::get('ratings', [RatingController::class, 'adminIndex'])
         ->middleware(['role:admin'])
@@ -308,6 +338,17 @@ Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.ret
 
 Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
 Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
+
+//Nhập HÀNG (admin)    
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('nhap-hang', [NhapHangController::class, 'index'])->name('nhapHang_index');
+    Route::post('nhap-hang/save-preview', [NhapHangController::class, 'savePreview'])->name('nhapHang_savePreview');
+    Route::get('nhap-hang/preview', [NhapHangController::class, 'preview'])->name('nhapHang_preview');
+    Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
+    Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
+});
+
+
 
 // Thống kê
 

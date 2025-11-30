@@ -246,8 +246,10 @@ class ProductController extends Controller
             'glass_material'   => 'nullable|string|max:255',
             'diameter'         => 'nullable|string|max:255',
             'water_resistance' => 'nullable|string|max:255',
+            'image'       => 'required|mimetypes:image/jpeg,image/png,image/webp,image/avif|max:4096',
         ]);
 
+        // Lấy thư mục lưu ảnh theo danh mục
         $category = Category::findOrFail($request->category_id);
         $slugCat  = Str::slug($category->name);
 
@@ -258,14 +260,23 @@ class ProductController extends Controller
             default   => 'Watch/Watch_nu',
         };
 
+        // Tạo tên file đẹp
         $originalName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
         $extension    = $request->file('image')->getClientOriginalExtension();
         $imageName    = Str::slug($originalName) . '.' . $extension;
 
+        // Lưu file vào storage/app/public/...
         $request->file('image')->storeAs('public/' . $folder, $imageName);
 
-        $productSlug = Str::slug($request->name) ?: 'san-pham-' . time();
+        // Tạo slug không trùng
+        $baseSlug = Str::slug($request->name);
+        $slug = $baseSlug;
+        $i = 1;
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $i++;
+        }
 
+        // Tạo sản phẩm
         Product::create([
             'name'        => $request->name,
             'price'       => $request->price,
@@ -282,10 +293,15 @@ class ProductController extends Controller
             'glass_material'   => $request->glass_material,
             'diameter'         => $request->diameter,
             'water_resistance' => $request->water_resistance,
+            'slug'        => $slug,
+            'is_hidden'   => true,   // mặc định ẩn
+            'is_new'      => true,   // gắn nhãn NEW
         ]);
 
-        return redirect()->route('admin.products_index')->with('success', 'Thêm sản phẩm thành công!');
+        return redirect()->route('admin.products_index')
+                        ->with('success', 'Thêm sản phẩm mới thành công!');
     }
+
 
     // ================== UPDATE ==================
     public function update(Request $request, $id)
@@ -305,6 +321,8 @@ class ProductController extends Controller
             'glass_material'   => $request->glass_material,
             'diameter'         => $request->diameter,
             'water_resistance' => $request->water_resistance,
+            // 'image'       => 'nullable|image|mimes:jpg,jpeg,png,avif,webp|max:2048',
+            'image' => 'nullable|mimetypes:image/jpeg,image/png,image/webp,image/avif|max:4096',
         ]);
 
         $product->fill([

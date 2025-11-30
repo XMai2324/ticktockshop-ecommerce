@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chi tiết đơn hàng #{{ $order->id }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -80,17 +81,31 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
-                            @if($item->product && $item->product->image)
-                                <img src="{{ asset('storage/'.$item->product->image) }}" alt="Ảnh" class="product-img">
-                            @else
-                                <img src="https://via.placeholder.com/50" alt="Ảnh" class="product-img">
-                            @endif
-                            <span>{{ $item->product->name ?? 'Sản phẩm đã xóa' }}</span>
-                        </div>
+                        @php
+                            $folder = 'Watch/Watch_nu'; // mặc định Nữ
+                            $catSlug = Str::slug(optional($item->product->category)->name ?? '');
+
+                            if ($catSlug === 'nam') {
+                                $folder = 'Watch/Watch_nam';
+                            } elseif ($catSlug === 'cap-doi') {
+                                $folder = 'Watch/Watch_cap';
+                            }
+                        @endphp
+
+                        @if($item->product && $item->product->image)
+                            <img src="{{ asset('storage/' . $folder . '/' . $item->product->image) }}"
+                                alt="Ảnh"
+                                class="product-img">
+                        @else
+                            <img src="https://via.placeholder.com/50" alt="Ảnh" class="product-img">
+                        @endif
+
+                        <span>{{ $item->product->name ?? 'Sản phẩm đã xóa' }}</span>
+                    </div>
                     </td>
                     <td class="text-center">{{ $item->quantity }}</td>
+                    <td>{{ number_format($item->product->price, 0, ',', '.') }} đ</td>
                     <td class="text-end">{{ number_format($item->price, 0, ',', '.') }} đ</td>
-                    <td class="text-end">{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td>
                 </tr>
             @endforeach
             </tbody>

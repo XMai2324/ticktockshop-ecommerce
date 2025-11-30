@@ -84,8 +84,8 @@
                     <tr>
                         <td>{{ $item->product->name ?? 'Sản phẩm đã xóa' }}</td>
                         <td>{{ $item->quantity }}</td>
+                        <td>{{ number_format($item->product->price, 0, ',', '.') }} đ</td>
                         <td>{{ number_format($item->price, 0, ',', '.') }} đ</td>
-                        <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -18,6 +18,7 @@ class Product extends Model
         'brand_id',
         'warranty_months',
         'is_hidden',
+        'is_new',
         'movement',
         'case_material',
         'strap_material',

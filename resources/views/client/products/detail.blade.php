@@ -8,7 +8,6 @@
 @php
     use Illuminate\Support\Str;
 
-    // ===== Folder ảnh theo danh mục =====
     $folder = 'Watch/Watch_nu';
     $catSlug = Str::slug(optional($product->category)->name ?? '');
     if ($catSlug === 'nam') {
@@ -17,12 +16,10 @@
         $folder = 'Watch/Watch_cap';
     }
 
-    // Ảnh chính (fallback nếu trống)
     $imageUrl = $product->image
         ? asset('storage/' . $folder . '/' . $product->image)
         : asset('storage/Watch/Watch_nu/Casio1.1.jpg');
 
-    // Nếu bạn có cột images (array/json/csv) và muốn hiển thị thêm:
     $toArray = function ($raw) {
         if (!$raw) {
             return [];
@@ -35,9 +32,13 @@
             return array_values(array_filter($decoded, fn($v) => is_string($v) && trim($v) != ''));
         }
         return array_values(
-            array_filter(preg_split('/\s*[,;|]\s*/', (string) $raw) ?: [], fn($v) => is_string($v) && trim($v) != ''),
+            array_filter(
+                preg_split('/\s*[,;|]\s*/', (string) $raw) ?: [],
+                fn($v) => is_string($v) && trim($v) != ''
+            )
         );
     };
+
     $fileNames = $toArray($product->images ?? null);
 
     $thumbUrls = collect($fileNames)
@@ -45,8 +46,8 @@
             $img = ltrim($img, '/');
             if (preg_match('~^https?://~i', $img)) {
                 return $img;
-            } // URL tuyệt đối
-            return asset('storage/' . $folder . '/' . $img); // tên file -> ghép folder
+            }
+            return asset('storage/' . $folder . '/' . $img);
         })
         ->unique()
         ->reject(fn($u) => $u === $imageUrl);
@@ -59,18 +60,42 @@
 
                 {{-- Breadcrumbs --}}
                 <div class="product-page-top row">
-                    <p><a href="{{ route('home') }}">Trang chủ</a></p> <span>&#10230;</span>
-                    @if ($product->category)
+                    {{-- Trang chủ --}}
+                    <p><a href="{{ route('home') }}">Trang chủ</a></p>
+                    <span>&#10230;</span>
+
+                    @php
+                        $category = $product->category;      // model Category
+                        $brand    = $product->brand;         // model Brand
+
+                        // Slug danh mục để map vào route
+                        $categorySlug = $category ? Str::slug($category->name) : null;
+
+                        // Brand slug cũng lấy slug chuẩn (casio, rolex...)
+                        $brandSlug = $brand ? Str::slug($brand->name) : null;
+                    @endphp
+
+                    @if ($brand && $category && $categorySlug && $brandSlug)
                         <p>
-                            <a href="{{ route('products.byCategory', Str::slug($product->category->name)) }}">
-                                {{ $product->category->name }}
+                            <a href="{{ route('products.filter', ['category' => $categorySlug, 'brand' => $brandSlug]) }}">
+                                {{ $brand->name }} {{ Str::lower($category->name) }}
+                            </a>
+                        </p>
+                        <span>&#10230;</span>
+                    @elseif ($category && $categorySlug)
+                        {{-- fallback nếu sản phẩm không có thương hiệu --}}
+                        <p>
+                            <a href="{{ route('products.byCategory', $categorySlug) }}">
+                                {{ $category->name }}
                             </a>
                         </p>
                         <span>&#10230;</span>
                     @endif
-                    <p>{{ $product->name }}</p>
-                </div>
 
+                    {{-- Tên sản phẩm --}}
+                    <p>{{ $product->name }}</p>
+
+                </div>
                 <div class="product-detail-wrap row">
                     {{-- LEFT: Gallery --}}
                     <div class="product-detail-left">
@@ -91,11 +116,12 @@
                                     </div>
 
                                     {{-- thumb cho ảnh phụ nếu có (từ cột images) --}}
-                                    @foreach ($thumbUrls as $u)
+                                    @foreach(($thumbUrls ?? []) as $u)
                                         <div class="thumb">
                                             <img src="{{ $u }}" alt="{{ $product->name }}">
                                         </div>
                                     @endforeach
+
                                 </div>
                             </div>
                         </div>

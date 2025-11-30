@@ -394,10 +394,10 @@ class ProductsSeeder extends Seeder
                 'price'            => $price,
                 'image'            => $image,
                 'images'           => json_encode([
-                    $image,
-                    str_replace('.', '_2.', $image),
-                    str_replace('.', '_3.', $image),
-                    str_replace('.', '_4.', $image),
+                    // $image,
+                    // str_replace('.', '_2.', $image),
+                    // str_replace('.', '_3.', $image),
+                    // str_replace('.', '_4.', $image),
                 ]),
                 'category_id'      => $category->id,
                 'brand_id'         => $brand->id,
@@ -415,6 +415,8 @@ class ProductsSeeder extends Seeder
                 'updated_at'       => now(),
             ]);
         }
+
+
         // -----------Citizen nữ----------
         $category = Category::where('name', 'Nữ')->first();
         $brand  = Brand::where('name', 'Citizen')->first();
@@ -581,6 +583,8 @@ class ProductsSeeder extends Seeder
                 'updated_at'       => now(),
             ]);
         }
+
+
         // -----------Rado nữ----------
         $category = Category::where('name', 'Nữ')->first();
         $brand = Brand::where('name', 'Rado')->first();
@@ -728,8 +732,8 @@ class ProductsSeeder extends Seeder
                 'image'            => $image,
                 'images'           => json_encode([
                     $image,
-                    str_replace('.', '_2.', $image),
-                    str_replace('.', '_3.', $image),
+                    // str_replace('.', '_2.', $image),
+                    // str_replace('.', '_3.', $image),
                 ]),
                 'category_id'      => $category->id,
                 'brand_id'         => $brand->id,
@@ -1697,9 +1701,9 @@ foreach ($products as [
         'image' => $image,
         'images' => json_encode([
             $image,
-            str_replace('.', '_2.', $image),
-            str_replace('.', '_3.', $image),
-            str_replace('.', '_4.', $image),
+            // str_replace('.', '_2.', $image),
+            // str_replace('.', '_3.', $image),
+            // str_replace('.', '_4.', $image),
         ]),
         'category_id' => $category->id,
         'brand_id' => $brand->id,
@@ -1864,9 +1868,9 @@ foreach ($products as [
         'image' => $image,
         'images' => json_encode([
             $image,
-            str_replace('.', '_2.', $image),
-            str_replace('.', '_3.', $image),
-            str_replace('.', '_4.', $image),
+            // str_replace('.', '_2.', $image),
+            // str_replace('.', '_3.', $image),
+            // str_replace('.', '_4.', $image),
         ]),
         'category_id' => $category->id,
         'brand_id' => $brand->id,
@@ -2049,8 +2053,6 @@ foreach ($products as [
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-
         }  
         }
     }
-        

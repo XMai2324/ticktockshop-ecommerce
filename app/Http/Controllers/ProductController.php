@@ -200,16 +200,30 @@ class ProductController extends Controller
     {
         $product->load(['brand', 'category']);
 
-        // Lấy sản phẩm liên quan
-        $related = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->where('is_hidden', false)
-            ->latest('id')
-            ->take(8)
-            ->get();
+        // TẠO image chính
+        $folder = 'Watch/Watch_nu';
+        $slugCat = \Illuminate\Support\Str::slug($product->category->name ?? '');
 
-        return view('client.products.detail', compact('product', 'related'));
+        if ($slugCat === 'nam') $folder = 'Watch/Watch_nam';
+        elseif ($slugCat === 'cap-doi') $folder = 'Watch/Watch_cap';
+
+        $imageUrl = asset("storage/$folder/{$product->image}");
+
+        // TẠO mảng thumb (đảm bảo không bị null)
+        $thumbUrls = [];
+
+        if ($product->images) {
+            $imgs = json_decode($product->images, true);
+            if (is_array($imgs)) {
+                foreach ($imgs as $img) {
+                    $thumbUrls[] = asset("storage/$folder/$img");
+                }
+            }
+        }
+
+        return view('client.products.detail', compact('product','imageUrl','thumbUrls'));
     }
+
 
     // ================== ADMIN INDEX ==================
     public function index(Request $request)
@@ -240,6 +254,7 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'description' => 'nullable|string',
             'image'       => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'image'       => 'required|mimetypes:image/jpeg,image/png,image/webp,image/avif|max:4096',
             'movement'         => 'nullable|string|max:255',
             'case_material'    => 'nullable|string|max:255',
             'strap_material'   => 'nullable|string|max:255',
@@ -268,13 +283,21 @@ class ProductController extends Controller
         // Lưu file vào storage/app/public/...
         $request->file('image')->storeAs('public/' . $folder, $imageName);
 
-        // Tạo slug không trùng
+
+        $images = [
+            $imageName,
+            str_replace('.', '_2.', $imageName),
+            str_replace('.', '_3.', $imageName),
+        ];
+
+        //Tạo slug không trùng
         $baseSlug = Str::slug($request->name);
         $slug = $baseSlug;
         $i = 1;
         while (Product::where('slug', $slug)->exists()) {
             $slug = $baseSlug . '-' . $i++;
         }
+         //$productSlug = Str::slug($request->name) ?: 'san-pham-' . time();
 
         // Tạo sản phẩm
         Product::create([
@@ -287,6 +310,11 @@ class ProductController extends Controller
             'image'       => $imageName,
             'slug'        => $productSlug,
             'is_hidden'   => false, // hoặc 0
+            'images'      => json_encode($images),
+
+            'slug'        => $slug,
+            'is_hidden'   => true,   // mặc định ẩn
+            'is_new'      => true,   // gắn nhãn NEW
             'movement'         => $request->movement,
             'case_material'    => $request->case_material,
             'strap_material'   => $request->strap_material,
@@ -323,6 +351,14 @@ class ProductController extends Controller
             'water_resistance' => $request->water_resistance,
             // 'image'       => 'nullable|image|mimes:jpg,jpeg,png,avif,webp|max:2048',
             'image' => 'nullable|mimetypes:image/jpeg,image/png,image/webp,image/avif|max:4096',
+            'image' => 'nullable|mimetypes:image/jpeg,image/png,image/webp,image/avif|max:4096',
+
+            'movement'         => 'nullable|string|max:255',
+            'case_material'    => 'nullable|string|max:255',
+            'strap_material'   => 'nullable|string|max:255',
+            'glass_material'   => 'nullable|string|max:255',
+            'diameter'         => 'nullable|string|max:255',
+            'water_resistance' => 'nullable|string|max:255',
         ]);
 
         $product->fill([

@@ -1,18 +1,6 @@
 
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="quickview-slug-pattern" content="/quick-view/{slug}">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>@yield('title', 'Thanh Toán')</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link rel="icon" type="image/png" href="{{ asset('storage/logo1.png') }}">
-
-
-<!DOCTYPE html>
-<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,11 +12,6 @@
     <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
     <link rel="stylesheet" href="{{ asset('css/client/checkout.css') }}">
-        <link rel="icon" type="image/png" href="{{ asset('storage/logo.png') }}">
-        <link rel="stylesheet" href="{{ asset('css/client/home.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/client/products.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/client/accessories.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/client/checkout.css') }}">
 
     @if (session('error')) <meta name="login-error" content="1">@endif
     @if (session('register_error')) <meta name="register-error" content="1">@endif
@@ -107,6 +90,7 @@
     <div class="logo">
         <img src="{{ asset('storage/logo2.png')}}" alt="logoShop">
     </div>
+
     <div class="header_menu">
         <li>
             <a href="{{ route('home') }}">THƯƠNG HIỆU</a>
@@ -285,6 +269,7 @@
                         </div>
                     </div>
                 </div> -->
+
     <div class="header_other">
         <li class="search-wrapper">
             <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">
@@ -300,13 +285,13 @@
         <li class="header-user">
             <div class="user-menu">
                 <i class="fa fa-user"></i>
-
+        
                 @auth
                     <span class="user-name">{{ Auth::user()->name }}</span>
-
+        
                     <ul class="dropdown-menu-user">
                         <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
-
+                     
                     </ul>
                 @else
                     <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>
@@ -487,11 +472,12 @@
 
                     <div class="delivery-content-left-button" style="justify-content:flex-end; margin-top:20px;">
                         <a href="{{ url('/cart') }}" style="margin-right:auto;"><span>&#171;</span> Quay lại giỏ hàng</a>
+                        
                         <button type="submit" class="qr-payment"><span style="font-weight:bold;">THANH TOÁN</span></button>
                     </div>
 
-
-
+                  
+                
                 </div>
             </div>
         </form>
@@ -503,13 +489,13 @@
             <div class="footer-logo">
                 <img src="{{ asset('storage/logo2.png')}}" alt="footer-logo">
             </div>
-            <p><strong>TickTock Shop</strong> là hệ thống cửa hàng đồng hồ chính hãng tại Việt Nam,
-                chuyên cung cấp các thương hiệu nổi tiếng thế giới như Casio, Seiko, Citizen,
+            <p><strong>TickTock Shop</strong> là hệ thống cửa hàng đồng hồ chính hãng tại Việt Nam, 
+                chuyên cung cấp các thương hiệu nổi tiếng thế giới như Casio, Seiko, Citizen, 
                 Rolex, Rado cùng nhiều phụ kiện đi kèm (dây đeo, hộp đựng, kính cường lực).
             </p>
             <p>
-                Với phương châm <em>“Uy tín tạo niềm tin”</em>, TickTock Shop luôn cam kết
-                sản phẩm 100% chính hãng, bảo hành chính hãng toàn quốc, dịch vụ giao hàng nhanh chóng
+                Với phương châm <em>“Uy tín tạo niềm tin”</em>, TickTock Shop luôn cam kết 
+                sản phẩm 100% chính hãng, bảo hành chính hãng toàn quốc, dịch vụ giao hàng nhanh chóng 
                 và đội ngũ tư vấn nhiệt tình để mang đến trải nghiệm mua sắm hoàn hảo nhất cho khách hàng.
             </p>
         </div>
@@ -518,7 +504,7 @@
             <p><i class="fa-solid fa-location-dot"></i> 123 Nguyễn Trãi, Thanh Xuân, Hà Nội</p>
             <p><i class="fa-solid fa-phone"></i> 0123 456 789</p>
             <p><i class="fa-regular fa-envelope"></i> support@ticktockshop.com</p>
-
+            
             <h4>Giờ làm việc</h4>
             <p>Thứ 2 - Thứ 7: 8:00 - 21:30</p>
             <p>Chủ nhật & ngày lễ: 9:00 - 18:00</p>
@@ -612,7 +598,7 @@
         };
         localStorage.setItem('checkout_info', JSON.stringify(data));
     });
-
+    
     // Khi load form lại
     window.addEventListener('DOMContentLoaded', () => {
         const saved = JSON.parse(localStorage.getItem('checkout_info') || '{}');
@@ -622,67 +608,67 @@
         }
     });
     </script>
-
+    
     {{-- <script>
         document.getElementById('checkout-form').addEventListener('submit', function(e) {
             const method = document.querySelector('input[name="payment_method"]:checked').value;
-
+        
             if (method === 'bank') {
                 e.preventDefault(); // Chặn submit mặc định
-
+        
                 const total = document.getElementById('grand-total-text').dataset.base;
-
+        
                 // Tạo form ẩn POST tới route vnpay/payment
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = "{{ route('vnpay.payment') }}";
-
+        
                 // Thêm CSRF token
                 const tokenInput = document.createElement('input');
                 tokenInput.type = 'hidden';
                 tokenInput.name = '_token';
                 tokenInput.value = "{{ csrf_token() }}";
                 form.appendChild(tokenInput);
-
+        
                 // Thêm amount
                 const amountInput = document.createElement('input');
                 amountInput.type = 'hidden';
                 amountInput.name = 'amount';
                 amountInput.value = total;
                 form.appendChild(amountInput);
-
+        
                 document.body.appendChild(form);
                 form.submit(); // submit form POST trực tiếp
             }
         });
         </script> --}}
-
+        
         <script>
             document.getElementById('checkout-form').addEventListener('submit', function(e) {
                 const method = document.querySelector('input[name="payment_method"]:checked').value;
-
+            
                 if (method === 'bank') {
                     e.preventDefault();
-
+            
                     const total = document.getElementById('grand-total-text').dataset.base;
                     const checkoutInfo = JSON.parse(localStorage.getItem('checkout_info') || '{}');
-
+            
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = "{{ route('vnpay.payment') }}";
-
+            
                     const tokenInput = document.createElement('input');
                     tokenInput.type = 'hidden';
                     tokenInput.name = '_token';
                     tokenInput.value = "{{ csrf_token() }}";
                     form.appendChild(tokenInput);
-
+            
                     const amountInput = document.createElement('input');
                     amountInput.type = 'hidden';
                     amountInput.name = 'amount';
                     amountInput.value = total;
                     form.appendChild(amountInput);
-
+            
                     // Gửi dữ liệu checkout_info
                     for (const key in checkoutInfo) {
                         const input = document.createElement('input');
@@ -691,11 +677,11 @@
                         input.value = checkoutInfo[key];
                         form.appendChild(input);
                     }
-
+            
                     document.body.appendChild(form);
                     form.submit();
                 }
             });
             </script>
-
+            
 </html>

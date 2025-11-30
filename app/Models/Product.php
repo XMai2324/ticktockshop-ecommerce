@@ -27,6 +27,12 @@ class Product extends Model
         'is_hidden',
         'is_new',
 
+        'movement',
+        'case_material',
+        'strap_material',
+        'glass_material',
+        'diameter',
+        'water_resistance',
     ];
 
     public function category()

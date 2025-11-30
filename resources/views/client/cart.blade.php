@@ -32,7 +32,7 @@
 
         <div class="header_menu">
             <li>
-                <a href="">THƯƠNG HIỆU</a>
+                <a href="{{ route('home') }}">THƯƠNG HIỆU</a>
                 <ul class="sub_TH">
                     <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
                     <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>

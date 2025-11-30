@@ -35,7 +35,6 @@ Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->n
 
 // Trang /
 
-// Trang /
 Route::get('/', function () {
 
     // Nếu là admin thì vẫn về trang admin
@@ -43,13 +42,10 @@ Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     }
 
-    // Lấy sản phẩm bán chạy & sản phẩm mới (có cả ratings)
-    $bestSellers = Product::with('ratings')
-        ->where('is_hidden', 0)
-        ->orderByDesc('created_at')   // bạn thay logic bán chạy tại đây nếu muốn
-        ->take(8)
-        ->get();
+    // LẤY SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin)
+    $bestSellers = Product::bestSellerByRevenue(8)->get();
 
+    // SẢN PHẨM MỚI (giữ nguyên logic cũ)
     $newProducts = Product::with('ratings')
         ->where('is_hidden', 0)
         ->orderByDesc('created_at')
@@ -58,6 +54,7 @@ Route::get('/', function () {
 
     return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');
+
 
 // logout
 Route::post('/logout', function () {

@@ -29,6 +29,11 @@
                     </div>
 
                     <div class="mb-2">
+                        <label>Đơn hàng:</label>
+                        <input id="detail-order" class="form-control" disabled></input>
+                    </div>
+
+                    <div class="mb-2">
                         <label>Số sao:</label>
                         <input type="text" id="detail-rating" class="form-control" disabled>
                     </div>
@@ -113,6 +118,7 @@
                                     <th>ID</th>
                                     <th>Người đánh giá</th>
                                     <th>Sản phẩm</th>
+                                    <th>Đơn hàng</th>
                                     <th>Sao</th>
                                     <th>Bình luận</th>
                                     <th>Phản hồi</th>

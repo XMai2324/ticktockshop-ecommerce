@@ -30,6 +30,13 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function ratings()
+    {
+        // Một đơn hàng có nhiều đánh giá (cho từng sản phẩm trong đơn)
+        return $this->hasMany(Rating::class, 'order_id');
+    }
+
+
     // Quan hệ với bảng payments (nếu có)
     public function payment()
     {
@@ -47,4 +54,8 @@ class Order extends Model
         return $this->hasMany(OrderItem::class, 'order_id');
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

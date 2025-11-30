@@ -191,8 +191,8 @@
                                             <p>{{ number_format($r->price, 0, ',', '.') }}<sup>đ</sup></p>
                                             {{-- Hiển thị đánh giá trung bình --}}
                                             @php
-                                                $avg = $product->avg_rating ?? 0;
-                                                $count = $product->rating_count ?? 0;
+                                                $avg = $r->avg_rating ?? 0;
+                                                $count = $r->rating_count ?? 0;
                                             @endphp
 
                                             @if ($count > 0)

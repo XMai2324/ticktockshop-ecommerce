@@ -505,7 +505,7 @@
                     <div class="custom-card border-top-success" style="border-top: 4px solid #1cc88a;">
                         <div class="card-header">
                             <h3 class="card-title" style="color: #1cc88a">
-                                <i class="fas fa-trophy"></i> Top 10 Đơn Giá Trị Cao Nhất
+                                <i class="fas fa-trophy"></i> Top 20 Đơn Giá Trị Cao Nhất
                             </h3>
                         </div>
 

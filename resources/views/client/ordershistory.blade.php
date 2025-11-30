@@ -52,6 +52,7 @@
                             <th>Ngày đặt</th>
                             <th>Tổng tiền</th>
                             <th>Phương thức thanh toán</th>
+                            <th>Trạng thái đơn hàng</th>
                             <th>Chi tiết</th>
                         </tr>
                     </thead>
@@ -70,7 +71,27 @@
                                         <span class="badge bg-secondary">Chưa tạo giao dịch</span>
                                     @endif
                                 </td>
-
+                                <td>
+                                    @switch($order->status)
+                                        @case('pending')
+                                            <span class="badge bg-warning text-dark">⏳ Chờ xử lý</span>
+                                            @break
+                                        @case('confirmed')
+                                            <span class="badge bg-primary">✅ Đã xác nhận</span>
+                                            @break
+                                        @case('shipping')
+                                            <span class="badge bg-info text-dark">🚚 Đang giao</span>
+                                            @break
+                                        @case('delivered')
+                                            <span class="badge bg-success">🎉 Đã nhận</span>
+                                            @break
+                                        @case('cancelled')
+                                            <span class="badge bg-danger">❌ Đã hủy</span>
+                                            @break
+                                        @default
+                                            <span class="badge bg-secondary">{{ $order->status }}</span>
+                                    @endswitch
+                                </td>
                                 <td>
                                     <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
                                         Xem

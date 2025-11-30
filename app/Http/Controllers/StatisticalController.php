@@ -150,10 +150,10 @@ class StatisticalController extends Controller
 
     // --- PHẦN 5: THỐNG KÊ ĐƠN HÀNG (MỚI) ---
 
-    // A. Đơn hàng có tổng tiền lớn nhất
+    // A. Top 20 Đơn hàng có tổng tiền lớn nhất
     $top_value_orders = \App\Models\Order::with('user')
         ->orderBy('total_price', 'desc')
-        ->take(10) // Lấy 10 đơn
+        ->take(20) // Lấy 20 đơn
         ->get();
 
 // B. Top 5 Đơn hàng nhiều sản phẩm nhất (Sỉ/Gom đơn)

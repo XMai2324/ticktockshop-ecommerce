@@ -62,18 +62,20 @@
                         data-id="${r.id}"
                         data-user="${user}"
                         data-product="${product}"
+                        data-order="${r.order_id || ''}"
                         data-rating="${r.rating}"
                         data-comment="${comment}"
-                        data-time="${escapeHtml(r.created_at)}"
+                        data-time="${escapeHtml(r.updated_at)}"
                         data-response="${response}"
                     >
                         <td>${r.id}</td>
                         <td>${user}</td>
-                        <td style="max-width:280px">${product}</td>
+                        <td style="max-width:250px">${product}</td>
+                        <td>Đơn #${r.order_id || '---'}</td>
                         <td>${r.rating} / 5 </td>
-                        <td style="max-width:300px">${comment}</td>
+                        <td style="max-width:280px">${comment}</td>
                         <td style="max-width:280px">${response}</td>
-                        <td>${escapeHtml(r.created_at)}</td>
+                        <td>${escapeHtml(r.updated_at)}</td>
                         <td><button class="btn-delete" data-id="${r.id}">Xóa</button></td>
                     </tr>
                 `;
@@ -97,6 +99,7 @@
                 document.getElementById('detail-id').value = row.dataset.id;
                 document.getElementById('detail-user').value = row.dataset.user;
                 document.getElementById('detail-product').value = row.dataset.product;
+                document.getElementById('detail-order').value = row.dataset.order;
                 document.getElementById('detail-rating').value = row.dataset.rating;
                 document.getElementById('detail-comment').value = row.dataset.comment;
                 document.getElementById('detail-time').value = row.dataset.time;

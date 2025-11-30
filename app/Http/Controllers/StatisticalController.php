@@ -66,8 +66,44 @@ class StatisticalController extends Controller
         $chart_labels = $dataRaw->pluck('label')->toArray();
         $chart_data   = $dataRaw->pluck('total')->toArray();
 
-        // 3. DỮ LIỆU CHI TIẾT SẢN PHẨM (Top 5 bán chạy - Ví dụ)
-        //$top_products = Product::orderBy('view_count', 'desc')->take(5)->get();
+        // --- PHẦN 4: THỐNG KÊ SẢN PHẨM & KHO HÀNG ---
+
+        // A. Sản phẩm Bán chạy nhất
+        $top_selling_products = \App\Models\Product::select(
+            'products.id',
+            'products.name',
+            'products.image',
+            'products.price',
+            'products.brand_id',    // <--- THÊM
+            'products.category_id'  // <--- THÊM
+        )
+        ->with(['brand', 'category']) // <--- Nạp dữ liệu quan hệ
+        ->join('order_items', 'products.id', '=', 'order_items.product_id')
+        ->join('orders', 'order_items.order_id', '=', 'orders.id')
+        ->where('orders.status', 'delivered')
+        ->selectRaw('SUM(order_items.quantity) as total_sold')
+        // Nhớ thêm brand_id, category_id vào Group By
+        ->groupBy('products.id', 'products.name', 'products.image', 'products.price', 'products.brand_id', 'products.category_id')
+        ->orderBy('total_sold', 'desc')
+        ->take(10)
+        ->get();
+
+    // 2. SẮP HẾT HÀNG
+        $low_stock_products = \App\Models\Product::with(['brand', 'category']) // <--- THÊM
+            ->where('quantity', '<=', 10)
+            ->where('quantity', '>', 0)
+            ->orderBy('quantity', 'asc')
+            ->get();
+
+        $out_of_stock_count = \App\Models\Product::where('quantity', 0)->count();
+        // 3. HÀNG TỒN ĐỌNG
+        $unsold_products = \App\Models\Product::with(['brand', 'category']) // <--- THÊM
+            ->whereDoesntHave('orderItems.order', function($q) {
+                $q->where('status', 'delivered');
+            })
+            ->select('id', 'name', 'image', 'price', 'created_at', 'quantity', 'brand_id', 'category_id') // <--- THÊM ID quan hệ
+            ->orderBy('created_at', 'asc')
+            ->get();
 
         // --- PHẦN 3: THỐNG KÊ ĐÁNH GIÁ  ---
 
@@ -103,8 +139,57 @@ class StatisticalController extends Controller
             // Chỉ lấy những sản phẩm có rating > 0 theo tiêu chí lọc
             ->having('ratings_count', '>', 0)
             ->orderBy('ratings_count', $filter_sort)
-            ->take(10)
+            ->take(15)
             ->get();
+
+        // Danh sách sản phẩm chưa có đánh giá
+        $unrated_products = Product::doesntHave('ratings')
+        ->orderBy('created_at', 'desc') // Ưu tiên sản phẩm mới nhập
+        ->take(20)
+        ->get();
+
+    // --- PHẦN 5: THỐNG KÊ ĐƠN HÀNG (MỚI) ---
+
+    // A. Đơn hàng có tổng tiền lớn nhất
+    $top_value_orders = \App\Models\Order::with('user')
+        ->orderBy('total_price', 'desc')
+        ->take(10) // Lấy 10 đơn
+        ->get();
+
+// B. Top 5 Đơn hàng nhiều sản phẩm nhất (Sỉ/Gom đơn)
+    $most_products_orders = Order::with('user')
+        ->withSum('orderItems', 'quantity') // Tính tổng số lượng item
+        ->orderBy('order_items_sum_quantity', 'desc')
+        ->take(5) // Lấy 5 đơn
+        ->get();
+
+    // C. Dữ liệu biểu đồ trạng thái đơn hàng
+    // Kết quả: ['completed' => 50, 'pending' => 10, 'cancelled' => 5]
+    $order_status_counts = Order::select('status',DB::raw('count(*) as total'))
+        ->groupBy('status')
+        ->pluck('total', 'status')
+        ->toArray();
+
+    // Chuẩn bị dữ liệu cho Chart.js
+    // Định nghĩa các trạng thái muốn hiển thị và màu sắc tương ứng
+    $status_labels_map = [
+        'pending'   => 'Chờ xử lý',
+        'confirmed' => 'Đã xác nhận',
+        'shipping'  => 'Đang giao',
+        'delivered' => 'Giao thành công',
+        'cancelled' => 'Đã hủy'
+    ];
+
+    // Tạo mảng label và data theo thứ tự
+    $status_chart_labels = [];
+    $status_chart_data = [];
+
+    foreach ($order_status_counts as $status => $count) {
+        // Lấy tên tiếng Việt, nếu không có thì lấy tên gốc
+        $status_chart_labels[] = $status_labels_map[$status] ?? ucfirst($status);
+        $status_chart_data[] = $count;
+    }
+
 
         return view('admin.statistical', compact(
             'total_products',
@@ -120,7 +205,16 @@ class StatisticalController extends Controller
             'bar_data',
             'table_products',
             'filter_star',
-            'filter_sort'
+            'filter_sort',
+            'unrated_products',
+            'top_selling_products',
+            'low_stock_products',
+            'out_of_stock_count',
+            'unsold_products',
+            'top_value_orders',
+            'most_products_orders',
+            'status_chart_labels',
+            'status_chart_data'
         ));
     }
 }

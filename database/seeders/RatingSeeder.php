@@ -20,8 +20,8 @@ class RatingSeeder extends Seeder
 
         foreach ($products as $product) {
 
-            // Random số lượng đánh giá / mỗi sản phẩm từ 3–10 đánh giá
-            $reviewCount = rand(3, 10);
+            // Random số lượng đánh giá / mỗi sản phẩm từ 0–10 đánh giá
+            $reviewCount = rand(0, 15);
 
             for ($i = 0; $i < $reviewCount; $i++) {
 

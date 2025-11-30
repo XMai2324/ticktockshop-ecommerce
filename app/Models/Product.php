@@ -60,6 +60,9 @@ class Product extends Model
         return $this->created_at >= now()->subDays(7);
     }
 
-
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
 

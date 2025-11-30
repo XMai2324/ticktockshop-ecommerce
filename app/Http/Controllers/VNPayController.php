@@ -120,8 +120,18 @@ class VNPayController extends Controller
                     'quantity'   => $item['quantity'] ?? $item['qty'], // GIỎ HÀNG DÙNG KEY NÀO?
                     'price'      => $item['price'], // đơn giá
                 ]);
+                        // Trừ tồn kho
+    $product = \App\Models\Product::find($item['id']);
+    if ($product) {
+        $product->decrement('quantity', $item['qty']);
+
+        if ($product->quantity < 0) {
+            $product->quantity = 0;
+            $product->save();
+        }
+    }
             }
-            
+     
     
             // Lưu thanh toán
             \App\Models\Payment::create([

@@ -178,10 +178,11 @@
     background: #c0392b;
 }
 
+/* Layout chính */
 .promotions-layout {
     display: flex;
     gap: 20px;
-    flex-wrap: wrap; /* cho phép wrap khi màn hình nhỏ */
+    flex-wrap: wrap;
 }
 
 /* Panel chung */
@@ -196,25 +197,48 @@
 
 /* Panel Left */
 .panel-left {
-    flex: 1 1 380px;  /* flex-grow, flex-shrink, base width */
+    flex: 1 1 380px;
     max-width: 400px;
 }
 
-/* Panel Right */
+/* Panel Right (bảng) */
 .panel-right {
-    flex: 2 1 500px;  /* chiếm nhiều không gian hơn panel-left */
-    min-width: 300px;
+    flex: 2 1 600px;   /* panel-right rộng hơn nhưng vẫn co lại được */
+    min-width: 450px; /* không quá nhỏ, hạn chế vỡ bảng */
 }
 
-/* Media Query: màn hình nhỏ hơn 800px (100% width) */
-@media (max-width: 800px) {
-    .promotions-layout {
-        flex-direction: column; /* panel-right xuống dưới panel-left */
+/* Responsive breakpoint 1 — Tablet */
+@media (max-width: 900px) {
+    .panel-right {
+        min-width: 100%;   /* bảng chiếm 100% khi chật */
+        flex: 1 1 100%;
     }
+}
+
+/* Responsive breakpoint 2 — Mobile vừa */
+@media (max-width: 750px) {
+    .promotions-layout {
+        flex-direction: column; /* đưa panel-right xuống dưới */
+    }
+
     .panel-left, .panel-right {
         max-width: 100%;
+        min-width: 100%;
         flex: 1 1 100%;
         margin-left: 0;
         margin-right: 0;
+    }
+}
+
+/* Mobile nhỏ (bảng nhỏ gọn) */
+@media (max-width: 480px) {
+    .table th, .table td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .btn-edit, .btn-delete {
+        padding: 4px 6px;
+        font-size: 12px;
     }
 }

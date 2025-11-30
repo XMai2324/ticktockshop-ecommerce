@@ -186,5 +186,90 @@
     background-color: #5a6268;
 }
 
+/* Màn hình vừa (tablet) */
+@media (max-width: 992px) {
 
+    /* Thu nhỏ container */
+    .container-nhap-hang {
+        padding: 15px;
+    }
+
+    /* Thu nhỏ font bảng */
+    #tableProducts th, 
+    #tableProducts td {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    /* Form lọc: chuyển hàng đẹp */
+    .filter-form {
+        flex-wrap: wrap;
+    }
+
+    .filter-form select,
+    .filter-form input,
+    .filter-form button {
+        flex: 1 1 48%;  /* 2 item 1 hàng */
+        min-width: 150px;
+    }
+}
+
+/* Màn hình nhỏ (mobile ~ <768px) */
+@media (max-width: 768px) {
+
+    /* Giảm padding */
+    .container-nhap-hang {
+        padding: 12px;
+    }
+
+    /* Bảng hiển thị gọn */
+    #tableProducts th, 
+    #tableProducts td {
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    /* Input trong bảng */
+    #tableProducts input,
+    #tableProducts select {
+        font-size: 12px;
+    }
+
+    /* Tìm kiếm co giãn full width */
+    #searchInput {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* Filter form xuống nhiều hàng */
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .filter-form select,
+    .filter-form input,
+    .filter-form button {
+        width: 100%;
+        flex: none;
+    }
+}
+
+/* Màn hình rất nhỏ (< 480px) */
+@media (max-width: 480px) {
+
+    /* Thu nhỏ chữ hơn nữa */
+    #tableProducts th,
+    #tableProducts td {
+        font-size: 11px;
+    }
+
+    /* Giảm kích thước nút scroll top */
+    #btnScrollTop {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+}   
 

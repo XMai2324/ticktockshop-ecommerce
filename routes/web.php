@@ -12,11 +12,12 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
-use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\NhapHangController;
+use App\Http\Controllers\StatisticalController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
-<<<<<<< HEAD
 | HOME + AUTH
 |--------------------------------------------------------------------------
 */
@@ -31,13 +32,28 @@ Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->n
 
 // Trang /
 
+// Trang /
 Route::get('/', function () {
-    if (auth()->check()) {
-        return auth()->user()->role === 'admin'
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('client.home');
+
+    // Nếu là admin thì vẫn về trang admin
+    if (auth()->check() && auth()->user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
     }
-    return view('client.home');
+
+    // Lấy sản phẩm bán chạy & sản phẩm mới (có cả ratings)
+    $bestSellers = Product::with('ratings')
+        ->where('is_hidden', 0)
+        ->orderByDesc('created_at')   // bạn thay logic bán chạy tại đây nếu muốn
+        ->take(8)
+        ->get();
+
+    $newProducts = Product::with('ratings')
+        ->where('is_hidden', 0)
+        ->orderByDesc('created_at')
+        ->take(8)
+        ->get();
+
+    return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');
 
 // logout
@@ -52,7 +68,21 @@ Route::post('/logout', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/dashboard', fn () => view('client.home'))->name('client.home');
+    Route::get('/dashboard', function () {
+
+        $bestSellers = Product::withCount('ratings')
+            ->where('is_hidden', 0)
+            ->orderByDesc('ratings_count')
+            ->take(8)
+            ->get();
+
+        $newProducts = Product::where('is_hidden', 0)
+            ->orderByDesc('created_at')
+            ->take(8)
+            ->get();
+
+        return view('client.home', compact('bestSellers', 'newProducts'));
+    })->name('client.home');
 });
 
 /*
@@ -262,6 +292,11 @@ Route::post('/checkout/remove-coupon', [CheckoutController::class, 'removeCoupon
 Route::get('/search', [ProductController::class, 'unifiedSearch'])->name('search.all');
 
 
+Route::get('/profile', [LoginAuthController::class, 'profile'])->name('profile');
+Route::post('/profile/update', [LoginAuthController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/change-password', [LoginAuthController::class, 'changePassword'])->name('profile.changePassword');
+
+
 //Admin promotion
 Route::prefix('admin')->middleware(['auth'])->group(function(){
     Route::get('promotions', [PromotionsController::class,'index'])->name('admin.promotions_index');
@@ -305,3 +340,20 @@ Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.ret
 
 Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
 Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
+
+//Nhập HÀNG (admin)    
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('nhap-hang', [NhapHangController::class, 'index'])->name('nhapHang_index');
+    Route::post('nhap-hang/save-preview', [NhapHangController::class, 'savePreview'])->name('nhapHang_savePreview');
+    Route::get('nhap-hang/preview', [NhapHangController::class, 'preview'])->name('nhapHang_preview');
+    Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
+    Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
+});
+
+
+
+// Thống kê
+
+Route::get('/statistical', [StatisticalController::class, 'index'])
+    ->name('admin.statistical');
+

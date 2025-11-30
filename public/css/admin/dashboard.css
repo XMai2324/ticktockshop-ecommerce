@@ -5,8 +5,8 @@ header{
   left:0;
   right:0;
   z-index:999;
-  height:120px; 
-  padding:12px 50px;
+  height:120px;
+  padding:12px 10px;
   display:flex;
   align-items:center;
   gap:24px;
@@ -18,7 +18,7 @@ header.sticky{
 }
 
 .logo img{
-    height:95px;
+    height:90px;
     display:block;
 }
 
@@ -42,22 +42,6 @@ header.sticky{
     display:block; padding:8px 10px; }
 
 
-/* USER + LOGOUT bên phải (giữ nguyên HTML của Anh) */
-.header_other{
-  margin-left:auto;               /* đẩy sát phải */
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-/* Đẩy cụm sang phải và canh giữa theo chiều dọc */
-.header_other {
-    display: flex;
-    align-items: center;
-    gap: 20px; /* khoảng cách giữa user và logout */
-}
 
 .header-user {
     display: flex;
@@ -92,7 +76,7 @@ header.sticky{
   cursor: pointer;
   font-size: 18px;
   color: #555;
-  padding: 4px 6px;
+  padding: 4px 3px;
   transition: color .2s, transform .2s;
 }
 .logout-btn:hover{ color:#e74c3c; transform:scale(1.05); }
@@ -350,12 +334,12 @@ main{ margin-top:100px; }
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
-    justify-content: center;
-    align-items: center;
+    
 }
 
 .modal-overlay.active {
     display: flex;
+   
 }
 
 .modal-content {
@@ -528,37 +512,4 @@ footer{
 }
 .footer-bottom{
     margin: 20px 0;
-}
-
-.product-card.product-hidden {
-    opacity: 0.4;
-    position: relative;
-}
-
-.product-card.product-hidden::after {
-    content: "ĐANG ẨN";
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    padding: 2px 6px;
-    font-size: 15px;
-    background: #d63220;
-    color: #ffffff;
-    border-radius: 4px;
-}
-.accessory-hidden {
-    opacity: 0.4;
-    filter: grayscale(60%);
-}
-.hidden-badge {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: #d6336c;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: bold;
-    z-index: 10;
 }

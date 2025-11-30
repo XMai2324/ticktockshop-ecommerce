@@ -1,0 +1,190 @@
+/* Container tổng */
+.container-nhap-hang {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 1200px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+/* Tiêu đề */
+.container-nhap-hang h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Nút trên cùng */
+.top-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* Bảng sản phẩm */
+#tableProducts {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+#tableProducts th, #tableProducts td {
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tableProducts th {
+    background-color: #007bff;
+    color: white;
+    font-weight: 500;
+}
+
+#tableProducts input[type="text"],
+#tableProducts input[type="number"],
+#tableProducts select,
+#tableProducts input[type="file"] {
+    width: 100%;
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#tableProducts input[readonly] {
+    background-color: #e9ecef;
+}
+
+/* Nút xóa */
+.remove-row {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-row:hover {
+    background-color: #c82333;
+}
+
+/* Tìm kiếm */
+#searchInput {
+    width: 300px;
+    padding: 6px 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+/* Nút thêm mới và lưu tất cả */
+.btn-primary, .btn-success {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0069d9;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #tableProducts th, #tableProducts td {
+        font-size: 12px;
+        padding: 5px;
+    }
+}
+
+#btnScrollTop {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: none; /* mặc định ẩn */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+#btnScrollTop:hover {
+    background-color: #0056b3;
+}
+
+/* Form lọc danh mục + thương hiệu */
+.filter-form {
+    margin-bottom: 10px; /* Cách searchInput phía dưới */
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Select và input search */
+.filter-form select,
+#searchInput {
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 4px;
+    border: 1px solid #0a0a0a;
+    font-size: 14px;
+}
+
+/* Nút lọc và reset bằng nhau, cao bằng searchInput */
+.filter-form button {
+    height: 38px; /* bằng searchInput */
+    padding: 0 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 1; /* để 2 nút bằng nhau */
+}
+
+/* Nút lọc */
+.filter-form .btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
+
+.filter-form .btn-primary:hover {
+    background-color: #0069d9;
+}
+
+/* Nút reset */
+.filter-form .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.filter-form .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+
+

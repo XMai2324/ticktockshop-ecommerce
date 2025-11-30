@@ -70,7 +70,7 @@
                                         <span class="badge bg-secondary">Chưa tạo giao dịch</span>
                                     @endif
                                 </td>
-
+                                
                                 <td>
                                     <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-outline-primary">
                                         Xem

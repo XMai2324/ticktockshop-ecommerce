@@ -1,49 +1,131 @@
+/* Container layout chính */
 .promotions-layout {
     display: flex;
-    gap: 10px;
+    gap: 20px;
+    flex-wrap: wrap; /* responsive khi màn hình nhỏ */
 }
 
+/* Panel chung */
 .panel-left, .panel-right {
-    margin-top: 40px;
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-#form-title-left{
-    text-align: center;
-}
-
-#form-title-right{
-    text-align: center;
-    margin-bottom: 20px;
+    box-sizing: border-box;
+    margin-top: 40px;
 }
 
+/* Panel Left */
 .panel-left {
     flex: 1;
     max-width: 400px;
     margin-left: 30px;
-
 }
 
-.panel-left .btn-primary{
-    margin-left: 40%;
-}
-
-
-.panel-left .field{
-    line-height: 3;
-}
-
-
+/* Panel Right */
 .panel-right {
     flex: 2;
     margin-right: 30px;
-
 }
 
+/* Titles */
+#form-title-left, #form-title-right {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
 
+/* Các field chung */
+.panel-left .field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
 
+/* Label */
+.panel-left .field label {
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+/* Input, select */
+.panel-left .field input,
+.panel-left .field select {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Grid 2 cột */
+.panel-left .grid-2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.panel-left .grid-2 .field {
+    flex: 1 1 150px;
+    min-width: 150px;
+}
+
+/* Checkbox */
+.panel-left .field-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.panel-left .field-checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.panel-left .field-checkbox label {
+    margin: 0;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* Button lưu */
+.panel-left button.btn-primary {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    display: block;
+    width: auto;
+    margin: 0 auto; /* căn giữa */
+    transition: background-color 0.3s;
+}
+
+.panel-left button.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+/* Lỗi validate */
+.panel-left .alert-error {
+    background-color: #ffe6e6;
+    border: 1px solid #ff4d4f;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+}
+
+.panel-left .text-error {
+    color: #ff4d4f;
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+
+/* Bảng */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -54,7 +136,8 @@
     padding: 8px;
 }
 
-.btn-primary{
+/* Button trong bảng */
+.btn-primary {
     background-color: #8092a4;
     color: white;
     padding: 10px 20px;
@@ -65,7 +148,7 @@
     transition: background-color 0.3s;
 }
 
-.btn-primary:hover{
+.btn-primary:hover {
     background-color: #218838;
 }
 
@@ -78,6 +161,10 @@
     cursor: pointer;
 }
 
+.btn-edit:hover {
+    background: #2980b9;
+}
+
 .btn-delete {
     background: #e74c3c;
     color: #fff;
@@ -87,5 +174,47 @@
     cursor: pointer;
 }
 
-.btn-edit:hover { background: #2980b9; }
-.btn-delete:hover { background: #c0392b; }
+.btn-delete:hover {
+    background: #c0392b;
+}
+
+.promotions-layout {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* cho phép wrap khi màn hình nhỏ */
+}
+
+/* Panel chung */
+.panel-left, .panel-right {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+
+/* Panel Left */
+.panel-left {
+    flex: 1 1 380px;  /* flex-grow, flex-shrink, base width */
+    max-width: 400px;
+}
+
+/* Panel Right */
+.panel-right {
+    flex: 2 1 500px;  /* chiếm nhiều không gian hơn panel-left */
+    min-width: 300px;
+}
+
+/* Media Query: màn hình nhỏ hơn 800px (100% width) */
+@media (max-width: 800px) {
+    .promotions-layout {
+        flex-direction: column; /* panel-right xuống dưới panel-left */
+    }
+    .panel-left, .panel-right {
+        max-width: 100%;
+        flex: 1 1 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}

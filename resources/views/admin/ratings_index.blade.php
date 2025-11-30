@@ -106,22 +106,23 @@
                             </div>
                         </div>
                     </div>
-
-                    <table class="table table-hover table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Người đánh giá</th>
-                                <th>Sản phẩm</th>
-                                <th>Sao</th>
-                                <th>Bình luận</th>
-                                <th>Phản hồi</th>
-                                <th>Thời gian</th>
-                                <th>Hành động</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ratings-list-js">
-                    </table>
+                    <div class="table-responsive border rounded" style="max-height: 700px; overflow-y: auto;">
+                        <table class="table table-hover table-bordered mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Người đánh giá</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Sao</th>
+                                    <th>Bình luận</th>
+                                    <th>Phản hồi</th>
+                                    <th>Thời gian</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ratings-list-js">
+                        </table>
+                    </div>
                 </div>
             </div>
 

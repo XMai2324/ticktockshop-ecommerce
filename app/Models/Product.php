@@ -25,6 +25,14 @@ class Product extends Model
         'brand_id',
         'warranty_months',
         'is_hidden',
+        'is_new',
+
+        'movement',
+        'case_material',
+        'strap_material',
+        'glass_material',
+        'diameter',
+        'water_resistance',
     ];
 
     public function category()
@@ -52,4 +60,15 @@ class Product extends Model
     {
         return $this->ratings()->count(); // số lượng đánh giá
     }
+
+    public function getIsNewAttribute()
+    {
+        return $this->created_at >= now()->subDays(7);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
+

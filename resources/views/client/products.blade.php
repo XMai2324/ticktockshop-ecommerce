@@ -46,11 +46,13 @@
                 <div class="product-page-right-top row">
                     <div class="product-page-right-top-item">
                         <p class="product-page-title">
-                            @if (isset($currentBrand) && isset($currentCategory))
+                            @if (!empty($keyword))
+                                KẾT QUẢ TÌM KIẾM: "{{ strtoupper($keyword) }}"
+                            @elseif (isset($currentBrand) && isset($currentCategory))
                                 {{ strtoupper($currentBrand->name) }} - {{ strtoupper($currentCategory->name) }}
-                            @elseif(isset($currentBrand))
+                            @elseif (isset($currentBrand))
                                 SẢN PHẨM THƯƠNG HIỆU: {{ strtoupper($currentBrand->name) }}
-                            @elseif(isset($currentCategory))
+                            @elseif (isset($currentCategory))
                                 SẢN PHẨM LOẠI: {{ strtoupper($currentCategory->name) }}
                             @else
                                 TẤT CẢ SẢN PHẨM

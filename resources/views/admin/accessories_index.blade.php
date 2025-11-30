@@ -4,11 +4,9 @@
 
 @section('content')
 <div class="container">
-    <div style="display: flex; gap: 24px; align-items: flex-start;">
+    <div style="display: flex; gap: 5px; align-items: flex-start;">
 
         <aside class="sidebar_acc">
-            
-
             <h3>Phụ kiện</h3>
             <ul>
                 
@@ -42,19 +40,18 @@
         <div class="admin-accessories-content" style="flex: 1;">
 
             {{-- Header + nút thêm --}}
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display: flex;">
                 <h2>
-                    Quản lý phụ kiện 
-                    @if($type === 'straps') - Dây đeo
-                    @elseif($type === 'boxes') - Hộp đựng
-                    @elseif($type === 'glasses') - Kính cường lực
+                    @if($type === 'straps') Dây đeo
+                    @elseif($type === 'boxes') Hộp đựng
+                    @elseif($type === 'glasses') Kính cường lực
                     @endif
                 </h2>
 
-                <button id="btn-open-accessory-create" class="btn-create-product">
+                <button id="btn-open-accessory-create" class="btn-create-product" style= "margin-left: auto;">
                     + Thêm phụ kiện mới
                 </button>
-                <button id="btn-filter-hidden" class="btn btn-secondary">
+                <button id="btn-filter-hidden" class="btn btn-secondary" style="font-weight: bold;padding: 10px 20px;margin-bottom: 10px; border-radius:6px;">
                     * Hiện sản phẩm ẩn *
                 </button>
             </div>
@@ -72,6 +69,17 @@
                 <label>Tên phụ kiện:</label>
                 <input type="text" name="name" required>
 
+                @if($type === 'straps' || $type === 'glasses')
+                    <label>Chất liệu:</label>
+                    <input type="text" name="material" required>
+
+                    <label>Màu sắc:</label>
+                    <input type="text" name="color" required>
+                @endif
+
+                <label>Số lượng:</label>
+                <input type="number" name="quantity" min="0" required>
+
                 <label>Giá:</label>
                 <input type="number" name="price" min="0" required>
 
@@ -79,8 +87,10 @@
                 <input type="file" name="image" id="accessory-image-input" required>
                 <img id="accessory-preview" style="display:none; max-width: 200px; margin-top: 10px; border:1px solid #ccc;">
 
-                <label>Mô tả:</label>
-                <textarea name="description" rows="4"></textarea>
+                @if($type === 'boxes' || $type === 'glasses')
+                    <label>Mô tả:</label>
+                    <textarea name="description" required></textarea>
+                @endif
 
                 <button type="submit">Lưu</button>
             </form>
@@ -161,7 +171,7 @@
                             <button class="btn-toggle-accessory"
                                     data-id="{{ $strap->id }}"
                                     data-type="straps"
-                                    data-hidden="{{ $strap->is_hidden ? 1 : 0 }}">
+                                    data-hidden="{{ $strap->is_hidden ? 1 : 0 }}" style="background-color: #dead69ff; ">
                                 {{ $strap->is_hidden ? 'Hiện' : 'Ẩn' }}
                             </button>
 

@@ -568,7 +568,6 @@ details[open] summary::after {
     font-weight: 500;
 }
 
-<<<<<<< HEAD
 .quantity-box input[type="number"] {
     width: 60px;
     padding: 6px;
@@ -590,11 +589,4 @@ details[open] summary::after {
 
 .btn-add-to-cart:hover {
     background-color: #e22e2e;
-<<<<<<< HEAD
 }
-=======
-}
-
->>>>>>> 24c700b1b99cc6031d36bdcc554af910fe6df928
-=======
->>>>>>> 2f242a665f4736f6c8ea06c493c312f233800832

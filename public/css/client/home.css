@@ -442,6 +442,214 @@ header:hover{
 
 
 /* -----------------------Body------------------------ */
+.home-section {
+    width: 1200px;
+    max-width: 100%;
+    margin: 0 auto 60px;
+}
+
+.home-section-title {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+/* container ngoài cho slider (để đặt mũi tên ra ngoài) */
+.slider-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* khung chứa list sản phẩm, ẩn phần tràn */
+.slider-wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+/* dãy sản phẩm trượt ngang */
+
+.product-slider {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    overflow-x: hidden;        /* ẩn thanh cuộn */
+    scroll-behavior: smooth;
+}
+.product-slider::-webkit-scrollbar { display: none; }
+
+/* card sản phẩm */
+
+.product-card {
+    flex: 0 0 260px;
+    border-radius: 24px;
+    background: #fff;
+    padding: 24px 20px 20px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    transition: transform .2s, box-shadow .2s;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ảnh sản phẩm */
+
+.product-image-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 220px;
+    margin-bottom: 16px;
+}
+.product-image-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* nội dung card */
+
+.product-info {
+    text-align: left;
+}
+.product-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.product-name a {
+    text-decoration: none;
+    color: #222;
+}
+.product-price {
+    color: #e60023;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* rating sao */
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+.product-rating i {
+    font-size: 14px;
+}
+.star-full {
+    color: #ffb400;
+}
+.star-empty {
+    color: #ddd;
+}
+.rating-text {
+    font-size: 14px;
+    margin-left: 4px;
+    color: #333;
+}
+
+/* nút trong card */
+
+/* chứa nút */
+.product-actions {
+    margin-top: 12px;
+}
+
+/* nút xem sản phẩm */
+.btn-view-product {
+    display: block;
+    width: 100%;
+    padding: 10px 14px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 999px;
+    border: 1px solid #000;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.btn-view-product:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Mũi tên 2 bên – nằm NGOÀI slider */
+
+.slide-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    cursor: pointer;
+    z-index: 50;
+    transition: 0.2s;
+}
+
+/* mũi tên trái / phải đặt ra ngoài khung */
+.slide-arrow.left {
+    left: -55px;   /* chỉnh -40 / -70 tuỳ bạn muốn xa/gần */
+}
+.slide-arrow.right {
+    right: -55px;
+}
+.slide-arrow:hover {
+    background: #000;
+    color: #fff;
+}
+/* Hiệu ứng tiêu đề cao cấp */
+.title-premium {
+    font-size: 32px;
+    font-weight: 800;
+    text-align: center;
+
+    /* Hiệu ứng gradient chạy */
+    background: linear-gradient(90deg, #ff4f8b, #ffcc00, #4fc3f7, #ff4f8b);
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* Animation */
+    animation: titleGlow 3s ease-in-out infinite,
+               titleMove 6s linear infinite;
+}
+
+/* Glow mềm + phóng to nhẹ */
+@keyframes titleGlow {
+    0%, 100% {
+        text-shadow: 0 0 8px rgba(255, 105, 180, 0.4);
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        text-shadow: 0 0 18px rgba(255, 105, 180, 0.7);
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* Gradient màu chạy qua chữ */
+@keyframes titleMove {
+    0% { background-position: 0%; }
+    100% { background-position: 300%; }
+}
 
 
 /* -----------------------Footer---------------------- */
@@ -452,13 +660,13 @@ header:hover{
     height: auto;
     background: #eceaea;
     color: rgb(100, 96, 96);
-    padding: 20px 50px;
+    padding: 20px 30px;
     gap: 20px;
 }
 
 .left_footer {
-    width: 55%;
-    font-size: 20px;
+    width: 65%;
+    font-size: 15px;
 }
 
 .footer-logo img {
@@ -467,11 +675,12 @@ header:hover{
 }
 
 .right_footer {
-    width: 45%;
+    width: 35%;
     justify-content: space-between;
     align-content: center;
     justify-items: center;
     line-height: 30px;
+    font-size: 15px;
 }
 
 
@@ -523,4 +732,26 @@ header:hover{
     padding: 2px 6px;
     border-radius: 50%;
     font-weight: bold;
+}
+
+.error-box {
+    background: #fdecea;
+    color: #b71c1c;
+    border-left: 4px solid #f44336;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    animation: fadeInDown 0.25s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

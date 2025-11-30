@@ -275,7 +275,17 @@
                     </table>
 
                     <div class="cart-content-right-button">
-                        <a href="{{ route('checkout') }}"><button>Đặt Hàng</button></a>
+                        @if(!empty($cartItems) && count($cartItems) > 0)
+                            {{-- Giỏ hàng có sản phẩm: cho phép đi đến trang checkout --}}
+                            <a href="{{ route('checkout') }}">
+                                <button>Đặt Hàng</button>
+                            </a>
+                        @else
+                            {{-- Giỏ hàng trống: khóa nút, không cho bấm --}}
+                            <button disabled style="opacity: 0.5; cursor: not-allowed;">
+                                Đặt Hàng
+                            </button>
+                        @endif
                     </div>
                     <div style="margin-top: 15px; text-align: right;">
                         <a href="{{  route('home')  }}" 

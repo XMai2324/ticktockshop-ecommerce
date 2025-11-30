@@ -277,6 +277,12 @@
                     <div class="cart-content-right-button">
                         <a href="{{ route('checkout') }}"><button>Đặt Hàng</button></a>
                     </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <a href="{{  route('home')  }}" 
+                        style="font-size:14px; color:#007bff; text-decoration:underline;">
+                        ← Tiếp tục mua sắm
+                        </a>
+                    </div>
 
                     <div class="cart-content-right-dangnhap">
                         @auth

@@ -152,10 +152,7 @@
         <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
     </div>
 
-<<<<<<< HEAD
 
-    
-=======
 <!-- <<<<<<< HEAD
 <<<<<<< HEAD
                         <div class="delivery-content-left-input-top row">
@@ -274,7 +271,7 @@
                     </div>
                 </div> -->
 
->>>>>>> b265e0326c11fc371ec14d9f5e7871692555083a
+
     <div class="header_other">
         <li class="search-wrapper">
             <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">

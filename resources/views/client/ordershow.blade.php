@@ -83,7 +83,7 @@
                 <tr>
                     <th>Sản phẩm</th>
                     <th class="text-center">SL</th>
-                    <th class="text-end">Đơn giá</th>
+                    <th class="text-end" style="text-align:center;">Đơn giá</th>
                     <th><i class="bi bi-currency-exchange"></i> Thành tiền</th>
                     <th class="text-center" style="width: 180px;">Đánh giá</th>
                 </tr>
@@ -103,8 +103,10 @@
                             @endif
                         </td>
                         <td class="text-center">{{ $item->quantity }}</td>
-                        <td class="text-end">{{ number_format($item->price, 0, ',', '.') }} đ</td>
-                        <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td>
+                        <!-- <td class="text-end">{{ number_format($item->price, 0, ',', '.') }} đ</td>
+                        <td>{{ number_format($item->price * $item->quantity, 0, ',', '.') }} đ</td> -->
+                        <td>{{ number_format($item->product->price, 0, ',', '.') }} đ</td>
+                        <td>{{ number_format($item->price, 0, ',', '.') }} đ</td>
                         {{-- NÚT ĐÁNH GIÁ --}}
                         <td class="text-center">
                             @if($order->status === 'delivered' || $order->status === 'completed')

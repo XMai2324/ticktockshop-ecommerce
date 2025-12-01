@@ -158,19 +158,26 @@ class LoginAuthController extends Controller
     {
         $request->validate([
             'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed',
+            'new_password'     => 'required|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Vui lòng nhập mật khẩu hiện tại.',
+            'new_password.required'     => 'Vui lòng nhập mật khẩu mới.',
+            'new_password.min'          => 'Mật khẩu mới phải có ít nhất :min ký tự.',
+            'new_password.confirmed'    => 'Mật khẩu mới nhập lại không khớp.',
         ]);
 
-        if (!\Hash::check($request->current_password, auth()->user()->password)) {
+        $user = auth()->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
             return back()->with('error', 'Mật khẩu hiện tại không đúng!');
         }
 
-        $user = auth()->user();
-        $user->password = bcrypt($request->new_password);
+        $user->password = Hash::make($request->new_password);
         $user->save();
 
         return back()->with('success', 'Đổi mật khẩu thành công!');
     }
+
 
 
 

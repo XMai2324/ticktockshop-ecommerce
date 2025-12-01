@@ -152,8 +152,129 @@
         <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
     </div>
 
+<<<<<<< HEAD
 
     
+=======
+<!-- <<<<<<< HEAD
+<<<<<<< HEAD
+                        <div class="delivery-content-left-input-top row">
+                            <div class="delivery-content-left-input-top-item">
+                                <label for="name">Họ tên <span style="color:red;">*</span></label>
+                                <input id="name" name="fullname" type="text" placeholder="Nhập họ tên của bạn" value="{{ old('fullname') }}">
+                            </div>
+                            <div class="delivery-content-left-input-top-item">
+                                <label>Điện thoại <span style="color:red;">*</span></label>
+                                <input name="phone" type="text" placeholder="Nhập Điện thoại của bạn" value="{{ old('phone') }}">
+                            </div>
+                            <div class="delivery-content-left-input-top-item">
+                                <label>Email <span style="color:red;">*</span></label>
+                                <input name="email" type="email" placeholder="Nhập Email của bạn" value="{{ old('email') }}">
+                            </div>
+                            <div class="delivery-content-left-input-top-item">
+                                <label>Tỉnh/Tp <span style="color:red;">*</span></label>
+                                <input name="province" type="text" placeholder="Nhập Tỉnh/Tp của bạn" value="{{ old('province') }}">
+                            </div>
+                        </div>
+
+                        <div class="delivery-content-left-input-bottom">
+                            <label>Quận/Huyện <span style="color:red;">*</span></label>
+                            <input name="district" type="text" placeholder="Chọn Quận/Huyện" value="{{ old('district') }}">
+                        </div>
+
+                        <div class="delivery-content-left-input-bottom">
+                            <label>Địa chỉ <span style="color:red;">*</span></label>
+                            <input name="address" type="text" placeholder="Chọn Địa chỉ" value="{{ old('address') }}">
+                        </div>
+
+                        {{-- Phương thức thanh toán --}}
+                        <div class="payment-method">
+                            <p style="font-weight:bold; margin-top:20px;">Phương thức thanh toán</p>
+                            <div class="row">
+                                <label style="margin-right:20px;">
+                                    <input type="radio" name="payment_method" value="cash" {{ old('payment_method','cash')==='cash'?'checked':'' }}> Thanh toán khi nhận hàng
+                                </label>
+                                <label>
+                                    <input type="radio" name="payment_method" value="bank" {{ old('payment_method')==='bank'?'checked':'' }}> Thanh toán bằng ngân hàng
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="delivery-content-right">
+                        <table>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+                            </tr>
+
+                            @forelse ($cartItems as $item)
+                                @php $line = (int)$item['qty'] * (int)$item['price']; @endphp
+                                <tr>
+                                    <td>{{ $item['name'] }}</td>
+                                    <td>{{ $item['qty'] }}</td>
+                                    <td><p>{{ number_format($line, 0, ',', '.') }} <sup>đ</sup></p></td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="3">Giỏ hàng trống</td></tr>
+                            @endforelse
+                            <tr class="total">
+                                <td colspan="2" style="font-weight:bold;">Tổng</td>
+                                <td style="font-weight:bold;">
+                                    <p>{{ number_format($subtotal, 0, ',', '.') }} <sup>đ</sup></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Phí vận chuyển</td>
+                                <td><p>{{ number_format($shipping, 0, ',', '.') }} <sup>đ</sup></p></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Giảm giá</td>
+                                <td><p>-{{ number_format($discount, 0, ',', '.') }} <sup>đ</sup></p></td>
+                            </tr>
+                            <tr class="grand-total">
+                                <td colspan="2" style="font-weight:bold;">TỔNG TIỀN HÀNG</td>
+                                <td style="font-weight:bold;">
+                                    <p id="grand-total-text" data-base="{{ $subtotal + $shipping - $discount }}">
+                                        {{ number_format($grandTotal, 0, ',', '.') }} <sup>đ</sup>
+                                    </p>
+                                </td>
+                            </tr>
+
+                            {{-- Mã khuyến mãi --}}
+                            <tr>
+                                <td colspan="2" style="font-weight:bold;">Mã Khuyến Mãi</td>
+                                <td>
+                                    <select id="promo-select" class="coupon-select" name="promo_code">
+                                        <option value="">Chọn mã có sẵn</option>
+                                        @foreach($availableCoupons as $p)
+                                            <option value="{{ $p['code'] }}"
+                                                data-type="{{ $p['type'] }}"
+                                                data-value="{{ $p['value'] }}">
+                                                {{ $p['label'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="delivery-content-left-button" style="justify-content:flex-end; margin-top:20px;">
+                            <a href="{{ url('/cart') }}" style="margin-right:auto;"><span>&#171;</span> Quay lại giỏ hàng</a>
+                            <button type="submit" class="qr-payment"><span style="font-weight:bold;">THANH TOÁN</span></button>
+                        </div>
+
+                        {{-- QR khi chọn ngân hàng --}}
+                        <div id="qr-container" style="display:none; margin-top:20px;">
+                            <p><strong>Mã QR thanh toán:</strong></p>
+                            <img id="qr-image" src="{{ asset('images/QR.png') }}" alt="QR thanh toán" style="width:300px; height:300px;">
+                            <p id="qr-timer" style="color:red; font-weight:bold;">Thời gian còn lại: 60s</p>
+                        </div>
+                    </div>
+                </div> -->
+
+>>>>>>> b265e0326c11fc371ec14d9f5e7871692555083a
     <div class="header_other">
         <li class="search-wrapper">
             <form id="searchForm" action="{{ route('products.filter') }}" method="GET" class="search-form">

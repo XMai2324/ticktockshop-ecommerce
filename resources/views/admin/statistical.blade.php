@@ -137,7 +137,30 @@
                                             <td>
                                                 <div class="item-flex">
                                                     @if ($p->image)
-                                                        <img src="{{ asset('storage/' . $p->image) }}" class="item-thumb">
+                                                        @php
+                                                            $folder = 'Watch/Watch_nu'; // Default Nữ
+
+                                                            $catSlug = Str::slug(optional($p->category)->name ?? '');
+
+                                                            if ($catSlug === 'nam') {
+                                                                $folder = 'Watch/Watch_nam';
+                                                            } elseif ($catSlug === 'cap-doi') {
+                                                                $folder = 'Watch/Watch_cap';
+                                                            }
+                                                        @endphp
+
+                                                       @php
+                                                            $folder = 'Watch/Watch_nu'; // Default Nữ
+
+                                                            $catSlug = Str::slug(optional($p->category)->name ?? '');
+
+                                                            if ($catSlug === 'nam') {
+                                                                $folder = 'Watch/Watch_nam';
+                                                            } elseif ($catSlug === 'cap-doi') {
+                                                                $folder = 'Watch/Watch_cap';
+                                                            }
+                                                        @endphp
+                                                        <img src="{{ asset('storage/' . $folder . '/' . $p->image) }}" class="item-thumb">
                                                     @endif
                                                     <div class="item-info">
                                                         <span class="item-name name-lg"

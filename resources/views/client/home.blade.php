@@ -156,9 +156,8 @@
                     <span class="user-name">{{ Auth::user()->name }}</span>
 
                     <ul class="dropdown-menu-user">
-                        <li><a href="#">Hồ sơ</a></li>
+                        <li><a href="{{ route('profile') }}">Hồ sơ</a></li>
                         <li><a href="{{ route('orders.history') }}">Lịch sử đơn hàng</a></li>
-
                     </ul>
                 @else
                     <a title="Đăng nhập" id="login-icon" href="javascript:void(0);">Đăng nhập</a>

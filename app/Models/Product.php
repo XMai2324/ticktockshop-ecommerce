@@ -26,6 +26,7 @@ class Product extends Model
         'glass_material',
         'diameter',
         'water_resistance',
+
     ];
 
     public function category()

@@ -60,18 +60,42 @@
 
                 {{-- Breadcrumbs --}}
                 <div class="product-page-top row">
-                    <p><a href="{{ route('home') }}">Trang chủ</a></p> <span>&#10230;</span>
-                    @if ($product->category)
+                    {{-- Trang chủ --}}
+                    <p><a href="{{ route('home') }}">Trang chủ</a></p>
+                    <span>&#10230;</span>
+
+                    @php
+                        $category = $product->category;      // model Category
+                        $brand    = $product->brand;         // model Brand
+
+                        // Slug danh mục để map vào route
+                        $categorySlug = $category ? Str::slug($category->name) : null;
+
+                        // Brand slug cũng lấy slug chuẩn (casio, rolex...)
+                        $brandSlug = $brand ? Str::slug($brand->name) : null;
+                    @endphp
+
+                    @if ($brand && $category && $categorySlug && $brandSlug)
                         <p>
-                            <a href="{{ route('products.byCategory', Str::slug($product->category->name)) }}">
-                                {{ $product->category->name }}
+                            <a href="{{ route('products.filter', ['category' => $categorySlug, 'brand' => $brandSlug]) }}">
+                                {{ $brand->name }} {{ Str::lower($category->name) }}
+                            </a>
+                        </p>
+                        <span>&#10230;</span>
+                    @elseif ($category && $categorySlug)
+                        {{-- fallback nếu sản phẩm không có thương hiệu --}}
+                        <p>
+                            <a href="{{ route('products.byCategory', $categorySlug) }}">
+                                {{ $category->name }}
                             </a>
                         </p>
                         <span>&#10230;</span>
                     @endif
-                    <p>{{ $product->name }}</p>
-                </div>
 
+                    {{-- Tên sản phẩm --}}
+                    <p>{{ $product->name }}</p>
+
+                </div>
                 <div class="product-detail-wrap row">
                     {{-- LEFT: Gallery --}}
                     <div class="product-detail-left">

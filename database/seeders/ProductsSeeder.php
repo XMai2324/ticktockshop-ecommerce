@@ -394,10 +394,10 @@ class ProductsSeeder extends Seeder
                 'price'            => $price,
                 'image'            => $image,
                 'images'           => json_encode([
-                    $image,
-                    str_replace('.', '_2.', $image),
-                    str_replace('.', '_3.', $image),
-                    str_replace('.', '_4.', $image),
+                    // $image,
+                    // str_replace('.', '_2.', $image),
+                    // str_replace('.', '_3.', $image),
+                    // str_replace('.', '_4.', $image),
                 ]),
                 'category_id'      => $category->id,
                 'brand_id'         => $brand->id,
@@ -732,8 +732,8 @@ class ProductsSeeder extends Seeder
                 'image'            => $image,
                 'images'           => json_encode([
                     $image,
-                    str_replace('.', '_2.', $image),
-                    str_replace('.', '_3.', $image),
+                    // str_replace('.', '_2.', $image),
+                    // str_replace('.', '_3.', $image),
                 ]),
                 'category_id'      => $category->id,
                 'brand_id'         => $brand->id,
@@ -1701,9 +1701,9 @@ foreach ($products as [
         'image' => $image,
         'images' => json_encode([
             $image,
-            str_replace('.', '_2.', $image),
-            str_replace('.', '_3.', $image),
-            str_replace('.', '_4.', $image),
+            // str_replace('.', '_2.', $image),
+            // str_replace('.', '_3.', $image),
+            // str_replace('.', '_4.', $image),
         ]),
         'category_id' => $category->id,
         'brand_id' => $brand->id,
@@ -1868,9 +1868,9 @@ foreach ($products as [
         'image' => $image,
         'images' => json_encode([
             $image,
-            str_replace('.', '_2.', $image),
-            str_replace('.', '_3.', $image),
-            str_replace('.', '_4.', $image),
+            // str_replace('.', '_2.', $image),
+            // str_replace('.', '_3.', $image),
+            // str_replace('.', '_4.', $image),
         ]),
         'category_id' => $category->id,
         'brand_id' => $brand->id,
@@ -2053,8 +2053,14 @@ foreach ($products as [
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+<<<<<<< HEAD
 
         } 
     } 
        
 }
+=======
+        }  
+        }
+    }
+>>>>>>> b265e0326c11fc371ec14d9f5e7871692555083a

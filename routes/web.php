@@ -45,13 +45,14 @@ Route::get('/', function () {
     // LẤY SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin)
     $bestSellers = Product::bestSellerByRevenue(10)->get();
 
-    // SẢN PHẨM MỚI (giữ nguyên logic cũ)
+    // SẢN PHẨM MỚI 
     $newProducts = Product::with('ratings')
         ->where('is_hidden', 0)
         ->where('created_at', '>=', now()->subDays(7))   //chỉ lấy sản phẩm 7 ngày gần nhất
         ->orderByDesc('created_at')
         ->take(8)
         ->get();
+
 
     return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');

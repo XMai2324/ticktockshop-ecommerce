@@ -13,7 +13,7 @@ class OrderController extends Controller
         $orders = Order::where('user_id', Auth::id())
         ->orderBy('created_at', 'desc')
         ->paginate(10); // mỗi trang 10 đơn hàng
-    
+
 
         return view('client.ordershistory', compact('orders'));
     }
@@ -21,24 +21,24 @@ class OrderController extends Controller
     // public function show($id)
     // {
     //     $order = Order::with('items.product')->findOrFail($id);
-    
+
     //     return view('client.ordershow', compact('order'));
     // }
-   
+
     public function show($id)
     {
-        $order = Order::with('items.product')->findOrFail($id);
-    
+        $order = Order::with('items.product', 'payment', 'ratings')->findOrFail($id);
+
         // Nếu là admin
         if (request()->is('admin/*')) {
             return view('admin.orders_show', compact('order'));
         }
-    
+
         // Nếu là client
         return view('client.ordershow', compact('order'));
     }
-    
-   
+
+
     public function index()
     {
         $orders = Order::latest()->paginate(10);
@@ -85,5 +85,5 @@ class OrderController extends Controller
         return redirect()->route('admin.orders.index')
             ->with('success', 'Xóa đơn hàng thành công!');
     }
-    
+
 }

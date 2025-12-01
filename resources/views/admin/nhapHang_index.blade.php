@@ -34,8 +34,15 @@
         <button type="button" id="btnAddNew" class="btn btn-primary">+ Thêm sản phẩm mới</button>
         <button type="submit" form="formNhapHang" class="btn btn-success">Lưu tất cả</button>
         <div class="d-flex justify-content-end mb-3">
-            <a href="{{ route('admin.import_history') }}" class="btn btn-info">
-                📦 Xem lịch sử nhập hàng
+            <a href="{{ route('admin.import_history') }}" 
+            class="btn text-white d-flex align-items-center gap-2 px-4 py-2 shadow"
+            style="
+                    background: linear-gradient(135deg, #1da2ff, #006eff);
+                    border-radius: 10px;
+                    font-weight: 600;
+            ">
+                <span class="fs-5">📦</span>
+                <span>Xem lịch sử nhập hàng</span>
             </a>
         </div>
     </div>

@@ -216,9 +216,9 @@ Route::get('/products/{id}', [ProductController::class, 'show'])->name('products
 Route::get('/products/{product}/ratings', [RatingController::class, 'index'])->name('products.ratings.index');
 
 // Tạo hoặc cập nhật đánh giá (user must be authenticated)
-Route::post('/products/{product}/ratings', [RatingController::class, 'store'])
+Route::post('/ratings', [RatingController::class, 'store'])
     ->middleware('auth')
-    ->name('products.ratings.store');
+    ->name('ratings.store');
 
 // Cập nhật một đánh giá (chỉ chủ sở hữu)
 Route::patch('/ratings/{rating}', [RatingController::class, 'update'])
@@ -307,7 +307,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
          ->name('admin.promotions.update');
     Route::delete('promotions/{id}', [PromotionsController::class,'destroy'])->name('admin.promotions.delete');
 
-    
+
 // Ratings management (admin)
     Route::get('ratings', [RatingController::class, 'adminIndex'])
         ->middleware(['role:admin'])
@@ -343,7 +343,7 @@ Route::get('/vnpay/return', [VNPayController::class, 'return'])->name('vnpay.ret
 Route::get('/checkout/success', fn() => view('client.checkout.success'))->name('checkout.success');
 Route::get('/checkout/failed', fn() => view('client.checkout.failed'))->name('checkout.failed');
 
-//Nhập HÀNG (admin)    
+//Nhập HÀNG (admin)
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('nhap-hang', [NhapHangController::class, 'index'])->name('nhapHang_index');
     Route::post('nhap-hang/save-preview', [NhapHangController::class, 'savePreview'])->name('nhapHang_savePreview');

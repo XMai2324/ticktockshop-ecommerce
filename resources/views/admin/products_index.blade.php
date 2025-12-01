@@ -25,12 +25,12 @@
             @endforeach
         </ul>
 
-    <h3>
-        <a href="{{ route('admin.accessories.straps') }}"
-            class="{{ request()->routeIs('admin.accessories.straps') ? 'active' : '' }}">
-            Phụ kiện
+        <!-- <h3>
+            <a href="{{ route('admin.accessories.straps') }}"
+                class="{{ request()->routeIs('admin.accessories.straps') ? 'active' : '' }}">
+                Phụ kiện
             </a>
-        </h3>
+        </h3> -->
     
 </aside>
 
@@ -138,7 +138,8 @@
             @forelse($products as $product)
                 <div class="col-3">
                     <div class="product-card" id="product-{{ $product->id }}"
-                            data-hidden="{{ $product->is_hidden ? 1 : 0 }}">
+                            data-hidden="{{ $product->is_hidden ? 1 : 0 }}"
+                            data-new="{{ $product->is_new ? 1 : 0 }}">
 
                             @if($product->is_new)
                                 <span class="badge-new">NEW</span>

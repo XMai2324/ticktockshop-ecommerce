@@ -34,7 +34,5 @@
             <span>Chưa có tài khoản?</span>
             <button class="dk" type="button" id="to-register">Đăng ký</button>
         </div>
-
-        <a class="forgot_pass" href="#" id="to-forgot">Quên mật khẩu ?</a>
     </form>
 </div>

@@ -123,7 +123,7 @@
                 </ul>
             </li>
 
-            {{-- PHỤ KIỆN --}}
+            <!-- {{-- PHỤ KIỆN --}}
             <li>
                 <a href="">PHỤ KIỆN</a>
                 <ul class="sub_pk">
@@ -131,7 +131,7 @@
                     <li><a href="{{ route('accessories.boxes') }}">Hộp đựng</a></li>
                     <li><a href="{{ route('accessories.glasses') }}">Kính cường lực</a></li>
                 </ul>
-            </li>
+            </li> -->
 
             <li><a href="{{ route('warranty.form') }}">THÔNG TIN BẢO HÀNH</a></li>
         </div>

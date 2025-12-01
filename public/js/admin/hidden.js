@@ -93,10 +93,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // Lọc từng card sản phẩm
             document.querySelectorAll('.product-card').forEach(function (card) {
                 const hidden = card.dataset.hidden === '1';
+                const isNew = card.dataset.new === '1';
 
                 if (filterOn) {
                     // Bật lọc → chỉ hiện sản phẩm ẩn
-                    card.style.display = hidden ? 'block' : 'none';
+                    card.style.display = (hidden || isNew) ? 'block' : 'none';
                 } else {
                     // Tắt lọc → hiện tất cả (ẩn thì vẫn bị làm mờ bằng CSS)
                     card.style.display = 'block';

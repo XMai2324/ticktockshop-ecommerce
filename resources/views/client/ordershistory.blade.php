@@ -36,7 +36,16 @@
 </head>
 <body class="container py-5">
     <div class="card p-4">
-        <h2 class="mb-4 text-center text-primary">📦 Lịch sử đơn hàng</h2>
+
+        <div class="position-relative mb-4">
+            <a href="{{ route('client.home') }}" 
+            class="btn btn-secondary position-absolute" 
+            style="left: 0; top: 50%; transform: translateY(-50%);">
+                ⬅ Quay lại trang chính
+            </a>
+
+            <h2 class="text-center text-primary">📦 Lịch sử đơn hàng</h2>
+        </div>
 
         @if($orders->isEmpty())
             <div class="alert alert-info text-center">

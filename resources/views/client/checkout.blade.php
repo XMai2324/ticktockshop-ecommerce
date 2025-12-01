@@ -248,7 +248,9 @@
                     <div class="delivery-content-left-input-top row">
                         <div class="delivery-content-left-input-top-item">
                             <label for="name">Họ tên <span style="color:red;">*</span></label>
-                            <input id="name" name="fullname" type="text" placeholder="Nhập họ tên của bạn" value="{{ old('fullname') }}">
+                            <input id="name" name="fullname" type="text"
+                                placeholder="Nhập họ tên của bạn"
+                                value="{{ old('fullname', auth()->check() ? auth()->user()->name : '') }}">
                         </div>
                         <div class="delivery-content-left-input-top-item">
                             <label>Điện thoại <span style="color:red;">*</span></label>
@@ -256,7 +258,9 @@
                         </div>
                         <div class="delivery-content-left-input-top-item">
                             <label>Email <span style="color:red;">*</span></label>
-                            <input name="email" type="email" placeholder="Nhập Email của bạn" value="{{ old('email') }}">
+                            <input name="email" type="email"
+                                placeholder="Nhập Email của bạn"
+                                value="{{ old('email', auth()->check() ? auth()->user()->email : '') }}">
                         </div>
                         <div class="delivery-content-left-input-top-item">
                             <label>Tỉnh/Tp <span style="color:red;">*</span></label>
@@ -265,8 +269,8 @@
                     </div>
 
                     <div class="delivery-content-left-input-bottom">
-                        <label>Quận/Huyện <span style="color:red;">*</span></label>
-                        <input name="district" type="text" placeholder="Chọn Quận/Huyện" value="{{ old('district') }}">
+                        <label>Phường <span style="color:red;">*</span></label>
+                        <input name="district" type="text" placeholder="Chọn phường" value="{{ old('district') }}">
                     </div>
 
                     <div class="delivery-content-left-input-bottom">

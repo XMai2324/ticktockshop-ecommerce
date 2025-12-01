@@ -35,7 +35,6 @@ Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->n
 
 // Trang /
 
-// Trang /
 Route::get('/', function () {
 
     // Nếu là admin thì vẫn về trang admin
@@ -43,21 +42,20 @@ Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     }
 
-    // Lấy sản phẩm bán chạy & sản phẩm mới (có cả ratings)
-    $bestSellers = Product::with('ratings')
-        ->where('is_hidden', 0)
-        ->orderByDesc('created_at')   // bạn thay logic bán chạy tại đây nếu muốn
-        ->take(8)
-        ->get();
+    // LẤY SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin)
+    $bestSellers = Product::bestSellerByRevenue(10)->get();
 
+    // SẢN PHẨM MỚI (giữ nguyên logic cũ)
     $newProducts = Product::with('ratings')
         ->where('is_hidden', 0)
+        ->where('created_at', '>=', now()->subDays(7))   //chỉ lấy sản phẩm 7 ngày gần nhất
         ->orderByDesc('created_at')
         ->take(8)
         ->get();
 
     return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');
+
 
 // logout
 Route::post('/logout', function () {
@@ -73,15 +71,15 @@ Route::post('/logout', function () {
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/dashboard', function () {
 
-        $bestSellers = Product::withCount('ratings')
-            ->where('is_hidden', 0)
-            ->orderByDesc('ratings_count')
-            ->take(8)
-            ->get();
+        // TOP 10 SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin & home)
+        $bestSellers = Product::bestSellerByRevenue(10)->get();
 
-        $newProducts = Product::where('is_hidden', 0)
+        // SẢN PHẨM MỚI: chỉ lấy sản phẩm tạo trong 7 ngày gần nhất
+        $newProducts = Product::with('ratings')
+            ->where('is_hidden', 0)
+            ->where('created_at', '>=', now()->subDays(7))
             ->orderByDesc('created_at')
-            ->take(8)
+            ->take(10)
             ->get();
 
         return view('client.home', compact('bestSellers', 'newProducts'));

@@ -2056,10 +2056,5 @@ foreach ($products as [
 
         } 
     } 
-        
-        
-
-
-        
+       
 }
-        

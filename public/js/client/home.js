@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         localStorage.setItem("searchHistory", JSON.stringify(history));
         loadSearchHistory();
-        // ✅ Giữ lại form sau khi xóa
+        //  Giữ lại form sau khi xóa
         document.getElementById("searchHistory").classList.add("show");
     }
 

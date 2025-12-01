@@ -99,24 +99,24 @@
                     <h3>Sửa sản phẩm</h3>
 
                     <label>Tên sản phẩm:</label>
-                    <input type="text" name="name" id="edit-name" required disabled>
+                    <input type="text" name="name" id="edit-name" readonly>
 
                     <label>Thương hiệu:</label>
-                    <select name="brand_id" id="edit-brand" disabled>
+                    <select name="brand_id" id="edit-brand" readonly>
                         @foreach($brands as $brand)
                             <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                         @endforeach
                     </select>
 
                     <label>Danh mục:</label>
-                    <select name="category_id" id="edit-category" disabled>
+                    <select name="category_id" id="edit-category" readonly>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
 
                     <label>Giá:</label>
-                    <input type="number" name="price" id="edit-price" required disabled>
+                    <input type="number" name="price" id="edit-price" readonly>
 
                     <label>Ảnh mới (nếu thay):</label>
                     <input type="file" name="image" id="edit-image-input">

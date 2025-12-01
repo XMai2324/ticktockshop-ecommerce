@@ -33,6 +33,11 @@
     <div class="top-buttons">
         <button type="button" id="btnAddNew" class="btn btn-primary">+ Thêm sản phẩm mới</button>
         <button type="submit" form="formNhapHang" class="btn btn-success">Lưu tất cả</button>
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{{ route('admin.import_history') }}" class="btn btn-info">
+                📦 Xem lịch sử nhập hàng
+            </a>
+        </div>
     </div>
 
     <form id="formNhapHang" action="{{ route('admin.nhapHang_savePreview') }}" method="POST" enctype="multipart/form-data">

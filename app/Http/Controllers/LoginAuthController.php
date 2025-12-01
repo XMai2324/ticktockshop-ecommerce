@@ -92,7 +92,7 @@ class LoginAuthController extends Controller
             'email'     => $request->email,
             'password'  => Hash::make($request->password),
             'role'      => 'user',   // gán role mặc định
-            'is_active' => true,     // ✅ tài khoản mới luôn ở trạng thái hoạt động
+            'is_active' => true,    
         ]);
 
         Auth::login($user); // tự đăng nhập sau khi đăng ký

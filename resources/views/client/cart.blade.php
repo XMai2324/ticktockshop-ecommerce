@@ -32,7 +32,7 @@
 
         <div class="header_menu">
             <li>
-                <a href="">THƯƠNG HIỆU</a>
+                <a href="{{ route('home') }}">THƯƠNG HIỆU</a>
                 <ul class="sub_TH">
                     <li><a href="{{ route('products.filter', ['brand' => 'casio']) }}">Casio</a></li>
                     <li><a href="{{ route('products.filter', ['brand' => 'rolex']) }}">Rolex</a></li>
@@ -275,7 +275,23 @@
                     </table>
 
                     <div class="cart-content-right-button">
-                        <a href="{{ route('checkout') }}"><button>Đặt Hàng</button></a>
+                        @if(!empty($cartItems) && count($cartItems) > 0)
+                            {{-- Giỏ hàng có sản phẩm: cho phép đi đến trang checkout --}}
+                            <a href="{{ route('checkout') }}">
+                                <button>Đặt Hàng</button>
+                            </a>
+                        @else
+                            {{-- Giỏ hàng trống: khóa nút, không cho bấm --}}
+                            <button disabled style="opacity: 0.5; cursor: not-allowed;">
+                                Đặt Hàng
+                            </button>
+                        @endif
+                    </div>
+                    <div style="margin-top: 15px; text-align: right;">
+                        <a href="{{  route('home')  }}" 
+                        style="font-size:14px; color:#007bff; text-decoration:underline;">
+                        ← Tiếp tục mua sắm
+                        </a>
                     </div>
 
                     <div class="cart-content-right-dangnhap">

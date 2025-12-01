@@ -14,7 +14,10 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\VNPayController;
 use App\Http\Controllers\NhapHangController;
 use App\Http\Controllers\StatisticalController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\CustomerController;
+use App\Models\Product;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,13 +36,26 @@ Route::post('client/reset_pass', [LoginAuthController::class, 'resetDirect'])->n
 // Trang /
 
 Route::get('/', function () {
-    if (auth()->check()) {
-        return auth()->user()->role === 'admin'
-            ? redirect()->route('admin.dashboard')
-            : redirect()->route('client.home');
+
+    // Nếu là admin thì vẫn về trang admin
+    if (auth()->check() && auth()->user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
     }
-    return view('client.home');
+
+    // LẤY SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin)
+    $bestSellers = Product::bestSellerByRevenue(10)->get();
+
+    // SẢN PHẨM MỚI (giữ nguyên logic cũ)
+    $newProducts = Product::with('ratings')
+        ->where('is_hidden', 0)
+        ->where('created_at', '>=', now()->subDays(7))   //chỉ lấy sản phẩm 7 ngày gần nhất
+        ->orderByDesc('created_at')
+        ->take(8)
+        ->get();
+
+    return view('client.home', compact('bestSellers', 'newProducts'));
 })->name('home');
+
 
 // logout
 Route::post('/logout', function () {
@@ -53,7 +69,21 @@ Route::post('/logout', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:user'])->group(function () {
-    Route::get('/dashboard', fn () => view('client.home'))->name('client.home');
+    Route::get('/dashboard', function () {
+
+        // TOP 10 SẢN PHẨM BÁN CHẠY THEO DOANH THU (giống admin & home)
+        $bestSellers = Product::bestSellerByRevenue(10)->get();
+
+        // SẢN PHẨM MỚI: chỉ lấy sản phẩm tạo trong 7 ngày gần nhất
+        $newProducts = Product::with('ratings')
+            ->where('is_hidden', 0)
+            ->where('created_at', '>=', now()->subDays(7))
+            ->orderByDesc('created_at')
+            ->take(10)
+            ->get();
+
+        return view('client.home', compact('bestSellers', 'newProducts'));
+    })->name('client.home');
 });
 
 /*
@@ -319,12 +349,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('nhap-hang/preview', [NhapHangController::class, 'preview'])->name('nhapHang_preview');
     Route::post('nhap-hang/confirm', [NhapHangController::class, 'confirmPreview'])->name('nhapHang_confirm');
     Route::get('nhap-hang/export', [NhapHangController::class, 'exportPreview'])->name('nhapHang_export');
+    Route::get('/nhap-hang/history', [ImportController::class, 'history']) ->name('import_history');
 });
-
-
 
 // Thống kê
 
 Route::get('/statistical', [StatisticalController::class, 'index'])
     ->name('admin.statistical');
+
 

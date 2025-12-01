@@ -69,25 +69,7 @@ class StatisticalController extends Controller
         // --- PHẦN 4: THỐNG KÊ SẢN PHẨM & KHO HÀNG ---
 
         // A. Sản phẩm Bán chạy nhất
-        $top_selling_products = \App\Models\Product::select(
-            'products.id',
-            'products.name',
-            'products.image',
-            'products.price',
-            'products.brand_id',    // <--- THÊM
-            'products.category_id'  // <--- THÊM
-        )
-        ->with(['brand', 'category']) // <--- Nạp dữ liệu quan hệ
-        ->join('order_items', 'products.id', '=', 'order_items.product_id')
-        ->join('orders', 'order_items.order_id', '=', 'orders.id')
-        ->where('orders.status', 'delivered')
-        ->selectRaw('SUM(order_items.quantity) as total_sold')
-        // Nhớ thêm brand_id, category_id vào Group By
-        ->groupBy('products.id', 'products.name', 'products.image', 'products.price', 'products.brand_id', 'products.category_id')
-        ->orderBy('total_sold', 'desc')
-        ->take(10)
-        ->get();
-
+        $top_selling_products = Product::bestSellerByRevenue(10)->get();
     // 2. SẮP HẾT HÀNG
         $low_stock_products = \App\Models\Product::with(['brand', 'category']) // <--- THÊM
             ->where('quantity', '<=', 10)

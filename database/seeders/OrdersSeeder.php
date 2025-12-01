@@ -19,13 +19,6 @@ class OrdersSeeder extends Seeder
             'status' => 'confirmed',
         ]);
 
-        Order::create([
-            'user_id' => 3,
-            'customer_name' => 'Mai',
-            'phone' => '0911222333',
-            'address' => 'TP. Hồ Chí Minh',
-            'total_price' => 5900000,
-            'status' => 'pending',
-        ]);
+        
     }
 }

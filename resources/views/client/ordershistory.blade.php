@@ -64,7 +64,7 @@
                                 <td>
                                     @if(optional($order->payment)->method === 'cash')
                                         <span class="badge bg-warning text-dark">💵 Thanh toán khi nhận hàng</span>
-                                    @elseif(optional($order->payment)->method === 'bank')
+                                    @elseif(optional($order->payment)->method === 'vnpay')
                                         <span class="badge bg-info text-dark">💳 Chuyển khoản ngân hàng</span>
                                     @else
                                         <span class="badge bg-secondary">Chưa tạo giao dịch</span>

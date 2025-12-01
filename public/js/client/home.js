@@ -13,7 +13,7 @@ window.addEventListener("scroll", function () {
     }
 });
 
-// slider
+// slider banner
 const imgPosition = document.querySelectorAll(".aspect-ratio-169 img");
 const imgContainer = document.querySelector(".aspect-ratio-169");
 const dotItem = document.querySelectorAll(".dot");
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         localStorage.setItem("searchHistory", JSON.stringify(history));
         loadSearchHistory();
-        // ✅ Giữ lại form sau khi xóa
+        //  Giữ lại form sau khi xóa
         document.getElementById("searchHistory").classList.add("show");
     }
 
@@ -177,5 +177,32 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!isInsideSearchArea) {
             historyBox.classList.remove("show");
         }
+    });
+});
+
+// ================== SLIDER SẢN PHẨM ==================
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons = document.querySelectorAll(".slide-arrow");
+
+    if (!buttons.length) return;
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const targetId = this.getAttribute("data-target");
+            const slider = document.getElementById(targetId);
+            if (!slider) return;
+
+            const card = slider.querySelector(".product-card");
+            if (!card) return;
+
+            const gap = 20; // đúng với gap trong CSS
+            const cardWidth = card.offsetWidth + gap;
+            const direction = this.classList.contains("right") ? 1 : -1;
+
+            slider.scrollBy({
+                left: direction * cardWidth,
+                behavior: "smooth",
+            });
+        });
     });
 });

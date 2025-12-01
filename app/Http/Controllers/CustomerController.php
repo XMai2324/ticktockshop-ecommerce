@@ -27,7 +27,7 @@ class CustomerController extends Controller
             'password' => 'required|string|min:6',
             'phone'    => 'nullable|string|max:20',
             'address'  => 'nullable|string|max:255',
-            'role'     => 'required|in:user,admin',
+            // 'role'     => 'required|in:user,admin',
         ]);
 
         User::create([
@@ -36,7 +36,7 @@ class CustomerController extends Controller
             'password'  => Hash::make($request->password),
             'phone'     => $request->phone,
             'address'   => $request->address,
-            'role'      => $request->role,
+            'role'      => 'user',
             'is_active' => true,
         ]);
 

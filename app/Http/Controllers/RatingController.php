@@ -121,20 +121,11 @@ class RatingController extends Controller
     {
         $rating = Rating::findOrFail($id);
         $user = Auth::user();
-
-        // Chỉ chủ sở hữu hoặc Admin mới được xóa
-        // Giả sử bạn có hàm isAdmin() trong model User
         if ($user->id !== $rating->user_id) {
-             return response()->json(['message' => 'Unauthorized'], 403);
+             return redirect()->back()->with('error', 'Bạn không có quyền xóa đánh giá này.');
         }
-
         $rating->delete();
-
-        if ($request->wantsJson()) {
-            return response()->json(['message' => 'Đã xóa đánh giá.'], 200);
-        }
-
-        return redirect()->back()->with('success', 'Đã xóa đánh giá.');
+        return redirect()->back()->with('success', 'Đã xóa đánh giá thành công!');
     }
 
     // Thêm: trang quản lý ratings cho admin
@@ -182,7 +173,7 @@ class RatingController extends Controller
         if ($request->date_to) {
             $ratings->whereDate('created_at', '<=', $request->date_to);
         }
-        // if null retuen all
+        // if null return all
         return response()->json($ratings->get());
     }
 }

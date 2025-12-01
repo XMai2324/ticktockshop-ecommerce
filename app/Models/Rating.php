@@ -31,6 +31,11 @@ class Rating extends Model
 
 	protected $casts = [
 		'rating' => 'integer',
+
+        // Định dạng ngày tháng: Ngày/Tháng/Năm Giờ:Phút
+        'created_at' => 'datetime:d/m/Y H:i',
+        'updated_at' => 'datetime:d/m/Y H:i',
+
 	];
 
 	public function user()

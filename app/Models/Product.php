@@ -95,7 +95,7 @@ class Product extends Model
                 'products.brand_id',
                 'products.category_id'
             )
-            ->orderByDesc('revenue')
+            ->orderBy('total_sold', 'desc')
             ->take($limit);
     }
 }

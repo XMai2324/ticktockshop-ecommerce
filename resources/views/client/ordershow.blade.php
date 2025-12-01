@@ -74,6 +74,12 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
     {{-- DANH SÁCH SẢN PHẨM --}}
     <h4 class="mb-3"><i class="bi bi-box-seam"></i> Sản phẩm trong đơn</h4>
@@ -115,6 +121,7 @@
                                     </div>
                                     <button class="btn btn-sm btn-outline-success fw-bold"
                                             onclick="openReviewForm(this)"
+                                            data-rating-id="{{ $existingRating->id }}"
                                             data-product-id="{{ $item->product_id }}"
                                             data-product-name="{{ $productName }}"
                                             data-rating="{{ $existingRating->rating }}"
@@ -178,19 +185,23 @@
                 </div>
                 <div class="col-md-8 mb-3">
                     <label class="form-label fw-bold">Nhận xét:</label>
-
-                    {{-- Textarea để trống value, placeholder sẽ được JS set --}}
                     <textarea name="comment" id="review-comment" class="form-control" rows="3"></textarea>
-
                 </div>
             </div>
 
             <div class="text-end">
-                <button type="button" class="btn btn-light border me-2" onclick="closeReviewForm()">Hủy</button>
+                <button type="button" id="btn-delete" class="btn btn-outline-danger me-2" onclick="confirmDelete()" style="display: none;">
+                    <i class="bi bi-trash"></i> Xóa đánh giá này
+                </button>
                 <button type="submit" class="btn btn-warning fw-bold px-4" id="form-submit-btn">Gửi</button>
             </div>
         </form>
     </div>
+
+    <form id="delete-rating-form" method="POST" action="" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
 
     <script>
         function openReviewForm(button) {
@@ -199,53 +210,62 @@
             const productName = button.getAttribute('data-product-name');
             const rating = button.getAttribute('data-rating');
             const comment = button.getAttribute('data-comment');
-
+            const ratingId = button.getAttribute('data-rating-id');
             // Điền ID và Tên SP
             document.getElementById('review-product-id').value = productId;
             const nameElement = document.getElementById('review-product-name');
             nameElement.textContent = (productName && productName.trim() !== "") ? productName : "Sản phẩm này";
 
-            // Điền Rating
             document.getElementById('review-rating').value = rating;
 
-            // Xử lý Comment và Placeholder
             const commentInput = document.getElementById('review-comment');
 
-            // Xóa dữ liệu cũ trong ô nhập liệu
             commentInput.value = '';
 
             if (comment && comment.trim() !== '') {
-                // Nếu có comment cũ: Đặt làm Placeholder
                 commentInput.setAttribute('placeholder', comment);
-                // Nếu bạn muốn người dùng vẫn sửa trên nội dung cũ thì bỏ comment dòng dưới:
-                commentInput.value = comment;
+                // commentInput.value = comment;
             } else {
                 // Nếu chưa có: Đặt placeholder mặc định
                 commentInput.setAttribute('placeholder', 'Hãy chia sẻ cảm nhận về sản phẩm...');
             }
-
             // Giao diện
             const formContainer = document.getElementById('review-form-container');
             const formTitle = document.getElementById('form-title');
             const submitBtn = document.getElementById('form-submit-btn');
+            const deleteBtn = document.getElementById('btn-delete');
 
             if (comment !== '' || rating !== '5') {
                 formTitle.innerHTML = '<i class="bi bi-pencil-square"></i> Cập nhật đánh giá';
                 submitBtn.innerText = 'Cập nhật';
                 formContainer.style.borderTopColor = '#198754';
+                deleteBtn.style.display = 'inline-block';
+
+                let deleteUrl = "{{ route('ratings.destroy', ['rating' => 'RATING_ID']) }}";
+                deleteUrl = deleteUrl.replace('RATING_ID', ratingId);
+                document.getElementById('delete-rating-form').action = deleteUrl;
             } else {
                 formTitle.innerHTML = '<i class="bi bi-star-fill"></i> Viết đánh giá mới';
                 submitBtn.innerText = 'Gửi đánh giá';
                 formContainer.style.borderTopColor = '#ffc107';
+                deleteBtn.style.display = 'none';
             }
 
             formContainer.style.display = 'block';
             formContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
         }
 
         function closeReviewForm() {
             document.getElementById('review-form-container').style.display = 'none';
         }
+
+        function confirmDelete() {
+            if(confirm('Bạn có chắc chắn muốn xóa đánh giá này không? Hành động này không thể hoàn tác.')) {
+                document.getElementById('delete-rating-form').submit();
+            }
+        }
+
     </script>
 
 </body>

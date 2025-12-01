@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Rating;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -17,13 +18,13 @@ class StatisticalController extends Controller
         // 1. DỮ LIỆU TỔNG QUAN
         $total_products = Product::count();
         $total_orders = Order::count();
-        $total_revenue = Order::where('status', 'confirmed')->sum('total_price');
+        $total_revenue = Order::where('status', 'delivered')->sum('total_price');
         $total_ratings = Rating::count();
         $avg_rating = round(Rating::avg('rating'), 1);
 
         // 2. THỐNG KÊ DOANH THU
         $filter = request('filter', 'month');
-        $query = Order::where('status', 'confirmed');
+        $query = Order::where('status', 'delivered');
 
         // Xử lý theo từng loại filter
         if ($filter == 'day') {
@@ -66,15 +67,51 @@ class StatisticalController extends Controller
         $chart_labels = $dataRaw->pluck('label')->toArray();
         $chart_data   = $dataRaw->pluck('total')->toArray();
 
+        // 1. Doanh thu theo Thương hiệu
+        $revenueByBrand = OrderItem::select(
+                'brands.name', // Lấy tên thương hiệu
+                DB::raw('SUM(order_items.quantity * order_items.price) as total') // Tính tổng tiền
+            )
+            // Bước 1: Nối bảng order_items với products (để biết item đó là sản phẩm gì)
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            // Bước 2: Nối bảng products với brands (để biết sản phẩm đó thuộc hãng nào)
+            ->join('brands', 'products.brand_id', '=', 'brands.id')
+            // Bước 3: Nối với orders để chỉ lấy đơn thành công
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->whereIn('orders.status', ['delivered'])
+            ->groupBy('brands.name')
+            ->orderByDesc('total')
+            ->get();
+
+        // 2. Doanh thu theo Danh mục (Tương tự)
+        $revenueByCategory = OrderItem::select(
+                'categories.name',
+                DB::raw('SUM(order_items.quantity * order_items.price) as total')
+            )
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id') // Nối sang bảng categories
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->whereIn('orders.status', ['delivered'])
+            ->groupBy('categories.name')
+            ->orderByDesc('total')
+            ->get();
+
+        // Tách dữ liệu để gửi sang View (ChartJS)
+        $brandLabels = $revenueByBrand->pluck('name');
+        $brandData = $revenueByBrand->pluck('total');
+
+        $catLabels = $revenueByCategory->pluck('name');
+        $catData = $revenueByCategory->pluck('total');
+
         // --- PHẦN 4: THỐNG KÊ SẢN PHẨM & KHO HÀNG ---
 
         // A. Sản phẩm Bán chạy nhất
         $top_selling_products = Product::bestSellerByRevenue(10)->get();
-    // 2. SẮP HẾT HÀNG
+        // 2. SẮP HẾT HÀNG
         $low_stock_products = \App\Models\Product::with(['brand', 'category']) // <--- THÊM
             ->where('quantity', '<=', 10)
             ->where('quantity', '>', 0)
-            ->orderBy('quantity', 'asc')
+            ->orderBy('quantity', 'desc')
             ->get();
 
         $out_of_stock_count = \App\Models\Product::where('quantity', 0)->count();
@@ -118,60 +155,125 @@ class StatisticalController extends Controller
                     $query->where('rating', $filter_star);
                 }
             }])
-            // Chỉ lấy những sản phẩm có rating > 0 theo tiêu chí lọc
             ->having('ratings_count', '>', 0)
             ->orderBy('ratings_count', $filter_sort)
             ->take(15)
             ->get();
 
-        // Danh sách sản phẩm chưa có đánh giá
-        $unrated_products = Product::doesntHave('ratings')
-        ->orderBy('created_at', 'desc') // Ưu tiên sản phẩm mới nhập
-        ->take(20)
-        ->get();
+        // D. Sản phẩm đã bán (giao thành công) nhưng CHƯA CÓ đánh giá nào
+        // D. Chi tiết các item đã giao nhưng chưa đánh giá
+        $unrated_products = \App\Models\OrderItem::whereHas('order', function ($q) {
+                $q->whereIn('status', ['delivered']);
+            })
+            ->whereNotExists(function ($query) {
+                $query->select(\Illuminate\Support\Facades\DB::raw(1))
+                    ->from('ratings')
+                    ->whereColumn('ratings.order_id', 'order_items.order_id')
+                    ->whereColumn('ratings.product_id', 'order_items.product_id');
+            })
+            ->with(['product.brand', 'product.category', 'order'])
+            ->orderByDesc('id')
+            ->get();
+
 
     // --- PHẦN 5: THỐNG KÊ ĐƠN HÀNG (MỚI) ---
+        // A. Top 10 Đơn hàng có tổng tiền lớn nhất
+        $top_value_orders = \App\Models\Order::with('user')
+            ->orderBy('total_price', 'desc')
+            ->take(10) // Lấy 10 đơn
+            ->get();
 
-    // A. Top 20 Đơn hàng có tổng tiền lớn nhất
-    $top_value_orders = \App\Models\Order::with('user')
-        ->orderBy('total_price', 'desc')
-        ->take(20) // Lấy 20 đơn
-        ->get();
+    // B. Top 10 Đơn hàng nhiều sản phẩm nhất (Sỉ/Gom đơn)
+        $most_products_orders = Order::with('user')
+            ->withSum('orderItems', 'quantity') // Tính tổng số lượng item
+            ->orderBy('order_items_sum_quantity', 'desc')
+            ->take(10) // Lấy 10 đơn
+            ->get();
 
-// B. Top 5 Đơn hàng nhiều sản phẩm nhất (Sỉ/Gom đơn)
-    $most_products_orders = Order::with('user')
-        ->withSum('orderItems', 'quantity') // Tính tổng số lượng item
-        ->orderBy('order_items_sum_quantity', 'desc')
-        ->take(5) // Lấy 5 đơn
-        ->get();
+        // C. Dữ liệu biểu đồ trạng thái đơn hàng
+        $order_status_counts = Order::select('status',DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
 
-    // C. Dữ liệu biểu đồ trạng thái đơn hàng
-    // Kết quả: ['completed' => 50, 'pending' => 10, 'cancelled' => 5]
-    $order_status_counts = Order::select('status',DB::raw('count(*) as total'))
-        ->groupBy('status')
-        ->pluck('total', 'status')
-        ->toArray();
+        // Chuẩn bị dữ liệu cho Chart.js
+        // Định nghĩa các trạng thái muốn hiển thị và màu sắc tương ứng
+        $status_labels_map = [
+            'pending'   => 'Chờ xử lý',
+            'confirmed' => 'Đã xác nhận',
+            'shipping'  => 'Đang giao',
+            'delivered' => 'Giao thành công',
+            'cancelled' => 'Đã hủy'
+        ];
 
-    // Chuẩn bị dữ liệu cho Chart.js
-    // Định nghĩa các trạng thái muốn hiển thị và màu sắc tương ứng
-    $status_labels_map = [
-        'pending'   => 'Chờ xử lý',
-        'confirmed' => 'Đã xác nhận',
-        'shipping'  => 'Đang giao',
-        'delivered' => 'Giao thành công',
-        'cancelled' => 'Đã hủy'
-    ];
+        // Tạo mảng label và data theo thứ tự
+        $status_chart_labels = [];
+        $status_chart_data = [];
 
-    // Tạo mảng label và data theo thứ tự
-    $status_chart_labels = [];
-    $status_chart_data = [];
+        foreach ($order_status_counts as $status => $count) {
+            $status_chart_labels[] = $status_labels_map[$status] ?? ucfirst($status);
+            $status_chart_data[] = $count;
+        }
 
-    foreach ($order_status_counts as $status => $count) {
-        // Lấy tên tiếng Việt, nếu không có thì lấy tên gốc
-        $status_chart_labels[] = $status_labels_map[$status] ?? ucfirst($status);
-        $status_chart_data[] = $count;
-    }
+        // BIỂU ĐỒ HÀNH VI MUA HÀNG (SỐ LƯỢNG ĐƠN) ---
+        $orderDateFilter = $request->input('order_date_filter', 'day');
 
+        $queryOrder = \App\Models\Order::query();
+
+        // Tùy chỉnh query dựa trên filter
+        if ($orderDateFilter == 'hour') {
+            $orderDataRaw = $queryOrder->select(
+                    DB::raw('HOUR(created_at) as label'),
+                    DB::raw('COUNT(*) as total')
+                )
+                ->where('created_at', '>=', now()->subDays(30)) // Lấy dữ liệu 30 ngày qua để phân tích giờ vàng
+                ->groupBy('label')
+                ->orderBy('label')
+                ->pluck('total', 'label')
+                ->toArray();
+
+            // Đảm bảo đủ 24 giờ (0-23)
+            $orderChartLabels = [];
+            $orderChartData = [];
+            for ($i = 0; $i < 24; $i++) {
+                $orderChartLabels[] = $i . 'h';
+                $orderChartData[] = $orderDataRaw[$i] ?? 0;
+            }
+
+        } elseif ($orderDateFilter == 'month') {
+            // Theo tháng trong năm nay
+            $orderDataRaw = $queryOrder->select(
+                    DB::raw('MONTH(created_at) as label'),
+                    DB::raw('COUNT(*) as total')
+                )
+                ->whereYear('created_at', date('Y'))
+                ->groupBy('label')
+                ->orderBy('label')
+                ->pluck('total', 'label')
+                ->toArray();
+
+            $orderChartLabels = [];
+            $orderChartData = [];
+            for ($i = 1; $i <= 12; $i++) {
+                $orderChartLabels[] = 'Tháng ' . $i;
+                $orderChartData[] = $orderDataRaw[$i] ?? 0;
+            }
+
+        } else {
+            // Mặc định: Theo ngày (30 ngày gần nhất)
+            $orderDataRaw = $queryOrder->select(
+                    DB::raw('DATE_FORMAT(created_at, "%d/%m") as label'),
+                    DB::raw('COUNT(*) as total')
+                )
+                ->where('created_at', '>=', now()->subDays(30))
+                ->groupBy('label')
+                ->orderBy('created_at')
+                ->pluck('total', 'label')
+                ->toArray();
+
+            $orderChartLabels = array_keys($orderDataRaw);
+            $orderChartData = array_values($orderDataRaw);
+        }
 
         return view('admin.statistical', compact(
             'total_products',
@@ -196,7 +298,14 @@ class StatisticalController extends Controller
             'top_value_orders',
             'most_products_orders',
             'status_chart_labels',
-            'status_chart_data'
+            'status_chart_data',
+            'orderChartLabels',
+            'orderChartData',
+            'orderDateFilter',
+            'brandLabels',
+            'brandData',
+            'catLabels',
+            'catData'
         ));
     }
 }

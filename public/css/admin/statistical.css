@@ -703,3 +703,29 @@
          grid-template-columns: 1fr;
      }
  }
+
+
+ /* --- LAYOUT LƯỚI 2x2 CHO PHẦN ĐÁNH GIÁ --- */
+.grid-2x2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Chia 2 cột đều nhau */
+    gap: 24px;
+    margin-top: 20px;
+}
+
+/* Responsive: Trên màn hình nhỏ hơn (Tablet/Mobile) thì về 1 cột */
+@media (max-width: 992px) {
+    .grid-2x2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Chỉnh chiều cao biểu đồ cho cân đối */
+.chart-container {
+    height: 280px;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
